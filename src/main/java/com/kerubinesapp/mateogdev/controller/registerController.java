@@ -11,4 +11,9 @@ public class registerController {
     public String mostrarFormularioRegistro(){
         return "register"; // Esto mapea a src/main/resources/templates/register.html
     }
+
+    @GetMapping("/table")
+    public String mostrarTablaPrueba(){
+        return "table-view";
+    }
 }
