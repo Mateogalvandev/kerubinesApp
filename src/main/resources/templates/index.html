@@ -3,157 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión - Kerubines App</title>
+    <title>Kerubines App - Sistema de Gestión</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <!-- Logo -->
-            <div class="logo">
-                <h1>Kerubines App</h1>
-            </div>
+<!-- Header -->
+<header class="header">
+    <div class="header-left">
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <h1 class="logo">Kerubines App</h1>
+    </div>
 
-            <!-- User Menu -->
-            <div class="user-menu">
-                <button class="user-button" onclick="toggleDropdown()">
-                    <div class="user-avatar">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </div>
-                    <span>Usuario</span>
-                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6,9 12,15 18,9"></polyline>
-                    </svg>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div class="dropdown-menu" id="dropdownMenu">
-                    <button class="dropdown-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                        </svg>
-                        <span>Configurar</span>
-                    </button>
-                    <button class="dropdown-item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                            <polyline points="16,17 21,12 16,7"></polyline>
-                            <line x1="21" y1="12" x2="9" y2="12"></line>
-                        </svg>
-                        <span>Cerrar sesión</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <!-- Toggle Button -->
-            <button class="sidebar-toggle" onclick="toggleSidebar()">
-                <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="15,18 9,12 15,6"></polyline>
+    <div class="header-right">
+        <div class="user-menu">
+            <button class="user-button" id="userButton">
+                <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
                 </svg>
             </button>
 
-            <!-- Menu Items -->
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <button class="nav-item active">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            <span class="nav-text">Venta</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="nav-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                            <span class="nav-text">Usuarios</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="nav-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                            </svg>
-                            <span class="nav-text">Productos</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="welcome-section">
-                <h2>¡Bienvenido!</h2>
-                <p>Aquí tienes tu sistema de gestión</p>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="#" class="dropdown-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Configurar
+                </a>
+                <a href="#" class="dropdown-item logout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16,17 21,12 16,7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Cerrar Sesión
+                </a>
             </div>
-        </main>
+        </div>
     </div>
+</header>
 
-    <script>
-        let sidebarCollapsed = false;
-        let dropdownOpen = false;
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+        <a href="#" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+            </svg>
+            <span>Venta</span>
+        </a>
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const chevron = document.querySelector('.chevron-icon');
-            
-            sidebarCollapsed = !sidebarCollapsed;
-            
-            if (sidebarCollapsed) {
-                sidebar.classList.add('collapsed');
-                chevron.style.transform = 'rotate(180deg)';
-            } else {
-                sidebar.classList.remove('collapsed');
-                chevron.style.transform = 'rotate(0deg)';
-            }
-        }
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Usuarios</span>
+        </a>
 
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdownMenu');
-            const chevron = document.querySelector('.chevron');
-            
-            dropdownOpen = !dropdownOpen;
-            
-            if (dropdownOpen) {
-                dropdown.classList.add('show');
-                chevron.style.transform = 'rotate(180deg)';
-            } else {
-                dropdown.classList.remove('show');
-                chevron.style.transform = 'rotate(0deg)';
-            }
-        }
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Productos</span>
+        </a>
+    </nav>
+</aside>
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const userMenu = document.querySelector('.user-menu');
-            if (!userMenu.contains(event.target)) {
-                const dropdown = document.getElementById('dropdownMenu');
-                const chevron = document.querySelector('.chevron');
-                dropdown.classList.remove('show');
-                chevron.style.transform = 'rotate(0deg)';
-                dropdownOpen = false;
-            }
-        });
-    </script>
+<!-- Main Content -->
+<main class="main-content" id="mainContent">
+    <div class="content-wrapper">
+        <div class="welcome-section">
+            <h2>Bienvenido al Sistema de Gestión</h2>
+            <p>Selecciona una opción del menú lateral para comenzar</p>
+        </div>
+
+
+    </div>
+</main>
+
+<!-- Overlay for mobile -->
+<div class="overlay" id="overlay"></div>
+
+<script>
+    // Toggle sidebar
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const overlay = document.getElementById('overlay');
+
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+    });
+
+    // Toggle user dropdown
+    const userButton = document.getElementById('userButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    userButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        dropdownMenu.classList.remove('active');
+    });
+
+    dropdownMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+</script>
 </body>
 </html>
