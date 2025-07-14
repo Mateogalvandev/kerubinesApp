@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Kerubines App</title>
+  <link rel="stylesheet" th:href="@{/css/register.css}">
+</head>
+<body>
+<div class="register-container">
+  <div class="register-card">
+    <!-- Header -->
+    <div class="register-header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+        </div>
+        <h1 class="logo-text">Kerubines App</h1>
+      </div>
+      <h2 class="register-title">Crear Nueva Cuenta</h2>
+      <p class="register-subtitle">Completa los siguientes datos para registrarte</p>
+    </div>
+
+    <!-- Formulario de Registro -->
+    <form class="register-form" id="registerForm" th:action="@{/register}" th:object="${user}" method="post">
+      <!-- Nombre Completo -->
+      <div class="form-group">
+        <label for="fullName" class="form-label">
+          <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Nombre Completo
+        </label>
+        <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                class="form-input"
+                placeholder="Ingresa tu nombre completo"
+                required
+        >
+        <div class="error-message" id="fullNameError"></div>
+      </div>
+
+      <!-- Nombre de Usuario -->
+      <div class="form-group">
+        <label for="username" class="form-label">
+          <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Nombre de Usuario
+        </label>
+        <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-input"
+                placeholder="Elige un nombre de usuario"
+                required
+        >
+        <div class="error-message" id="usernameError" ></div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="form-group">
+        <label for="password" class="form-label">
+          <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <circle cx="12" cy="16" r="1"></circle>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Contraseña
+        </label>
+        <div class="password-input-container">
+          <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-input password-input"
+                  placeholder="Crea una contraseña segura"
+                  required
+          >
+          <button type="button" class="password-toggle" id="passwordToggle">
+            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+        <div class="password-requirements" id="passwordRequirements">
+          <div class="requirement" id="lengthReq">
+            <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20,6 9,17 4,12"></polyline>
+            </svg>
+            Mínimo 6 caracteres
+          </div>
+          <div class="requirement" id="letterReq">
+            <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20,6 9,17 4,12"></polyline>
+            </svg>
+            Al menos 1 letra
+          </div>
+          <div class="requirement" id="numberReq">
+            <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20,6 9,17 4,12"></polyline>
+            </svg>
+            Al menos 1 número
+          </div>
+        </div>
+        <div class="error-message" id="passwordError" ></div>
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div class="form-group">
+        <label for="confirmPassword" class="form-label">
+          <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <circle cx="12" cy="16" r="1"></circle>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Confirmar Contraseña
+        </label>
+        <div class="password-input-container">
+          <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  class="form-input password-input"
+                  placeholder="Repite tu contraseña"
+                  required
+          >
+          <button type="button" class="password-toggle" id="confirmPasswordToggle">
+            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+        <div class="password-match" id="passwordMatch"></div>
+        <div class="error-message" id="confirmPasswordError" ></div>
+      </div>
+
+      <!-- Botón de Registro -->
+      <button type="submit" class="register-button" id="registerButton" disabled>
+        <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+          <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0"></path>
+          <path d="M16 11h6m-3-3v6"></path>
+        </svg>
+        Crear Cuenta
+      </button>
+
+      <!-- Enlaces adicionales -->
+      <div class="form-footer">
+        <p class="login-link">
+          ¿Ya tienes una cuenta?
+          <a href="#" th:href="@{/login}">Iniciar Sesión</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Referencias a elementos del DOM
+  const form = document.getElementById('registerForm');
+  const fullNameInput = document.getElementById('fullName');
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const registerButton = document.getElementById('registerButton');
+
+  // Referencias a elementos de validación
+  const lengthReq = document.getElementById('lengthReq');
+  const letterReq = document.getElementById('letterReq');
+  const numberReq = document.getElementById('numberReq');
+  const passwordMatch = document.getElementById('passwordMatch');
+
+  // Referencias a mensajes de error
+  const fullNameError = document.getElementById('fullNameError');
+  const usernameError = document.getElementById('usernameError');
+  const passwordError = document.getElementById('passwordError');
+  const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+  // Toggle de visibilidad de contraseña
+  const passwordToggle = document.getElementById('passwordToggle');
+  const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+
+  // Funciones de validación
+  function validatePassword(password) {
+      const hasMinLength = password.length >= 6;
+      const hasLetter = /[a-zA-Z]/.test(password);
+      const hasNumber = /\d/.test(password);
+
+      return {
+          hasMinLength,
+          hasLetter,
+          hasNumber,
+          isValid: hasMinLength && hasLetter && hasNumber
+      };
+  }
+
+  function updatePasswordRequirements(password) {
+      const validation = validatePassword(password);
+
+      // Actualizar requisito de longitud
+      lengthReq.classList.toggle('valid', validation.hasMinLength);
+      lengthReq.classList.toggle('invalid', password.length > 0 && !validation.hasMinLength);
+
+      // Actualizar requisito de letra
+      letterReq.classList.toggle('valid', validation.hasLetter);
+      letterReq.classList.toggle('invalid', password.length > 0 && !validation.hasLetter);
+
+      // Actualizar requisito de número
+      numberReq.classList.toggle('valid', validation.hasNumber);
+      numberReq.classList.toggle('invalid', password.length > 0 && !validation.hasNumber);
+
+      return validation.isValid;
+  }
+
+  function validatePasswordMatch() {
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      if (confirmPassword.length === 0) {
+          passwordMatch.textContent = '';
+          passwordMatch.className = 'password-match';
+          return false;
+      }
+
+      if (password === confirmPassword) {
+          passwordMatch.textContent = '✓ Las contraseñas coinciden';
+          passwordMatch.className = 'password-match valid';
+          return true;
+      } else {
+          passwordMatch.textContent = '✗ Las contraseñas no coinciden';
+          passwordMatch.className = 'password-match invalid';
+          return false;
+      }
+  }
+
+  function validateForm() {
+      const isFullNameValid = fullNameInput.value.trim().length > 0;
+      const isUsernameValid = usernameInput.value.trim().length > 0;
+      const isPasswordValid = validatePassword(passwordInput.value).isValid;
+      const isPasswordMatchValid = validatePasswordMatch();
+
+      const isFormValid = isFullNameValid && isUsernameValid && isPasswordValid && isPasswordMatchValid;
+
+      registerButton.disabled = !isFormValid;
+      registerButton.classList.toggle('enabled', isFormValid);
+
+      return isFormValid;
+  }
+
+  // Event listeners para validación en tiempo real
+  passwordInput.addEventListener('input', function() {
+      updatePasswordRequirements(this.value);
+      validatePasswordMatch();
+      validateForm();
+  });
+
+  confirmPasswordInput.addEventListener('input', function() {
+      validatePasswordMatch();
+      validateForm();
+  });
+
+  fullNameInput.addEventListener('input', validateForm);
+  usernameInput.addEventListener('input', validateForm);
+
+  // Toggle de visibilidad de contraseña
+  passwordToggle.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+
+      const eyeIcon = this.querySelector('.eye-icon');
+      if (type === 'text') {
+          eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+      } else {
+          eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      }
+  });
+
+  confirmPasswordToggle.addEventListener('click', function() {
+      const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPasswordInput.setAttribute('type', type);
+
+      const eyeIcon = this.querySelector('.eye-icon');
+      if (type === 'text') {
+          eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+      } else {
+          eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      }
+  });
+
+  // Validación al enviar el formulario
+  form.addEventListener('submit', function(e) {
+      // La validación se hace en tiempo real, si el botón está habilitado, es válido.
+      // Si por alguna razón se envía con el botón deshabilitado, se previene.
+      if (registerButton.disabled) {
+          e.preventDefault();
+          alert('Por favor, completa todos los campos correctamente.');
+          return;
+      }
+
+      // Aquí puedes enviar el formulario o hacer la petición AJAX
+      console.log('Formulario válido, enviando...');
+      // this.submit(); // Descomenta para enviar el formulario
+  });
+
+  // Validación inicial
+  validateForm();
+</script>
+</body>
+</html>
