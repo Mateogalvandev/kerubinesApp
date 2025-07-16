@@ -1,5 +1,7 @@
-package com.kerubinesapp.mateogdev.model;
+package com.kerubinesapp.mateogdev.dto;
 
+import com.kerubinesapp.mateogdev.model.Rol;
+import com.kerubinesapp.mateogdev.model.Venta;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,17 +12,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idUsuario;
+public class UsuarioDto {
+
     private String nombre;
     private String username;
     private String password;
-    @OneToMany
-    private List<Venta> ventaLista;
-    @ManyToOne
     private Rol rolUsuario;
+
+
 
 }
