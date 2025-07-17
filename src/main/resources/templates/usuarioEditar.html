@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Kerubines App</title>
+    <link rel="stylesheet" href="/css/register.css">
+    <style>
+        .section-divider {
+            margin: 2rem 0;
+            border: 0;
+            height: 1px;
+            background-color: #e2e8f0;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <div class="register-card">
+        <!-- Header -->
+        <div class="register-header">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                </div>
+                <h1 class="logo-text">Kerubines App</h1>
+            </div>
+            <h2 class="register-title">Editar Perfil</h2>
+            <p class="register-subtitle">Actualiza tus datos personales</p>
+        </div>
+
+        <!-- Formulario de Edición -->
+        <form class="register-form" th:action="/usuario/editar/{id}(id=${usuario.id}})" th:object="${usuarioEditar}" id="editForm" method="post">
+            <!-- Sección de Información Básica -->
+            <div class="section-title">Información Personal</div>
+
+            <!-- Nombre Completo -->
+            <div class="form-group">
+                <label for="fullName" class="form-label">
+                    <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Nombre Completo
+                </label>
+                <input
+                        type="text"
+                        id="fullName"
+                        class="form-input"
+                        th:field="*{nombre}"
+                        placeholder="Ingresa tu nombre completo"
+                        required
+                >
+                <div class="error-message" id="fullNameError"></div>
+            </div>
+
+            <!-- Nombre de Usuario -->
+            <div class="form-group">
+                <label for="username" class="form-label">
+                    <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Nombre de Usuario
+                </label>
+                <input
+                        type="text"
+                        id="username"
+                        class="form-input"
+                        th:field="*{username}"
+                        placeholder="Escribe un nombre de usuario"
+                        required
+                >
+                <div class="error-message" id="usernameError"></div>
+            </div>
+
+            <!-- Divider -->
+            <hr class="section-divider">
+
+            <!-- Sección de Cambio de Contraseña -->
+            <div class="section-title">Cambiar Contraseña</div>
+            <p class="register-subtitle">Deja en blanco si no deseas cambiar la contraseña</p>
+
+            <!-- Nueva Contraseña -->
+            <div class="form-group">
+                <label for="newPassword" class="form-label">
+                    <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Nueva Contraseña
+                </label>
+                <div class="password-input-container">
+                    <input
+                            type="password"
+                            id="newPassword"
+                            th:field="*{password}"
+                            class="form-input password-input"
+                            placeholder="Crea una contraseña segura"
+                    >
+                    <button type="button" class="password-toggle" id="newPasswordToggle">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="password-requirements" id="passwordRequirements">
+                    <div class="requirement" id="lengthReq">
+                        <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"></polyline>
+                        </svg>
+                        Mínimo 6 caracteres
+                    </div>
+                    <div class="requirement" id="letterReq">
+                        <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"></polyline>
+                        </svg>
+                        Al menos 1 letra
+                    </div>
+                    <div class="requirement" id="numberReq">
+                        <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20,6 9,17 4,12"></polyline>
+                        </svg>
+                        Al menos 1 número
+                    </div>
+                </div>
+                <div class="error-message" id="newPasswordError"></div>
+            </div>
+
+            <!-- Confirmar Nueva Contraseña -->
+            <div class="form-group">
+                <label for="confirmNewPassword" class="form-label">
+                    <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Confirmar Nueva Contraseña
+                </label>
+                <div class="password-input-container">
+                    <input
+                            type="password"
+                            id="confirmNewPassword"
+                            class="form-input password-input"
+                            placeholder="Repite tu nueva contraseña"
+                    >
+                    <button type="button" class="password-toggle" id="confirmNewPasswordToggle">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+                <div class="password-match" id="passwordMatch"></div>
+                <div class="error-message" id="confirmNewPasswordError"></div>
+            </div>
+
+            <!-- Botón de Actualizar -->
+            <button type="submit" class="register-button" id="updateButton">
+                <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                Actualizar Perfil
+            </button>
+
+            <!-- Enlaces adicionales -->
+            <div class="form-footer">
+                <p class="login-link">
+                    <a href="#">Volver al perfil</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Referencias a elementos del DOM
+    const form = document.getElementById('editForm');
+    const fullNameInput = document.getElementById('fullName');
+    const usernameInput = document.getElementById('username');
+    const newPasswordInput = document.getElementById('newPassword');
+    const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+    const updateButton = document.getElementById('updateButton');
+
+    // Referencias a elementos de validación
+    const lengthReq = document.getElementById('lengthReq');
+    const letterReq = document.getElementById('letterReq');
+    const numberReq = document.getElementById('numberReq');
+    const passwordMatch = document.getElementById('passwordMatch');
+
+    // Referencias a mensajes de error
+    const fullNameError = document.getElementById('fullNameError');
+    const usernameError = document.getElementById('usernameError');
+    const newPasswordError = document.getElementById('newPasswordError');
+    const confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+
+    // Toggle de visibilidad de contraseña
+    const newPasswordToggle = document.getElementById('newPasswordToggle');
+    const confirmNewPasswordToggle = document.getElementById('confirmNewPasswordToggle');
+
+    // Funciones de validación
+    function validatePassword(password) {
+        const hasMinLength = password.length >= 6;
+        const hasLetter = /[a-zA-Z]/.test(password);
+        const hasNumber = /\d/.test(password);
+
+        return {
+            hasMinLength,
+            hasLetter,
+            hasNumber,
+            isValid: hasMinLength && hasLetter && hasNumber
+        };
+    }
+
+    function updatePasswordRequirements(password) {
+        const validation = validatePassword(password);
+
+        // Actualizar requisito de longitud
+        lengthReq.classList.toggle('valid', validation.hasMinLength);
+        lengthReq.classList.toggle('invalid', password.length > 0 && !validation.hasMinLength);
+
+        // Actualizar requisito de letra
+        letterReq.classList.toggle('valid', validation.hasLetter);
+        letterReq.classList.toggle('invalid', password.length > 0 && !validation.hasLetter);
+
+        // Actualizar requisito de número
+        numberReq.classList.toggle('valid', validation.hasNumber);
+        numberReq.classList.toggle('invalid', password.length > 0 && !validation.hasNumber);
+
+        return validation.isValid;
+    }
+
+    function validatePasswordMatch() {
+        const password = newPasswordInput.value;
+        const confirmPassword = confirmNewPasswordInput.value;
+
+        // Si ambos campos están vacíos, no mostrar mensaje
+        if (password.length === 0 && confirmPassword.length === 0) {
+            passwordMatch.textContent = '';
+            passwordMatch.className = 'password-match';
+            return true;
+        }
+
+        // Si solo uno está lleno, mostrar error
+        if ((password.length === 0 || confirmPassword.length === 0) && (password.length !== confirmPassword.length)) {
+            passwordMatch.textContent = '✗ Completa ambos campos de contraseña';
+            passwordMatch.className = 'password-match invalid';
+            return false;
+        }
+
+        if (password === confirmPassword) {
+            passwordMatch.textContent = '✓ Las contraseñas coinciden';
+            passwordMatch.className = 'password-match valid';
+            return true;
+        } else {
+            passwordMatch.textContent = '✗ Las contraseñas no coinciden';
+            passwordMatch.className = 'password-match invalid';
+            return false;
+        }
+    }
+
+    function validateForm() {
+        const isFullNameValid = fullNameInput.value.trim().length > 0;
+        const isUsernameValid = usernameInput.value.trim().length > 0;
+
+        // Validar contraseñas solo si se ingresó alguna
+        const isPasswordEmpty = newPasswordInput.value.length === 0 && confirmNewPasswordInput.value.length === 0;
+        let isPasswordValid = true;
+        let isPasswordMatchValid = true;
+
+        if (!isPasswordEmpty) {
+            isPasswordValid = updatePasswordRequirements(newPasswordInput.value);
+            isPasswordMatchValid = validatePasswordMatch();
+        }
+
+        const isFormValid = isFullNameValid && isUsernameValid &&
+                          (isPasswordEmpty || (isPasswordValid && isPasswordMatchValid));
+
+        updateButton.disabled = !isFormValid;
+        updateButton.classList.toggle('enabled', isFormValid);
+
+        return isFormValid;
+    }
+
+    // Event listeners para validación en tiempo real
+    newPasswordInput.addEventListener('input', function() {
+        updatePasswordRequirements(this.value);
+        validatePasswordMatch();
+        validateForm();
+    });
+
+    confirmNewPasswordInput.addEventListener('input', function() {
+        validatePasswordMatch();
+        validateForm();
+    });
+
+    fullNameInput.addEventListener('input', validateForm);
+    usernameInput.addEventListener('input', validateForm);
+
+    // Toggle de visibilidad de contraseña
+    newPasswordToggle.addEventListener('click', function() {
+        const type = newPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        newPasswordInput.setAttribute('type', type);
+
+        const eyeIcon = this.querySelector('.eye-icon');
+        if (type === 'text') {
+            eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+        } else {
+            eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+        }
+    });
+
+    confirmNewPasswordToggle.addEventListener('click', function() {
+        const type = confirmNewPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmNewPasswordInput.setAttribute('type', type);
+
+        const eyeIcon = this.querySelector('.eye-icon');
+        if (type === 'text') {
+            eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+        } else {
+            eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+        }
+    });
+
+    // Validación al enviar el formulario
+    form.addEventListener('submit', function(e) {
+        if (!validateForm()) {
+            e.preventDefault();
+            alert('Por favor, completa todos los campos obligatorios correctamente.');
+            return;
+        }
+
+        console.log('Formulario válido, enviando...');
+        // this.submit(); // Descomenta para enviar el formulario
+    });
+
+    // Validación inicial
+    validateForm();
+</script>
+</body>
+</html>

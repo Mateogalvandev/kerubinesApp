@@ -62,4 +62,20 @@ public class UsuarioService implements IUsuarioService{
         return usuarioRepository.findAll();
 
     }
+
+    @Override
+    public Usuario usuarioObtenerId(Long id) {
+        Usuario usuario = usuarioRepository.findById(id).get();
+        return usuario;
+    }
+
+    @Override
+    public Usuario actualizarUsuario(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public void eliminarUsuario(Long id) {
+        usuarioRepository.deleteById(id);
+    }
 }

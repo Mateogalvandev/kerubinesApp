@@ -11,4 +11,10 @@ public interface IUsuarioService extends UserDetailsService {
     public Usuario guardarUsuario(UsuarioDto usuarioDto);
 
     public List<Usuario> usuarioLista();
+
+    public Usuario usuarioObtenerId(Long id);
+
+    public Usuario actualizarUsuario(Usuario usuario);
+
+    public void eliminarUsuario(Long id);
 }
