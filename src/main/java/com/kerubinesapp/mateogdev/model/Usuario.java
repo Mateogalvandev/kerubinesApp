@@ -5,11 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Usuario {
     @Id
@@ -20,7 +20,90 @@ public class Usuario {
     private String password;
     @OneToMany
     private List<Venta> ventaLista;
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     private Rol rolUsuario;
+    private LocalDate fechaIngreso;
 
+    public Usuario(String nombre,String password, String username, LocalDate fechaIngreso) {
+        this.password = password;
+        this.username = username;
+        this.nombre = nombre;
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    public Usuario(String nombre, String password, String username) {
+        this.nombre = nombre;
+        this.password = password;
+        this.username = username;
+    }
+
+    public enum Rol {
+        ROLE_USER,
+        ROLE_ADMIN
+    }
+
+    public Usuario(Long idUsuario, String nombre, String username, String password, List<Venta> ventaLista, Rol rolUsuario) {
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
+        this.username = username;
+        this.password = password;
+        this.ventaLista = ventaLista;
+        this.rolUsuario = rolUsuario;
+    }
+
+    public LocalDate getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(LocalDate fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Venta> getVentaLista() {
+        return ventaLista;
+    }
+
+    public void setVentaLista(List<Venta> ventaLista) {
+        this.ventaLista = ventaLista;
+    }
+
+    public Rol getRolUsuario() {
+        return rolUsuario;
+    }
+
+    public void setRolUsuario(Rol rolUsuario) {
+        this.rolUsuario = rolUsuario;
+    }
 }

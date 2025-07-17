@@ -24,7 +24,7 @@
     </div>
 
     <!-- Formulario de Registro -->
-    <form class="register-form" id="registerForm" th:action="@{/register}" th:object="${user}" method="post">
+    <form class="register-form" id="registerForm" th:action="@{/register}" th:object="${usuario}" method="post">
       <!-- Nombre Completo -->
       <div class="form-group">
         <label for="fullName" class="form-label">
@@ -37,7 +37,7 @@
         <input
                 type="text"
                 id="fullName"
-                name="fullName"
+                th:field="*{nombre}"
                 class="form-input"
                 placeholder="Ingresa tu nombre completo"
                 required
@@ -57,9 +57,9 @@
         <input
                 type="text"
                 id="username"
-                name="username"
+                th:field="*{username}"
                 class="form-input"
-                placeholder="Elige un nombre de usuario"
+                placeholder="Escribe un nombre de usuario"
                 required
         >
         <div class="error-message" id="usernameError" ></div>
@@ -79,7 +79,7 @@
           <input
                   type="password"
                   id="password"
-                  name="password"
+                  th:field="*{password}"
                   class="form-input password-input"
                   placeholder="Crea una contraseña segura"
                   required
@@ -142,6 +142,26 @@
         </div>
         <div class="password-match" id="passwordMatch"></div>
         <div class="error-message" id="confirmPasswordError" ></div>
+      </div>
+
+      <!-- Nuevo campo: Rol (simplificado) -->
+      <div class="form-group">
+        <label for="role" class="form-label">
+          <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Rol (opcional)
+        </label>
+        <input
+                type="text"
+                id="role"
+                name="role"
+                class="form-input"
+                placeholder="Escribe un Rol"
+        >
       </div>
 
       <!-- Botón de Registro -->

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Datos - Kerubines App</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}"> <!-- Estilos base del sistema -->
+  <link rel="stylesheet" th:href="@{/css/table-view.css}"> <!-- Estilos específicos de la tabla -->
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <button class="menu-toggle" id="menuToggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <h1 class="logo">Kerubines App</h1>
+  </div>
+
+  <div class="header-right">
+    <div class="user-menu">
+      <button class="user-button" id="userButton">
+        <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6,9 12,15 18,9"></polyline>
+        </svg>
+      </button>
+
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="#" class="dropdown-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          Configurar
+        </a>
+        <a href="#" class="dropdown-item logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16,17 21,12 16,7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Cerrar Sesión
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <nav class="sidebar-nav">
+    <!-- Venta Section -->
+    <div class="nav-section">
+      <button class="nav-item nav-toggle" data-target="ventaSubmenu">
+        <div class="nav-item-content">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+          </svg>
+          <span>Venta</span>
+        </div>
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+      </button>
+      <div class="nav-submenu" id="ventaSubmenu">
+        <a href="#" class="nav-subitem" th:href="@{/venta/crear}">
+          <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Crear
+        </a>
+        <a href="#" class="nav-subitem" th:href="@{/venta/administrar}">
+          <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+          Administrar
+        </a>
+      </div>
+    </div>
+
+    <!-- Usuarios Section -->
+    <div class="nav-section">
+      <button class="nav-item nav-toggle" data-target="usuariosSubmenu">
+        <div class="nav-item-content">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Usuarios</span>
+        </div>
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+      </button>
+      <div class="nav-submenu" id="usuariosSubmenu">
+        <a href="#" class="nav-subitem" th:href="@{/usuarios/crear}">
+          <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Crear
+        </a>
+        <a href="#" class="nav-subitem" th:href="@{/usuarios/administrar}">
+          <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+          Administrar
+        </a>
+      </div>
+    </div>
+
+    <!-- Productos Section -->
+    <div class="nav-section">
+      <button class="nav-item nav-toggle" data-target="productosSubmenu">
+        <div class="nav-item-content">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Productos</span>
+        </div>
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+      </button>
+      <div class="nav-submenu" id="productosSubmenu">
+        <a href="#" class="nav-subitem" th:href="@{/productos/crear}">
+          <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Crear
+        </a>
+        <a href="#" class="nav-subitem" th:href="@{/productos/administrar}">
+          <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+          Administrar
+        </a>
+      </div>
+    </div>
+  </nav>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content" id="mainContent">
+  <div class="container-fluid">
+    <!-- Título de la página -->
+    <div class="page-header">
+      <h2 class="page-title">Gestión de Usuarios</h2>
+      <p class="page-subtitle">Administra la información de los usuarios registrados en el sistema.</p>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-bar-container">
+      <input type="text" id="searchInput" class="search-input" placeholder="Buscar en la tabla...">
+      <button class="search-button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contenedor de la tabla -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tabla de Usuarios</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+            <tr>
+              <th data-column="id">
+                ID
+                <button class="sort-button" data-sort-direction="none">
+                  <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <polyline points="7 14 12 9 17 14"></polyline>
+                  </svg>
+                </button>
+              </th>
+              <th data-column="fullName">
+                Nombre Completo
+                <button class="sort-button" data-sort-direction="none">
+                  <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <polyline points="7 14 12 9 17 14"></polyline>
+                  </svg>
+                </button>
+              </th>
+              <th data-column="username">
+                Nombre de Usuario
+                <button class="sort-button" data-sort-direction="none">
+                  <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <polyline points="7 14 12 9 17 14"></polyline>
+                  </svg>
+                </button>
+              </th>
+              <th data-column="email">
+                Rol
+                <button class="sort-button" data-sort-direction="none">
+                  <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <polyline points="7 14 12 9 17 14"></polyline>
+                  </svg>
+                </button>
+              </th>
+              <th data-column="registrationDate">
+                Fecha de Registro
+                <button class="sort-button" data-sort-direction="none">
+                  <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <polyline points="7 14 12 9 17 14"></polyline>
+                  </svg>
+                </button>
+              </th>
+              <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr th:each="usuario : ${usuariosLista}">
+                <td th:text="${usuario.idUsuario}">ID</td>
+                <td th:text="${usuario.nombre}">Nombre</td>
+                <td th:text="${usuario.Username}">Nombre de usuario</td>
+                <td th:text="${usuario.rolUsuario == 'ROLE_ADMIN' ? 'Admin' : 'Empleado'}">Rol</td>
+                <td th:text="${usuario.fechaIngreso}">Fecha de Ingreso</td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination-container">
+      <button class="pagination-button" id="prevPage">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Anterior
+      </button>
+      <div class="page-numbers" id="pageNumbers">
+        <!-- Los números de página se generarán con JavaScript -->
+      </div>
+      <button class="pagination-button" id="nextPage">
+        Siguiente
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</main>
+
+<!-- Overlay for mobile -->
+<div class="overlay" id="overlay"></div>
+
+<script>
+  // Toggle sidebar (código existente)
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+  const overlay = document.getElementById('overlay');
+
+  menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.classList.toggle('sidebar-open');
+  });
+
+  overlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.classList.remove('sidebar-open');
+  });
+
+  // Toggle user dropdown (código existente)
+  const userButton = document.getElementById('userButton');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+
+  userButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('active');
+  });
+
+  document.addEventListener('click', () => {
+      dropdownMenu.classList.remove('active');
+  });
+
+  dropdownMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+  });
+
+  // Toggle navigation submenus (código existente)
+  const navToggles = document.querySelectorAll('.nav-toggle');
+
+  navToggles.forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = toggle.getAttribute('data-target');
+          const submenu = document.getElementById(targetId);
+          const chevron = toggle.querySelector('.nav-chevron');
+
+          navToggles.forEach(otherToggle => {
+              if (otherToggle !== toggle) {
+                  const otherTargetId = otherToggle.getAttribute('data-target');
+                  const otherSubmenu = document.getElementById(otherTargetId);
+                  const otherChevron = otherToggle.querySelector('.nav-chevron');
+
+                  otherSubmenu.classList.remove('active');
+                  otherToggle.classList.remove('active');
+                  otherChevron.style.transform = 'rotate(0deg)';
+              }
+          });
+
+          submenu.classList.toggle('active');
+          toggle.classList.toggle('active');
+
+          if (submenu.classList.contains('active')) {
+              chevron.style.transform = 'rotate(90deg)';
+          } else {
+              chevron.style.transform = 'rotate(0deg)';
+          }
+      });
+  });
+
+  const subItems = document.querySelectorAll('.nav-subitem');
+  subItems.forEach(item => {
+      item.addEventListener('click', () => {
+          subItems.forEach(subItem => subItem.classList.remove('active'));
+          item.classList.add('active');
+      });
+  });
+
+  // --- Lógica de la tabla: Búsqueda, Ordenamiento y Paginación ---
+
+  // Datos de ejemplo (en un entorno real, esto vendría de tu backend Spring Boot)
+ <!--  let tableData = [ 
+      { id: 1, fullName: 'Juan Pérez', username: 'juanp', email: 'juan.perez@example.com', registrationDate: '2023-01-15' },
+      { id: 2, fullName: 'María García', username: 'mariag', email: 'maria.garcia@example.com', registrationDate: '2023-02-20' },
+      { id: 3, fullName: 'Carlos López', username: 'carlosl', email: 'carlos.lopez@example.com', registrationDate: '2023-03-10' },
+      { id: 4, fullName: 'Ana Martínez', username: 'anam', email: 'ana.martinez@example.com', registrationDate: '2023-04-05' },
+      { id: 5, fullName: 'Pedro Sánchez', username: 'pedros', email: 'pedro.sanchez@example.com', registrationDate: '2023-05-12' },
+      { id: 6, fullName: 'Laura Rodríguez', username: 'laurar', email: 'laura.rodriguez@example.com', registrationDate: '2023-06-01' },
+      { id: 7, fullName: 'Miguel Fernández', username: 'miguelF', email: 'miguel.fernandez@example.com', registrationDate: '2023-07-22' },
+      { id: 8, fullName: 'Sofía González', username: 'sofiag', email: 'sofia.gonzalez@example.com', registrationDate: '2023-08-18' },
+      { id: 9, fullName: 'Javier Ruiz', username: 'javierr', email: 'javier.ruiz@example.com', registrationDate: '2023-09-03' },
+      { id: 10, fullName: 'Elena Díaz', username: 'elenad', email: 'elena.diaz@example.com', registrationDate: '2023-10-25' },
+      { id: 11, fullName: 'Ricardo Torres', username: 'ricardot', email: 'ricardo.torres@example.com', registrationDate: '2023-11-11' },
+      { id: 12, fullName: 'Isabel Vargas', username: 'isabelv', email: 'isabel.vargas@example.com', registrationDate: '2023-12-07' },
+      { id: 13, fullName: 'Fernando Castro', username: 'fernandoc', email: 'fernando.castro@example.com', registrationDate: '2024-01-01' },
+      { id: 14, fullName: 'Gabriela Soto', username: 'gabrielas', email: 'gabriela.soto@example.com', registrationDate: '2024-02-14' },
+      { id: 15, fullName: 'Diego Herrera', username: 'diegoh', email: 'diego.herrera@example.com', registrationDate: '2024-03-29' },
+  ] 
+  -->
+
+  const tableBody = document.getElementById('tableBody');
+  const searchInput = document.getElementById('searchInput');
+  const sortButtons = document.querySelectorAll('.sort-button');
+  const prevPageBtn = document.getElementById('prevPage');
+  const nextPageBtn = document.getElementById('nextPage');
+  const pageNumbersContainer = document.getElementById('pageNumbers');
+
+  let filteredData = [...tableData]; // Datos sobre los que se aplica búsqueda y ordenamiento
+  let currentPage = 1;
+  const rowsPerPage = 5; // Puedes ajustar esto
+
+  // Función para renderizar la tabla
+  function renderTable(dataToRender) {
+      tableBody.innerHTML = ''; // Limpiar tabla
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedData = dataToRender.slice(start, end);
+
+      if (paginatedData.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="no-results">No se encontraron resultados.</td></tr>';
+          return;
+      }
+
+      paginatedData.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+              <td>${item.id}</td>
+              <td>${item.fullName}</td>
+              <td>${item.username}</td>
+              <td>${item.email}</td>
+              <td>${item.registrationDate}</td>
+              <td>
+                  <button class="btn btn-edit">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                      Editar
+                  </button>
+                  <button class="btn btn-delete">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          <line x1="10" y1="11" x2="10" y2="17"></line>
+                          <line x1="14" y1="11" x2="14" y2="17"></line>
+                      </svg>
+                      Eliminar
+                  </button>
+              </td>
+          `;
+          tableBody.appendChild(row);
+      });
+  }
+
+  // Función para actualizar los controles de paginación
+  function updatePaginationControls() {
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      pageNumbersContainer.innerHTML = '';
+
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+      for (let i = 1; i <= totalPages; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.classList.add('page-number-button');
+          pageBtn.textContent = i;
+          if (i === currentPage) {
+              pageBtn.classList.add('active');
+          }
+          pageBtn.addEventListener('click', () => {
+              currentPage = i;
+              renderTable(filteredData);
+              updatePaginationControls();
+          });
+          pageNumbersContainer.appendChild(pageBtn);
+      }
+  }
+
+  // Búsqueda
+  searchInput.addEventListener('input', () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      filteredData = tableData.filter(item =>
+          Object.values(item).some(value =>
+              String(value).toLowerCase().includes(searchTerm)
+          )
+      );
+      currentPage = 1; // Resetear a la primera página al buscar
+      renderTable(filteredData);
+      updatePaginationControls();
+  });
+
+  // Ordenamiento
+  sortButtons.forEach(button => {
+      button.addEventListener('click', () => {
+          const column = button.parentElement.getAttribute('data-column');
+          let direction = button.getAttribute('data-sort-direction');
+
+          // Resetear otros botones de ordenamiento
+          sortButtons.forEach(otherButton => {
+              if (otherButton !== button) {
+                  otherButton.setAttribute('data-sort-direction', 'none');
+                  otherButton.querySelector('.sort-icon').innerHTML = '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>'; // Icono de doble flecha
+              }
+          });
+
+          // Cambiar dirección de ordenamiento
+          if (direction === 'asc') {
+              direction = 'desc';
+              button.querySelector('.sort-icon').innerHTML = '<polyline points="7 14 12 9 17 14"></polyline>'; // Flecha hacia arriba
+          } else if (direction === 'desc') {
+              direction = 'none';
+              button.querySelector('.sort-icon').innerHTML = '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>'; // Icono de doble flecha
+          } else { // 'none'
+              direction = 'asc';
+              button.querySelector('.sort-icon').innerHTML = '<polyline points="7 10 12 15 17 10"></polyline>'; // Flecha hacia abajo
+          }
+          button.setAttribute('data-sort-direction', direction);
+
+          // Ordenar los datos
+          if (direction !== 'none') {
+              filteredData.sort((a, b) => {
+                  const valA = String(a[column]).toLowerCase();
+                  const valB = String(b[column]).toLowerCase();
+
+                  if (valA < valB) return direction === 'asc' ? -1 : 1;
+                  if (valA > valB) return direction === 'asc' ? 1 : -1;
+                  return 0;
+              });
+          } else {
+              // Si no hay dirección, volver al orden original (si es posible, aquí se usa una copia inicial)
+              filteredData = [...tableData];
+              if (searchInput.value) { // Re-aplicar filtro si hay búsqueda activa
+                  const searchTerm = searchInput.value.toLowerCase();
+                  filteredData = filteredData.filter(item =>
+                      Object.values(item).some(value =>
+                          String(value).toLowerCase().includes(searchTerm)
+                      )
+                  );
+              }
+          }
+
+          currentPage = 1; // Resetear a la primera página al ordenar
+          renderTable(filteredData);
+          updatePaginationControls();
+      });
+  });
+
+  // Paginación
+  prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+          currentPage--;
+          renderTable(filteredData);
+          updatePaginationControls();
+      }
+  });
+
+  nextPageBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      if (currentPage < totalPages) {
+          currentPage++;
+          renderTable(filteredData);
+          updatePaginationControls();
+      }
+  });
+
+  // Inicializar la tabla al cargar la página
+  document.addEventListener('DOMContentLoaded', () => {
+      renderTable(filteredData);
+      updatePaginationControls();
+  });
+</script>
+</body>
+</html>
