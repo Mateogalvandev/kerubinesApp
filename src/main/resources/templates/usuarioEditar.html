@@ -38,7 +38,7 @@
         </div>
 
         <!-- Formulario de Edición -->
-        <form class="register-form" th:action="/usuario/editar/{id}(id=${usuario.id}})" th:object="${usuarioEditar}" id="editForm" method="post">
+        <form class="register-form" th:action="/usuario/editar/{id}(id=${usuarioEditar.idUser}})" th:object="${usuarioEditar}" id="editForm" method="post">
             <!-- Sección de Información Básica -->
             <div class="section-title">Información Personal</div>
 

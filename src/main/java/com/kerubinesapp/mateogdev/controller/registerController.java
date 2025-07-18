@@ -27,6 +27,11 @@ public class registerController {
         return "register";
     }
 
+    @GetMapping("/usuarios/crear")
+    public String mostrarFormularioRegistroPagina() {
+        return "register";
+    }
+
     @PostMapping("/register")
     public String registrarCuentaUsuario(@ModelAttribute("usuario") UsuarioDto usuarioDto) {
         usuarioService.guardarUsuario(usuarioDto);

@@ -229,14 +229,18 @@
             </tr>
             </thead>
             <tbody id="tableBody">
-              <tr th:each="usuario : ${usuariosLista}">
-                <td th:text="${usuario.idUsuario}">ID</td>
-                <td th:text="${usuario.nombre}">Nombre</td>
-                <td th:text="${usuario.Username}">Nombre de usuario</td>
-                <td th:text="${usuario.rolUsuario == 'ROLE_ADMIN' ? 'Admin' : 'Empleado'}">Rol</td>
-                <td th:text="${usuario.fechaIngreso}">Fecha de Ingreso</td>
-              </tr>
-            
+            <tr th:each="usuario : ${usuariosLista}">
+              <td th:text="${usuario.idUsuario}">ID</td>
+              <td th:text="${usuario.nombre}">Nombre</td>
+              <td th:text="${usuario.Username}">Nombre de usuario</td>
+              <td th:text="${usuario.rolUsuario == 'ROLE_ADMIN' ? 'Admin' : 'Empleado'}">Rol</td>
+              <td th:text="${usuario.fechaIngreso}">Fecha de Ingreso</td>
+              <td>
+                <a th:href="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}" class="btn btn-edit">Editar</a>
+                <a href="#" class="btn btn-delete"
+                   onclick="confirmDelete(event, '@{/usuarios/eliminar/{id}(id=${usuario.idUsuario})}')">Eliminar</a>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -412,8 +416,8 @@ function renderTable(dataToRender) {
                 <td>${item.email}</td>
                 <td>${item.registrationDate}</td>
                 <td>
-                    <button class="btn btn-edit">Editar</button>
-                    <button class="btn btn-delete">Eliminar</button>
+                    <a href="/usuarios/editar/${item.id}" class="btn btn-edit">Editar</a>
+                    <a href="/usuarios/eliminar/${item.id}" class="btn btn-delete">Eliminar</a>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -553,6 +557,22 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTable(filteredData);
     updatePaginationControls();
 });
+
+// Función para confirmar eliminación
+function confirmDelete(event, deleteUrl) {
+    event.preventDefault(); // Previene la navegación inmediata
+    const isConfirmed = confirm('¿Estás seguro de que deseas eliminar este usuario?');
+    if (isConfirmed) {
+        // Convertir la URL de Thymeleaf a una URL normal
+        const processedUrl = deleteUrl
+            .replace(/&amp;/g, '&') // Reemplazar entidades HTML
+            .replace(/&#x2F;/g, '/'); // Reemplazar barras inclinadas codificadas
+
+        // Navegar a la URL de eliminación
+        window.location.href = processedUrl;
+    }
+    return false; // Siempre previene la acción por defecto
+}
 </script>
 </body>
 </html>

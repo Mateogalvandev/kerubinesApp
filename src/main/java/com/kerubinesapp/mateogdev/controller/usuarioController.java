@@ -1,6 +1,5 @@
 package com.kerubinesapp.mateogdev.controller;
 
-import com.kerubinesapp.mateogdev.dto.UsuarioDto;
 import com.kerubinesapp.mateogdev.model.Usuario;
 import com.kerubinesapp.mateogdev.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,13 @@ public class usuarioController {
         return "usuariosTabla";
     }
 
-    @GetMapping("/estudiantes/editar/{id}")
+    @GetMapping("/usuarios/editar/{id}")
     public String editarUsuario(@PathVariable Long id, Model model){
         model.addAttribute("usuarioEditar", usuarioService.usuarioObtenerId(id));
         return "usuarioEditar";
     }
 
-    @PostMapping("/usuario/editar/{id}")
+    @PostMapping("/usuarios/editar/post/{id}")
     public String editarUsuarioAccion(@PathVariable Long id,
                                       @ModelAttribute("usuarioEditar")Usuario usuario,
                                       Model model){
@@ -41,5 +40,11 @@ public class usuarioController {
         return "redirect:/usuarios/administrar";
 
 
+    }
+
+    @GetMapping("/usuarios/eliminar/{id}")
+        public String usuarioEliminar(@PathVariable Long id){
+        usuarioService.eliminarUsuario(id);
+        return "redirect:/usuarios/administrar";
     }
 }
