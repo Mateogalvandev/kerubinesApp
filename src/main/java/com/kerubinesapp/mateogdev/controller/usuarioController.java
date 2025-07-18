@@ -3,6 +3,7 @@ package com.kerubinesapp.mateogdev.controller;
 import com.kerubinesapp.mateogdev.model.Usuario;
 import com.kerubinesapp.mateogdev.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,9 @@ public class usuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/usuarios/administrar")
     public String listaUsuarios(Model model){
@@ -35,7 +39,9 @@ public class usuarioController {
         Usuario usuarioExistente = usuarioService.usuarioObtenerId(id);
         usuarioExistente.setNombre(usuario.getNombre());
         usuarioExistente.setUsername(usuario.getUsername());
-        usuarioExistente.setPassword(usuario.getPassword());
+        if (usuario.getPassword() != null && !usuario.getPassword().trim().isEmpty()) {
+            usuarioExistente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
         usuarioService.actualizarUsuario(usuarioExistente);
         return "redirect:/usuarios/administrar";
 
