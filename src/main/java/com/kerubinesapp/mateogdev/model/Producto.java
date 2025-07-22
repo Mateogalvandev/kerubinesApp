@@ -22,4 +22,12 @@ public class Producto {
     private Double costo;
     @ManyToMany
     private List<Venta> ventaLista;
+
+    public Producto(String nombreProducto, String descripcion, String talla, String color, Double costo) {
+        this.nombreProducto = nombreProducto;
+        this.descripcion = descripcion;
+        this.talla = talla;
+        this.color = color;
+        this.costo = costo;
+    }
 }

@@ -38,8 +38,4 @@ public class registerController {
         return "redirect:/login";
     }
 
-    @GetMapping("/table")
-    public String mostrarTablaPrueba() {
-        return "table-view";
-    }
 }

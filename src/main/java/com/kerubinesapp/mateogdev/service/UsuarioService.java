@@ -33,14 +33,6 @@ public class UsuarioService implements IUsuarioService{
     }
 
     @Override
-    public Usuario guardarUsuario(UsuarioDto usuarioDto) {
-        Usuario usuario = new Usuario(usuarioDto.getNombre(),passwordEncoder.encode(usuarioDto.getPassword()), usuarioDto.getUsername());
-        usuario.setRolUsuario(Usuario.Rol.ROLE_USER);
-        usuario.setFechaIngreso(LocalDate.now());
-        return usuarioRepository.save(usuario);
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByUsername(username);
         if (usuario == null){
@@ -58,6 +50,15 @@ public class UsuarioService implements IUsuarioService{
     }
 
     @Override
+    public Usuario guardarUsuario(UsuarioDto usuarioDto) {
+        Usuario usuario = new Usuario(usuarioDto.getNombre(),passwordEncoder.encode(usuarioDto.getPassword()), usuarioDto.getUsername());
+        usuario.setRolUsuario(Usuario.Rol.ROLE_USER);
+        usuario.setFechaIngreso(LocalDate.now());
+        return usuarioRepository.save(usuario);
+    }
+
+
+    @Override
     public List<Usuario> usuarioLista() {
         return usuarioRepository.findAll();
 
@@ -71,6 +72,7 @@ public class UsuarioService implements IUsuarioService{
 
     @Override
     public Usuario actualizarUsuario(Usuario usuario) {
+
         return usuarioRepository.save(usuario);
     }
 
