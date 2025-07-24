@@ -18,6 +18,8 @@ public class VentaService implements IVentaService {
     public Venta guardarVenta(VentaDto ventaDto) {
         Venta venta = new Venta(
                 ventaDto.getIdVenta(),
+                ventaDto.getNombreCliente(),
+                ventaDto.getNumeroCliente(),
                 ventaDto.getDate(),
                 ventaDto.getTotal(),
                 ventaDto.getTipoDeVenta(),

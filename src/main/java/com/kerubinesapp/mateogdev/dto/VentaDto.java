@@ -19,6 +19,8 @@ public class VentaDto {
 
 
     private Long idVenta;
+    private String nombreCliente;
+    private String numeroCliente;
     private LocalDateTime Date;
     private Double total;
     private String tipoDeVenta;

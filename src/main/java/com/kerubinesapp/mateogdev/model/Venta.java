@@ -18,6 +18,8 @@ public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idVenta;
+    private String nombreCliente;
+    private String numeroCliente;
     private LocalDateTime Date;
     private Double total;
     private String tipoDeVenta;

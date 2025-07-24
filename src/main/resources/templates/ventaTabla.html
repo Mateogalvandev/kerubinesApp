@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Ventas - Kerubines App</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"> <!-- Estilos base del sistema -->
+    <link rel="stylesheet" th:href="@{/css/ventaTabla.css}"> <!-- Estilos específicos de ventas -->
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="header-left">
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <h1 class="logo"><a href="/">Kerubines App</a></h1>
+    </div>
+    <div class="header-right">
+        <div class="user-menu">
+            <button class="user-button" id="userButton">
+                <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+            </button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <form th:action="@{/logout}" method="post" style="margin: 0; padding: 0;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="dropdown-item logout">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16,17 21,12 16,7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Cerrar Sesión
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+        <!-- Venta Section -->
+        <div class="nav-section">
+            <button class="nav-item nav-toggle active" data-target="ventaSubmenu">
+                <div class="nav-item-content">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+                    </svg>
+                    <span>Venta</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(90deg);">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+            <div class="nav-submenu active" id="ventaSubmenu">
+                <a href="#" class="nav-subitem" th:href="@{/venta/crear}">
+                    <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Crear
+                </a>
+                <a href="#" class="nav-subitem active" th:href="@{/venta/administrar}">
+                    <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                    Administrar
+                </a>
+            </div>
+        </div>
+        <!-- Usuarios Section -->
+        <div class="nav-section">
+            <button class="nav-item nav-toggle" data-target="usuariosSubmenu">
+                <div class="nav-item-content">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Usuarios</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+            <div class="nav-submenu" id="usuariosSubmenu">
+                <a href="#" class="nav-subitem" th:href="@{/usuarios/crear}">
+                    <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Crear
+                </a>
+                <a href="#" class="nav-subitem" th:href="@{/usuarios/administrar}">
+                    <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                    Administrar
+                </a>
+            </div>
+        </div>
+        <!-- Productos Section -->
+        <div class="nav-section">
+            <button class="nav-item nav-toggle" data-target="productosSubmenu">
+                <div class="nav-item-content">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span>Productos</span>
+                </div>
+                <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+            <div class="nav-submenu" id="productosSubmenu">
+                <a href="#" class="nav-subitem" th:href="@{/productos/crear}">
+                    <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Crear
+                </a>
+                <a href="#" class="nav-subitem" th:href="@{/productos/administrar}">
+                    <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                    Administrar
+                </a>
+            </div>
+        </div>
+    </nav>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content" id="mainContent">
+    <div class="container-fluid">
+        <!-- Título de la página -->
+        <div class="page-header">
+            <div class="page-title-section">
+                <h2 class="page-title">Administración de Ventas</h2>
+                <p class="page-subtitle">Gestiona y supervisa todas las ventas registradas en el sistema.</p>
+            </div>
+            <div class="page-actions">
+                <a href="#" th:href="@{/venta/crear}" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Nueva Venta
+                </a>
+            </div>
+        </div>
+
+        <!-- Filtros y estadísticas -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number" id="totalSales">0</h3>
+                    <p class="stat-label">Total Ventas</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number" id="totalRevenue">$0.00</h3>
+                    <p class="stat-label">Ingresos Totales</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number" id="todaySales">0</h3>
+                    <p class="stat-label">Ventas Hoy</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters-container">
+            <div class="filter-group">
+                <label for="dateFilter">Filtrar por fecha:</label>
+                <select id="dateFilter" class="filter-select">
+                    <option value="all">Todas las fechas</option>
+                    <option value="today">Hoy</option>
+                    <option value="week">Esta semana</option>
+                    <option value="month">Este mes</option>
+                    <option value="custom">Rango personalizado</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="statusFilter">Estado:</label>
+                <select id="statusFilter" class="filter-select">
+                    <option value="all">Todos los estados</option>
+                    <option value="completada">Completada</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="paymentFilter">Método de pago:</label>
+                <select id="paymentFilter" class="filter-select">
+                    <option value="all">Todos los métodos</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="transferencia">Transferencia</option>
+                    <option value="tarjeta">Tarjeta</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Barra de búsqueda -->
+        <div class="search-bar-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Buscar por cliente, ID de venta o vendedor...">
+            <button class="search-button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Contenedor de la tabla -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Registro de Ventas</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th data-column="id">
+                                ID Venta
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th data-column="cliente">
+                                Cliente
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th data-column="fecha">
+                                Fecha
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th data-column="total">
+                                Total
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th data-column="metodoPago">
+                                Método de Pago
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th data-column="estado">
+                                Estado
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th data-column="vendedor">
+                                Vendedor
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        <!-- Ejemplo de datos (esto vendría de tu BD) -->
+                        <tr th:each="venta : ${ventasLista}">
+                            <td th:text="${venta.idVenta}">#001</td>
+                            <td th:text="${venta.nombreCliente}">Juan Pérez</td>
+                            <td th:text="${venta.fechaVenta}">2024-01-15</td>
+                            <td class="total-amount" th:text="'$' + ${venta.total}">$125.50</td>
+                            <td>
+                                <span class="payment-badge" th:class="'payment-badge payment-' + ${venta.metodoPago}" th:text="${venta.metodoPago}">Efectivo</span>
+                            </td>
+                            <td>
+                                <span class="status-badge" th:class="'status-badge status-' + ${venta.estado}" th:text="${venta.estado}">Completada</span>
+                            </td>
+                            <td th:text="${venta.vendedor}">María García</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a th:href="@{/venta/ver/{id}(id=${venta.idVenta})}" class="btn btn-view" title="Ver detalles">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </a>
+                                    <a th:href="@{/venta/editar/{id}(id=${venta.idVenta})}" class="btn btn-edit" title="Editar">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </a>
+                                    <button class="btn btn-print" onclick="printSale(${venta.idVenta})" title="Imprimir">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6,9 6,2 18,2 18,9"></polyline>
+                                            <path d="M6,18H4a2,2,0,0,1-2-2V11a2,2,0,0,1,2-2H20a2,2,0,0,1,2,2v5a2,2,0,0,1-2,2H18"></path>
+                                            <rect x="6" y="14" width="12" height="8"></rect>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-delete" onclick="confirmDelete(event, '@{/venta/eliminar/{id}(id=${venta.idVenta})}')" title="Eliminar">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="3,6 5,6 21,6"></polyline>
+                                            <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination-container">
+            <button class="pagination-button" id="prevPage">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Anterior
+            </button>
+            <div class="page-numbers" id="pageNumbers">
+                <!-- Los números de página se generarán con JavaScript -->
+            </div>
+            <button class="pagination-button" id="nextPage">
+                Siguiente
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+</main>
+
+<!-- Overlay for mobile -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Modal para ver detalles de venta -->
+<div class="modal" id="saleDetailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Detalles de la Venta</h3>
+            <button type="button" class="modal-close" id="closeSaleModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" id="saleDetailContent">
+            <!-- El contenido se cargará dinámicamente -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle sidebar (código existente)
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const overlay = document.getElementById('overlay');
+
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+    });
+
+    // Toggle user dropdown (código existente)
+    const userButton = document.getElementById('userButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    userButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => {
+        dropdownMenu.classList.remove('active');
+    });
+
+    dropdownMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Toggle navigation submenus (código existente)
+    const navToggles = document.querySelectorAll('.nav-toggle');
+    navToggles.forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = toggle.getAttribute('data-target');
+            const submenu = document.getElementById(targetId);
+            const chevron = toggle.querySelector('.nav-chevron');
+
+            navToggles.forEach(otherToggle => {
+                if (otherToggle !== toggle) {
+                    const otherTargetId = otherToggle.getAttribute('data-target');
+                    const otherSubmenu = document.getElementById(otherTargetId);
+                    const otherChevron = otherToggle.querySelector('.nav-chevron');
+                    otherSubmenu.classList.remove('active');
+                    otherToggle.classList.remove('active');
+                    otherChevron.style.transform = 'rotate(0deg)';
+                }
+            });
+
+            submenu.classList.toggle('active');
+            toggle.classList.toggle('active');
+            if (submenu.classList.contains('active')) {
+                chevron.style.transform = 'rotate(90deg)';
+            } else {
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+    });
+
+    // --- Lógica específica para administrar ventas ---
+
+    // Función para obtener datos de la tabla desde el DOM
+    function getTableDataFromDOM() {
+        const rows = document.querySelectorAll('#tableBody tr');
+        const data = [];
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length > 0) {
+                data.push({
+                    id: cells[0].textContent.trim(),
+                    cliente: cells[1].textContent.trim(),
+                    fecha: cells[2].textContent.trim(),
+                    total: cells[3].textContent.trim(),
+                    metodoPago: cells[4].textContent.trim(),
+                    estado: cells[5].textContent.trim(),
+                    vendedor: cells[6].textContent.trim()
+                });
+            }
+        });
+
+        return data;
+    }
+
+    const tableBody = document.getElementById('tableBody');
+    const searchInput = document.getElementById('searchInput');
+    const sortButtons = document.querySelectorAll('.sort-button');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const pageNumbersContainer = document.getElementById('pageNumbers');
+
+    let tableData = [];
+    let filteredData = [];
+    let currentPage = 1;
+    const rowsPerPage = 10;
+
+    // Filtros
+    const dateFilter = document.getElementById('dateFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const paymentFilter = document.getElementById('paymentFilter');
+
+    // Función para renderizar la tabla
+    function renderTable(dataToRender) {
+        tableBody.innerHTML = '';
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedData = dataToRender.slice(start, end);
+
+        if (paginatedData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" class="no-results">No se encontraron resultados.</td></tr>';
+            return;
+        }
+
+        // Obtener las filas originales de Thymeleaf
+        const originalRows = Array.from(document.querySelectorAll('#tableBody tr'));
+
+        paginatedData.forEach(item => {
+            // Buscar la fila original que coincide con este item
+            const originalRow = originalRows.find(row =>
+                row.querySelector('td').textContent.trim() === item.id
+            );
+
+            if (originalRow) {
+                // Clonar la fila original para mantener todo el HTML de Thymeleaf
+                const row = originalRow.cloneNode(true);
+                tableBody.appendChild(row);
+            }
+        });
+    }
+
+    // Función para actualizar estadísticas
+    function updateStats() {
+        const totalSales = filteredData.length;
+        const totalRevenue = filteredData.reduce((sum, sale) => {
+            const amount = parseFloat(sale.total.replace('$', '').replace(',', ''));
+            return sum + (isNaN(amount) ? 0 : amount);
+        }, 0);
+
+        const today = new Date().toISOString().split('T')[0];
+        const todaySales = filteredData.filter(sale => sale.fecha === today).length;
+
+        document.getElementById('totalSales').textContent = totalSales;
+        document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
+        document.getElementById('todaySales').textContent = todaySales;
+    }
+
+    // Función para aplicar filtros
+    function applyFilters() {
+        filteredData = [...tableData];
+
+        // Filtro por fecha
+        const dateFilterValue = dateFilter.value;
+        if (dateFilterValue !== 'all') {
+            const today = new Date();
+            filteredData = filteredData.filter(item => {
+                const itemDate = new Date(item.fecha);
+                switch (dateFilterValue) {
+                    case 'today':
+                        return itemDate.toDateString() === today.toDateString();
+                    case 'week':
+                        const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        return itemDate >= weekAgo;
+                    case 'month':
+                        return itemDate.getMonth() === today.getMonth() &&
+                               itemDate.getFullYear() === today.getFullYear();
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Filtro por estado
+        if (statusFilter.value !== 'all') {
+            filteredData = filteredData.filter(item =>
+                item.estado.toLowerCase().includes(statusFilter.value.toLowerCase())
+            );
+        }
+
+        // Filtro por método de pago
+        if (paymentFilter.value !== 'all') {
+            filteredData = filteredData.filter(item =>
+                item.metodoPago.toLowerCase().includes(paymentFilter.value.toLowerCase())
+            );
+        }
+
+        // Aplicar búsqueda si hay texto
+        if (searchInput.value.trim() !== '') {
+            const searchTerm = searchInput.value.toLowerCase();
+            filteredData = filteredData.filter(item =>
+                Object.values(item).some(value =>
+                    String(value).toLowerCase().includes(searchTerm)
+                )
+            );
+        }
+
+        currentPage = 1;
+        renderTable(filteredData);
+        updatePaginationControls();
+        updateStats();
+    }
+
+    // Event listeners para filtros
+    dateFilter.addEventListener('change', applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+    paymentFilter.addEventListener('change', applyFilters);
+
+    // Búsqueda
+    searchInput.addEventListener('input', applyFilters);
+
+    // Función para actualizar controles de paginación
+    function updatePaginationControls() {
+        const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+        pageNumbersContainer.innerHTML = '';
+
+        prevPageBtn.disabled = currentPage === 1;
+        nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.classList.add('page-number-button');
+            pageBtn.textContent = i;
+            if (i === currentPage) {
+                pageBtn.classList.add('active');
+            }
+            pageBtn.addEventListener('click', () => {
+                currentPage = i;
+                renderTable(filteredData);
+                updatePaginationControls();
+            });
+            pageNumbersContainer.appendChild(pageBtn);
+        }
+    }
+
+    // Ordenamiento
+    sortButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const column = button.parentElement.getAttribute('data-column');
+            let direction = button.getAttribute('data-sort-direction');
+
+            // Resetear otros botones
+            sortButtons.forEach(otherButton => {
+                if (otherButton !== button) {
+                    otherButton.setAttribute('data-sort-direction', 'none');
+                    otherButton.querySelector('.sort-icon').innerHTML =
+                        '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>';
+                }
+            });
+
+            // Cambiar dirección
+            if (direction === 'asc') {
+                direction = 'desc';
+                button.querySelector('.sort-icon').innerHTML = '<polyline points="7 14 12 9 17 14"></polyline>';
+            } else if (direction === 'desc') {
+                direction = 'none';
+                button.querySelector('.sort-icon').innerHTML =
+                    '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>';
+            } else {
+                direction = 'asc';
+                button.querySelector('.sort-icon').innerHTML = '<polyline points="7 10 12 15 17 10"></polyline>';
+            }
+
+            button.setAttribute('data-sort-direction', direction);
+
+            // Ordenar datos
+            if (direction !== 'none') {
+                filteredData.sort((a, b) => {
+                    let valA = String(a[column]).toLowerCase();
+                    let valB = String(b[column]).toLowerCase();
+
+                    // Manejo especial para números y fechas
+                    if (column === 'total') {
+                        valA = parseFloat(valA.replace('$', '').replace(',', '')) || 0;
+                        valB = parseFloat(valB.replace('$', '').replace(',', '')) || 0;
+                    } else if (column === 'fecha') {
+                        valA = new Date(valA);
+                        valB = new Date(valB);
+                    }
+
+                    if (valA < valB) return direction === 'asc' ? -1 : 1;
+                    if (valA > valB) return direction === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            } else {
+                applyFilters(); // Volver al orden original con filtros
+                return;
+            }
+
+            currentPage = 1;
+            renderTable(filteredData);
+            updatePaginationControls();
+        });
+    });
+
+    // Paginación
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable(filteredData);
+            updatePaginationControls();
+        }
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable(filteredData);
+            updatePaginationControls();
+        }
+    });
+
+    // Funciones específicas de ventas
+    function printSale(saleId) {
+        // Implementar lógica de impresión
+        console.log('Imprimir venta:', saleId);
+        // Aquí puedes abrir una nueva ventana con el recibo o generar un PDF
+    }
+
+    function confirmDelete(event, deleteUrl) {
+        event.preventDefault();
+        const isConfirmed = confirm('¿Estás seguro de que deseas eliminar esta venta? Esta acción no se puede deshacer.');
+        if (isConfirmed) {
+            const processedUrl = deleteUrl
+                .replace(/&amp;/g, '&')
+                .replace(/&#x2F;/g, '/');
+            window.location.href = processedUrl;
+        }
+        return false;
+    }
+
+    // Inicializar al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        tableData = getTableDataFromDOM();
+        filteredData = [...tableData];
+
+        renderTable(filteredData);
+        updatePaginationControls();
+        updateStats();
+    });
+</script>
+</body>
+</html>
