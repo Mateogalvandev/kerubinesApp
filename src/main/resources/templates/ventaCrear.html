@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kerubines App - Crear Venta</title>
     <link rel="stylesheet" th:href="@{/css/productoStyle.css}"> <!-- Estilos base del sistema -->
-    <link rel="stylesheet" th:href="@{/css/ventaStyle.css}"> <!-- Estilos específicos de la venta -->
+    <link rel="stylesheet" th:href="@{/css/productoTabla.css}"> <!-- Estilos específicos de la tabla -->
+    <link rel="stylesheet" th:href="@{/css/ventaStyle.css}"> <!-- Estilos específicos para ventas -->
 </head>
 <body>
 <!-- Header -->
@@ -77,7 +78,6 @@
                 </a>
             </div>
         </div>
-
         <!-- Usuarios Section -->
         <div class="nav-section">
             <button class="nav-item nav-toggle" data-target="usuariosSubmenu">
@@ -108,7 +108,6 @@
                 </a>
             </div>
         </div>
-
         <!-- Productos Section -->
         <div class="nav-section">
             <button class="nav-item nav-toggle" data-target="productosSubmenu">
@@ -148,94 +147,160 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h2 class="page-title">Crear Nueva Venta</h2>
-            <p class="page-description">Registra los detalles de una nueva transacción de venta.</p>
+            <p class="page-description">Completa la información de la venta para registrarla en el sistema</p>
         </div>
-
         <div class="form-container">
-            <form id="saleForm">
+            <form id="ventaForm" th:action="@{/venta/crear/post}" th:object="${ventaEntidad}" method="post">
                 <div class="form-grid">
-                    <!-- Sección de Productos -->
-                    <div class="form-group full-width">
-                        <label class="form-label required">Productos</label>
-                        <div id="productsContainer" class="products-container">
-                            <!-- Product rows will be added here by JavaScript -->
-                            <div class="product-row">
-                                <div class="form-group product-name-group">
-                                    <label for="productName_0" class="sr-only">Nombre del Producto</label>
-                                    <input type="text" id="productName_0" name="productName_0" class="form-input" placeholder="Nombre del Producto" required>
-                                </div>
-                                <div class="form-group product-quantity-group">
-                                    <label for="productQuantity_0" class="sr-only">Cantidad</label>
-                                    <input type="number" id="productQuantity_0" name="productQuantity_0" class="form-input" placeholder="Cantidad" min="1" value="1" required>
-                                </div>
-                                <div class="form-group product-price-group">
-                                    <label for="productPrice_0" class="sr-only">Precio Unitario</label>
-                                    <input type="number" id="productPrice_0" name="productPrice_0" class="form-input" placeholder="Precio Unitario" step="0.01" min="0" required>
-                                </div>
-                                <div class="form-group product-subtotal-group">
-                                    <label for="productSubtotal_0" class="sr-only">Subtotal</label>
-                                    <input type="text" id="productSubtotal_0" name="productSubtotal_0" class="form-input read-only" value="0.00" readonly>
-                                </div>
-                                <button type="button" class="btn-remove-product" onclick="removeProductRow(this)">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M18 6L6 18M6 6l12 12"></path>
-                                    </svg>
-                                </button>
+                    <!-- ID Venta (Auto-generado) -->
+                    <div class="form-group">
+                        <label for="idVenta" class="form-label">ID Venta</label>
+                        <input
+                                type="text"
+                                id="idVenta"
+                                th:field="*{idVenta}"
+                                class="form-input"
+                                placeholder="Se generará automáticamente"
+                                readonly
+                        >
+                    </div>
+
+                    <!-- Fecha y Tipo de Venta en la misma fila -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date" class="form-label required">Fecha</label>
+                            <input
+                                    type="datetime-local"
+                                    id="date"
+                                    th:field="*{date}"
+                                    class="form-input"
+                                    required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoDeVenta" class="form-label required">Tipo de Venta</label>
+                            <select
+                                    id="tipoDeVenta"
+                                    th:field="*{tipoDeVenta}"
+                                    class="form-input"
+                                    required
+                            >
+                                <option value="">Seleccionar tipo</option>
+                                <option value="EFECTIVO">Efectivo</option>
+                                <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
+                                <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
+                                <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+                                <option value="CHEQUE">Cheque</option>
+                                <option value="CREDITO">Crédito</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Total y Usuario en la misma fila -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="total" class="form-label required">Total</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">$</span>
+                                <input
+                                        type="number"
+                                        id="total"
+                                        th:field="*{total}"
+                                        class="form-input"
+                                        placeholder="0.00"
+                                        step="0.01"
+                                        min="0"
+                                        required
+                                        readonly
+                                >
                             </div>
                         </div>
-                        <button type="button" id="addProductBtn" class="btn btn-add-product">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Agregar Producto
-                        </button>
+                        <div class="form-group">
+                            <label for="usuarioVentaIdUsuario" class="form-label required">Usuario Responsable</label>
+                            <select
+                                    id="usuarioVentaIdUsuario"
+                                    th:field="*{usuarioVentaIdUsuario}"
+                                    class="form-input"
+                                    required
+                            >
+                                <option value="">Seleccionar usuario</option>
+                                <option th:each="user : ${userList}"
+                                        th:value="${user.id}"
+                                        th:text="${user.nombre + ' ' + user.apellido}">
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- Tipo de Venta -->
+                    <!-- Productos Section -->
                     <div class="form-group">
-                        <label for="tipoVenta" class="form-label required">Tipo de Venta</label>
-                        <select id="tipoVenta" name="tipoVenta" class="form-select" required>
-                            <option value="">Selecciona tipo de venta</option>
-                            <option value="transferencia">Transferencia</option>
-                            <option value="efectivo">Efectivo</option>
-                            <option value="tarjeta">Tarjeta de Crédito</option>
-                        </select>
+                        <label class="form-label">Productos</label>
+                        <div class="products-container">
+                            <div class="products-header">
+                                <div class="product-grid-header">
+                                    <span>Producto</span>
+                                    <span>Cantidad</span>
+                                    <span>Precio Unit.</span>
+                                    <span>Subtotal</span>
+                                    <span>Acción</span>
+                                </div>
+                            </div>
+                            <div id="productContainer">
+                                <div class="product-row">
+                                    <select class="form-input product-select" name="products[0].id">
+                                        <option value="">Seleccionar producto</option>
+                                        <option th:each="product : ${productList}"
+                                                th:value="${product.id}"
+                                                th:text="${product.nombreProducto}"
+                                                th:data-price="${product.costo}">
+                                        </option>
+                                    </select>
+                                    <input type="number" class="form-input quantity-input"
+                                           name="products[0].quantity" placeholder="1"
+                                           min="1" value="1">
+                                    <input type="text" class="form-input price-display"
+                                           placeholder="$0.00" readonly>
+                                    <input type="text" class="form-input subtotal-input"
+                                           placeholder="$0.00" readonly>
+                                    <button type="button" class="btn-icon btn-danger remove-product">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="3,6 5,6 21,6"></polyline>
+                                            <path d="M19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="addProduct">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Agregar Producto
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Nombre del Cliente -->
+                    <!-- Resumen de la venta -->
                     <div class="form-group">
-                        <label for="nombreCliente" class="form-label required">Nombre del Cliente</label>
-                        <input type="text" id="nombreCliente" name="nombreCliente" class="form-input" placeholder="Nombre completo del cliente" required>
-                    </div>
-
-                    <!-- Número de Teléfono -->
-                    <div class="form-group">
-                        <label for="telefonoCliente" class="form-label">Número de Teléfono</label>
-                        <input type="tel" id="telefonoCliente" name="telefonoCliente" class="form-input" placeholder="Ej: 123-456-7890">
-                    </div>
-
-                    <!-- Total a Pagar y Porcentaje -->
-                    <div class="form-group">
-                        <label for="subtotal" class="form-label">Subtotal Productos</label>
-                        <input type="text" id="subtotal" name="subtotal" class="form-input read-only" value="0.00" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="porcentaje" class="form-label">Porcentaje Adicional (%)</label>
-                        <input type="number" id="porcentaje" name="porcentaje" class="form-input" placeholder="Ej: 10" min="0" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="montoPorcentaje" class="form-label">Monto Porcentaje</label>
-                        <input type="text" id="montoPorcentaje" name="montoPorcentaje" class="form-input read-only" value="0.00" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="totalPagar" class="form-label required">Total a Pagar</label>
-                        <input type="text" id="totalPagar" name="totalPagar" class="form-input read-only total-highlight" value="0.00" readonly>
+                        <div class="sale-summary">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="summarySubtotal">$0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>IVA (16%):</span>
+                                <span id="summaryTax">$0.00</span>
+                            </div>
+                            <div class="summary-row total-row">
+                                <span>Total:</span>
+                                <span id="summaryTotal">$0.00</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelSaleBtn">
+                    <button type="button" class="btn btn-secondary" id="cancelButton">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M18 6L6 18M6 6l12 12"></path>
                         </svg>
@@ -259,275 +324,225 @@
 <div class="overlay" id="overlay"></div>
 
 <script>
-    let productRowCount = 1; // Keep track of product rows for unique IDs
+    // Toggle sidebar
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const overlay = document.getElementById('overlay');
 
-    document.addEventListener('DOMContentLoaded', () => {
-        initializeNavigation();
-        initializeSaleForm();
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('sidebar-open');
     });
 
-    function initializeSaleForm() {
-        const productsContainer = document.getElementById('productsContainer');
-        const addProductBtn = document.getElementById('addProductBtn');
-        const porcentajeInput = document.getElementById('porcentaje');
-        const saleForm = document.getElementById('saleForm');
-        const cancelSaleBtn = document.getElementById('cancelSaleBtn');
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+    });
 
-        addProductBtn.addEventListener('click', addProductRow);
-        porcentajeInput.addEventListener('input', calculateTotals);
-        productsContainer.addEventListener('input', (e) => {
-            if (e.target.matches('.product-quantity-group input, .product-price-group input')) {
-                updateProductSubtotal(e.target);
-                calculateTotals();
+    // Toggle user dropdown
+    const userButton = document.getElementById('userButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    userButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        dropdownMenu.classList.remove('active');
+    });
+
+    dropdownMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Toggle navigation submenus
+    const navToggles = document.querySelectorAll('.nav-toggle');
+    navToggles.forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = toggle.getAttribute('data-target');
+            const submenu = document.getElementById(targetId);
+            const chevron = toggle.querySelector('.nav-chevron');
+
+            // Close other submenus
+            navToggles.forEach(otherToggle => {
+                if (otherToggle !== toggle) {
+                    const otherTargetId = otherToggle.getAttribute('data-target');
+                    const otherSubmenu = document.getElementById(otherTargetId);
+                    const otherChevron = otherToggle.querySelector('.nav-chevron');
+                    otherSubmenu.classList.remove('active');
+                    otherToggle.classList.remove('active');
+                    otherChevron.style.transform = 'rotate(0deg)';
+                }
+            });
+
+            // Toggle current submenu
+            submenu.classList.toggle('active');
+            toggle.classList.toggle('active');
+            if (submenu.classList.contains('active')) {
+                chevron.style.transform = 'rotate(90deg)';
+            } else {
+                chevron.style.transform = 'rotate(0deg)';
             }
         });
+    });
 
-        saleForm.addEventListener('submit', handleSaleFormSubmit);
-        cancelSaleBtn.addEventListener('click', handleCancelSale);
+    // Handle submenu item clicks
+    const subItems = document.querySelectorAll('.nav-subitem');
+    subItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove active class from all subitems
+            subItems.forEach(subItem => subItem.classList.remove('active'));
+            // Add active class to clicked item
+            item.classList.add('active');
+        });
+    });
 
-        // Initial calculation for the first row
-        updateProductSubtotal(document.getElementById('productQuantity_0'));
-        calculateTotals();
+    // Sales form functionality
+    let productIndex = 1;
 
-        // Initialize the 'Crear' submenu for 'Venta' as active
+    // Set current date and time
+    document.addEventListener('DOMContentLoaded', () => {
+        const now = new Date();
+        const formattedDate = now.toISOString().slice(0, 16);
+        document.getElementById('date').value = formattedDate;
+
+        // Initialize the sales submenu as active on page load
         const ventaToggle = document.querySelector('[data-target="ventaSubmenu"]');
         const ventaSubmenu = document.getElementById('ventaSubmenu');
         const ventaChevron = ventaToggle.querySelector('.nav-chevron');
 
+        // Force open the Venta submenu
         ventaSubmenu.classList.add('active');
         ventaToggle.classList.add('active');
         ventaChevron.style.transform = 'rotate(90deg)';
 
-        const createVentaItem = document.querySelector('a[th\\:href*="/venta/crear"]');
-        if (createVentaItem) {
-            createVentaItem.classList.add('active');
+        // Mark "Crear" item as active in submenu
+        const createItem = document.querySelector('a[th\\:href*="/venta/crear"]');
+        if (createItem) {
+            createItem.classList.add('active');
         }
-    }
+    });
 
-    function addProductRow() {
-        const productsContainer = document.getElementById('productsContainer');
+    // Add product functionality
+    document.getElementById('addProduct').addEventListener('click', function() {
         const newRow = document.createElement('div');
-        newRow.classList.add('product-row');
+        newRow.className = 'product-row';
         newRow.innerHTML = `
-            <div class="form-group product-name-group">
-                <label for="productName_${productRowCount}" class="sr-only">Nombre del Producto</label>
-                <input type="text" id="productName_${productRowCount}" name="productName_${productRowCount}" class="form-input" placeholder="Nombre del Producto" required>
-            </div>
-            <div class="form-group product-quantity-group">
-                <label for="productQuantity_${productRowCount}" class="sr-only">Cantidad</label>
-                <input type="number" id="productQuantity_${productRowCount}" name="productQuantity_${productRowCount}" class="form-input" placeholder="Cantidad" min="1" value="1" required>
-            </div>
-            <div class="form-group product-price-group">
-                <label for="productPrice_${productRowCount}" class="sr-only">Precio Unitario</label>
-                <input type="number" id="productPrice_${productRowCount}" name="productPrice_${productRowCount}" class="form-input" placeholder="Precio Unitario" step="0.01" min="0" required>
-            </div>
-            <div class="form-group product-subtotal-group">
-                <label for="productSubtotal_${productRowCount}" class="sr-only">Subtotal</label>
-                <input type="text" id="productSubtotal_${productRowCount}" name="productSubtotal_${productRowCount}" class="form-input read-only" value="0.00" readonly>
-            </div>
-            <button type="button" class="btn-remove-product" onclick="removeProductRow(this)">
+            <select class="form-input product-select" name="products[${productIndex}].id">
+                <option value="">Seleccionar producto</option>
+                <option th:each="product : \${productList}"
+                        th:value="\${product.id}"
+                        th:text="\${product.nombreProducto}"
+                        th:data-price="\${product.costo}">
+                </option>
+            </select>
+            <input type="number" class="form-input quantity-input"
+                   name="products[${productIndex}].quantity" placeholder="1"
+                   min="1" value="1">
+            <input type="text" class="form-input price-display"
+                   placeholder="$0.00" readonly>
+            <input type="text" class="form-input subtotal-input"
+                   placeholder="$0.00" readonly>
+            <button type="button" class="btn-icon btn-danger remove-product">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 6L6 18M6 6l12 12"></path>
+                    <polyline points="3,6 5,6 21,6"></polyline>
+                    <path d="M19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2"></path>
                 </svg>
             </button>
         `;
-        productsContainer.appendChild(newRow);
-        productRowCount++;
-        // Add event listeners for the new row's inputs
-        const newQuantityInput = newRow.querySelector(`.product-quantity-group input`);
-        const newPriceInput = newRow.querySelector(`.product-price-group input`);
-        newQuantityInput.addEventListener('input', () => { updateProductSubtotal(newQuantityInput); calculateTotals(); });
-        newPriceInput.addEventListener('input', () => { updateProductSubtotal(newPriceInput); calculateTotals(); });
-        updateProductSubtotal(newQuantityInput); // Calculate subtotal for the new row
-        calculateTotals(); // Recalculate overall totals
-    }
+        document.getElementById('productContainer').appendChild(newRow);
+        productIndex++;
+    });
 
-    function removeProductRow(button) {
-        const productsContainer = document.getElementById('productsContainer');
-        const rowToRemove = button.closest('.product-row');
-        if (productsContainer.children.length > 1) { // Ensure at least one row remains
-            productsContainer.removeChild(rowToRemove);
-            calculateTotals(); // Recalculate totals after removal
-        } else {
-            alert('Debe haber al menos un producto en la venta.');
-        }
-    }
-
-    function updateProductSubtotal(inputElement) {
-        const row = inputElement.closest('.product-row');
-        const quantityInput = row.querySelector('.product-quantity-group input');
-        const priceInput = row.querySelector('.product-price-group input');
-        const subtotalInput = row.querySelector('.product-subtotal-group input');
-
-        const quantity = parseFloat(quantityInput.value) || 0;
-        const price = parseFloat(priceInput.value) || 0;
-        const subtotal = quantity * price;
-        subtotalInput.value = subtotal.toFixed(2);
-    }
-
-    function calculateTotals() {
-        let overallSubtotal = 0;
-        document.querySelectorAll('.product-row').forEach(row => {
-            const subtotalInput = row.querySelector('.product-subtotal-group input');
-            overallSubtotal += parseFloat(subtotalInput.value) || 0;
-        });
-
-        document.getElementById('subtotal').value = overallSubtotal.toFixed(2);
-
-        const porcentaje = parseFloat(document.getElementById('porcentaje').value) || 0;
-        const montoPorcentaje = overallSubtotal * (porcentaje / 100);
-        document.getElementById('montoPorcentaje').value = montoPorcentaje.toFixed(2);
-
-        const totalPagar = overallSubtotal + montoPorcentaje;
-        document.getElementById('totalPagar').value = totalPagar.toFixed(2);
-    }
-
-    function handleSaleFormSubmit(e) {
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-        const saleData = {
-            products: [],
-            tipoVenta: formData.get('tipoVenta'),
-            nombreCliente: formData.get('nombreCliente'),
-            telefonoCliente: formData.get('telefonoCliente'),
-            subtotal: parseFloat(formData.get('subtotal')),
-            porcentaje: parseFloat(formData.get('porcentaje')),
-            montoPorcentaje: parseFloat(formData.get('montoPorcentaje')),
-            totalPagar: parseFloat(formData.get('totalPagar'))
-        };
-
-        // Collect product details
-        document.querySelectorAll('.product-row').forEach((row, index) => {
-            saleData.products.push({
-                name: formData.get(`productName_${index}`),
-                quantity: parseFloat(formData.get(`productQuantity_${index}`)),
-                price: parseFloat(formData.get(`productPrice_${index}`)),
-                subtotal: parseFloat(formData.get(`productSubtotal_${index}`))
-            });
-        });
-
-        console.log('Datos de la Venta:', saleData);
-        alert('Venta creada exitosamente!');
-        e.target.reset(); // Reset the form
-        // Reset product rows to just one
-        const productsContainer = document.getElementById('productsContainer');
-        while (productsContainer.children.length > 1) {
-            productsContainer.removeChild(productsContainer.lastChild);
-        }
-        productRowCount = 1;
-        // Reset initial product row values
-        document.getElementById('productName_0').value = '';
-        document.getElementById('productQuantity_0').value = '1';
-        document.getElementById('productPrice_0').value = '';
-        updateProductSubtotal(document.getElementById('productQuantity_0'));
-        calculateTotals();
-    }
-
-    function handleCancelSale() {
-        if (confirm('¿Estás seguro de que quieres cancelar? Se perderán los datos ingresados.')) {
-            const saleForm = document.getElementById('saleForm');
-            saleForm.reset();
-            // Reset product rows to just one
-            const productsContainer = document.getElementById('productsContainer');
-            while (productsContainer.children.length > 1) {
-                productsContainer.removeChild(productsContainer.lastChild);
+    // Remove product functionality
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-product')) {
+            const productRows = document.querySelectorAll('.product-row');
+            if (productRows.length > 1) {
+                e.target.closest('.product-row').remove();
+                calculateTotal();
             }
-            productRowCount = 1;
-            // Reset initial product row values
-            document.getElementById('productName_0').value = '';
-            document.getElementById('productQuantity_0').value = '1';
-            document.getElementById('productPrice_0').value = '';
-            updateProductSubtotal(document.getElementById('productQuantity_0'));
-            calculateTotals();
         }
+    });
+
+    // Calculate subtotal when product or quantity changes
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('product-select') || e.target.classList.contains('quantity-input')) {
+            const row = e.target.closest('.product-row');
+            const productSelect = row.querySelector('.product-select');
+            const quantityInput = row.querySelector('.quantity-input');
+            const priceDisplay = row.querySelector('.price-display');
+            const subtotalInput = row.querySelector('.subtotal-input');
+
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const price = parseFloat(selectedOption.dataset.price) || 0;
+            const quantity = parseInt(quantityInput.value) || 0;
+            const subtotal = price * quantity;
+
+            priceDisplay.value = `$${price.toFixed(2)}`;
+            subtotalInput.value = `$${subtotal.toFixed(2)}`;
+            calculateTotal();
+        }
+    });
+
+    // Calculate total
+    function calculateTotal() {
+        let subtotal = 0;
+        document.querySelectorAll('.subtotal-input').forEach(input => {
+            const value = parseFloat(input.value.replace('$', '')) || 0;
+            subtotal += value;
+        });
+
+        const tax = subtotal * 0.16; // 16% IVA
+        const total = subtotal + tax;
+
+        document.getElementById('summarySubtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('summaryTax').textContent = `$${tax.toFixed(2)}`;
+        document.getElementById('summaryTotal').textContent = `$${total.toFixed(2)}`;
+        document.getElementById('total').value = total.toFixed(2);
+
+        // Add visual feedback
+        const summary = document.querySelector('.sale-summary');
+        summary.classList.add('updated');
+        setTimeout(() => summary.classList.remove('updated'), 1000);
     }
 
-    function initializeNavigation() {
-        // Toggle sidebar
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            document.body.classList.toggle('sidebar-open');
+    // Form validation
+    document.getElementById('ventaForm').addEventListener('submit', function(e) {
+        let hasProducts = false;
+        document.querySelectorAll('.product-select').forEach(select => {
+            if (select.value) {
+                hasProducts = true;
+            }
         });
 
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('sidebar-open');
-        });
+        if (!hasProducts) {
+            e.preventDefault();
+            alert('Debe seleccionar al menos un producto para la venta.');
+            return false;
+        }
+    });
 
-        // Toggle user dropdown
-        const userButton = document.getElementById('userButton');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-
-        userButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('active');
-        });
-
-        document.addEventListener('click', () => {
-            dropdownMenu.classList.remove('active');
-        });
-
-        dropdownMenu.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-
-        // Navigation submenus
-        const navToggles = document.querySelectorAll('.nav-toggle');
-        navToggles.forEach(toggle => {
-            toggle.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = toggle.getAttribute('data-target');
-                const submenu = document.getElementById(targetId);
-                const chevron = toggle.querySelector('.nav-chevron');
-
-                // Cerrar otros submenús primero
-                navToggles.forEach(otherToggle => {
-                    if (otherToggle !== toggle) {
-                        const otherTargetId = otherToggle.getAttribute('data-target');
-                        const otherSubmenu = document.getElementById(otherTargetId);
-                        const otherChevron = otherToggle.querySelector('.nav-chevron');
-                        otherSubmenu.classList.remove('active');
-                        otherToggle.classList.remove('active');
-                        otherChevron.style.transform = 'rotate(0deg)';
-                    }
-                });
-
-                // Alternar el submenú actual
-                submenu.classList.toggle('active');
-                toggle.classList.toggle('active');
-                chevron.style.transform = submenu.classList.contains('active') ? 'rotate(90deg)' : 'rotate(0deg)';
-            });
-        });
-
-        // Submenu items - cerrar submenú al hacer clic
-        const subItems = document.querySelectorAll('.nav-subitem');
-        subItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                // Marcar como activo el item clickeado
-                subItems.forEach(subItem => subItem.classList.remove('active'));
-                item.classList.add('active');
-
-                // Cerrar el submenú padre después de hacer clic
-                const parentSubmenu = item.closest('.nav-submenu');
-                const parentToggle = document.querySelector(`[data-target="${parentSubmenu.id}"]`);
-                const parentChevron = parentToggle.querySelector('.nav-chevron');
-
-                // Cerrar con un pequeño delay para que se vea la selección
-                setTimeout(() => {
-                    parentSubmenu.classList.remove('active');
-                    parentToggle.classList.remove('active');
-                    parentChevron.style.transform = 'rotate(0deg)';
-                }, 150);
-            });
-        });
-    }
+    // Cancel button functionality
+    document.getElementById('cancelButton').addEventListener('click', () => {
+        if (confirm('¿Estás seguro de que quieres cancelar? Se perderán los datos ingresados.')) {
+            document.getElementById('ventaForm').reset();
+            // Reset date to current
+            const now = new Date();
+            const formattedDate = now.toISOString().slice(0, 16);
+            document.getElementById('date').value = formattedDate;
+            // Reset summary
+            document.getElementById('summarySubtotal').textContent = '$0.00';
+            document.getElementById('summaryTax').textContent = '$0.00';
+            document.getElementById('summaryTotal').textContent = '$0.00';
+        }
+    });
 </script>
 </body>
 </html>

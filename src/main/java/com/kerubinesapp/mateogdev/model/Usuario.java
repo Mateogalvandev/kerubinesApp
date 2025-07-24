@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,8 +19,8 @@ public class Usuario {
     private String nombre;
     private String username;
     private String password;
-    @OneToMany
-    private List<Venta> ventaLista;
+    @OneToMany(mappedBy = "usuarioVenta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Venta> ventas = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private Rol rolUsuario;
     private LocalDate fechaIngreso;
@@ -42,12 +43,13 @@ public class Usuario {
         ROLE_ADMIN
     }
 
-    public Usuario(Long idUsuario, String nombre, String username, String password, List<Venta> ventaLista, Rol rolUsuario) {
+
+    public Usuario(Long idUsuario, String nombre, String username, String password, List<Venta> ventas, Rol rolUsuario) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.username = username;
         this.password = password;
-        this.ventaLista = ventaLista;
+        this.ventas = ventas;
         this.rolUsuario = rolUsuario;
     }
 
@@ -91,12 +93,12 @@ public class Usuario {
         this.password = password;
     }
 
-    public List<Venta> getVentaLista() {
-        return ventaLista;
+    public List<Venta> getVentas() {
+        return ventas;
     }
 
-    public void setVentaLista(List<Venta> ventaLista) {
-        this.ventaLista = ventaLista;
+    public void setVentas(List<Venta> ventas) {
+        this.ventas = ventas;
     }
 
     public Rol getRolUsuario() {

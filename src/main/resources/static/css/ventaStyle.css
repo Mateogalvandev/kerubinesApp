@@ -1,0 +1,357 @@
+/* Estilos específicos para el formulario de ventas */
+
+/* Input con icono (para el campo de total con símbolo $) */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    color: #6b7280;
+    font-weight: 600;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.input-with-icon .form-input {
+    padding-left: 35px;
+}
+
+/* Contenedor de productos */
+.products-container {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #f9fafb;
+    margin-top: 8px;
+}
+
+.products-header {
+    margin-bottom: 12px;
+}
+
+.product-grid-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 12px;
+    font-weight: 600;
+    color: #374151;
+    padding: 8px 0;
+    border-bottom: 1px solid #d1d5db;
+    font-size: 0.875rem;
+}
+
+.product-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+    transition: background-color 0.2s ease;
+}
+
+.product-row:last-child {
+    border-bottom: none;
+}
+
+.product-row:hover {
+    background-color: #f3f4f6;
+    border-radius: 4px;
+}
+
+/* Botones de icono */
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0;
+}
+
+.btn-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-danger {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.btn-danger:hover {
+    background-color: #fecaca;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.btn-danger:active {
+    transform: translateY(0);
+}
+
+/* Resumen de venta */
+.sale-summary {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+.summary-row:last-child {
+    margin-bottom: 0;
+}
+
+.summary-row span:first-child {
+    font-weight: 500;
+}
+
+.summary-row span:last-child {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.total-row {
+    font-weight: 700 !important;
+    font-size: 1.1em !important;
+    color: #1a202c !important;
+    border-top: 2px solid #cbd5e0;
+    padding-top: 12px;
+    margin-top: 12px;
+}
+
+.total-row span {
+    color: #1a202c !important;
+}
+
+.total-row span:last-child {
+    color: #38a169 !important;
+    font-size: 1.2em;
+}
+
+/* Mejoras en los campos del formulario para ventas */
+.form-input:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    outline: none;
+}
+
+.form-input[readonly] {
+    background-color: #f7fafc;
+    color: #718096;
+    cursor: not-allowed;
+}
+
+/* Select personalizado */
+select.form-input {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+    appearance: none;
+}
+
+select.form-input:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%234299e1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Botón agregar producto */
+#addProduct {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    padding: 8px 16px;
+}
+
+#addProduct svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Animaciones y transiciones */
+.product-row {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design para productos */
+@media (max-width: 768px) {
+    .product-grid-header,
+    .product-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .product-grid-header {
+        display: none;
+    }
+
+    .product-row {
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .product-row .form-input {
+        margin-bottom: 8px;
+    }
+
+    .product-row .btn-icon {
+        align-self: center;
+        margin-top: 8px;
+    }
+}
+
+/* Estados de validación */
+.form-input:invalid {
+    border-color: #f56565;
+    box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.1);
+}
+
+.form-input:valid {
+    border-color: #48bb78;
+}
+
+/* Indicador de campo requerido */
+.form-label.required::after {
+    content: " *";
+    color: #e53e3e;
+    font-weight: bold;
+}
+
+/* Mejoras en el resumen cuando hay cambios */
+.sale-summary.updated {
+    border-color: #4299e1;
+    background-color: #ebf8ff;
+    transition: all 0.3s ease;
+}
+
+/* Loading state para botones */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estilos para mensajes de error */
+.error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.error-message svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Tooltip para ayuda */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #2d3748;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 0.75rem;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Mejoras en accesibilidad */
+.form-input:focus-visible {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+}
+
+.btn:focus-visible {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .sidebar,
+    .header,
+    .form-actions {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 0;
+    }
+
+    .form-container {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+}
