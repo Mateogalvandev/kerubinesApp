@@ -17,8 +17,9 @@ public class ProductoService implements IProductoService {
     @Override
     public Producto guardarProducto(ProductoDto productoDto) {
         Producto producto = new Producto(
-                productoDto.getNombreProducto(), productoDto.getDescripcion(),
-                productoDto.getTalla(), productoDto.getColor(), productoDto.getCosto(),
+                productoDto.getNombreProducto(),
+                productoDto.getTalla(), productoDto.getColor(),productoDto.getDescripcion(),
+                productoDto.getCosto(),
                 productoDto.getStock()
         );
         return productoRepository.save(producto);
