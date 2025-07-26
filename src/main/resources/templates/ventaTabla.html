@@ -324,46 +324,18 @@
                         </thead>
                         <tbody id="tableBody">
                         <!-- Ejemplo de datos (esto vendría de tu BD) -->
-                        <tr th:each="venta : ${ventasLista}">
-                            <td th:text="${venta.idVenta}">#001</td>
-                            <td th:text="${venta.nombreCliente}">Juan Pérez</td>
-                            <td th:text="${venta.fechaVenta}">2024-01-15</td>
-                            <td class="total-amount" th:text="'$' + ${venta.total}">$125.50</td>
+                        <tr th:each="venta : ${ventaTabla}">
+                            <td th:text="${venta.idVenta}">ID</td>
+                            <td th:text="${venta.nombreCliente}">Nombre del Cliente</td>
+                            <td th:text="${venta.numeroCliente}">Numero del Cliente</td>
+                            <td th:text="${venta.Date}">Fecha</td>
+                            <td th:text="${venta.total}">Total</td>
+                            <td th:text="${venta.tipoDeVenta}">Tipo de Venta</td>
+                            <td> </td>Vendedor</td>
                             <td>
-                                <span class="payment-badge" th:class="'payment-badge payment-' + ${venta.metodoPago}" th:text="${venta.metodoPago}">Efectivo</span>
-                            </td>
-                            <td>
-                                <span class="status-badge" th:class="'status-badge status-' + ${venta.estado}" th:text="${venta.estado}">Completada</span>
-                            </td>
-                            <td th:text="${venta.vendedor}">María García</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a th:href="@{/venta/ver/{id}(id=${venta.idVenta})}" class="btn btn-view" title="Ver detalles">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                    </a>
-                                    <a th:href="@{/venta/editar/{id}(id=${venta.idVenta})}" class="btn btn-edit" title="Editar">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                        </svg>
-                                    </a>
-                                    <button class="btn btn-print" onclick="printSale(${venta.idVenta})" title="Imprimir">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="6,9 6,2 18,2 18,9"></polyline>
-                                            <path d="M6,18H4a2,2,0,0,1-2-2V11a2,2,0,0,1,2-2H20a2,2,0,0,1,2,2v5a2,2,0,0,1-2,2H18"></path>
-                                            <rect x="6" y="14" width="12" height="8"></rect>
-                                        </svg>
-                                    </button>
-                                    <button class="btn btn-delete" onclick="confirmDelete(event, '@{/venta/eliminar/{id}(id=${venta.idVenta})}')" title="Eliminar">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="3,6 5,6 21,6"></polyline>
-                                            <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"></path>
-                                        </svg>
-                                    </button>
-                                </div>
+                                <a th:href="@{/venta/editar/{id}(id=${venta.idVenta})}" class="btn btn-edit">Editar</a>
+                                <a href="#" class="btn btn-delete"
+                                   onclick="confirmDelete(event, '@{/venta/eliminar/{id}(id=${venta.idVenta})}')">Eliminar</a>
                             </td>
                         </tr>
                         </tbody>

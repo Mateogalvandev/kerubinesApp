@@ -35,9 +35,11 @@ public class productoController {
 
         System.out.println("Nombre: " + productoDto.getNombreProducto());
         System.out.println("Descripcion: " + productoDto.getDescripcion());
-        System.out.println("Talla: " + productoDto.getTalla());
+        System.out.println("Talla   : " + productoDto.getTalla());
         System.out.println("Color: " + productoDto.getColor());
         System.out.println("Costo: " + productoDto.getCosto());
+        System.out.println("Stock: " + productoDto.getStock());
+
 
         return "redirect:/productos/administrar";
     }

@@ -163,7 +163,7 @@
                                 required
                         >
                     </div>
-                    <!-- Talla y Costo en la misma fila -->
+                    <!-- Talla, Costo y Stock en la misma fila -->
                     <div class="form-row">
                         <div class="form-group">
                             <label for="talla" class="form-label required">Talla</label>
@@ -186,6 +186,19 @@
                                     placeholder="0.00"
                                     step="0.01"
                                     min="0"
+                                    required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="stock" class="form-label required">Stock</label>
+                            <input
+                                    type="number"
+                                    id="stock"
+                                    th:field="*{stock}"
+                                    class="form-input"
+                                    placeholder="0"
+                                    min="0"
+                                    step="1"
                                     required
                             >
                         </div>

@@ -150,7 +150,6 @@
       <h2 class="page-title">Crear Nueva Venta</h2>
       <p class="page-subtitle">Registra una nueva venta en el sistema.</p>
     </div>
-
     <br>
 
     <!-- Formulario de Venta -->
@@ -170,8 +169,8 @@
             <input type="text" id="nombreCliente" name="nombreCliente" th:field="*{nombreCliente}" class="form-input" required>
           </div>
           <div class="form-group">
-            <label for="telefonoCliente">Teléfono</label>
-            <input type="tel" id="telefonoCliente" name="telefonoCliente" th:field="*{numeroCliente}" class="form-input">
+            <label for="numeroCliente">Teléfono</label>
+            <input type="tel" id="numeroCliente" name="numeroCliente" th:field="*{numeroCliente}" class="form-input">
           </div>
         </div>
 
@@ -194,47 +193,68 @@
         </div>
       </div>
 
-      <!-- Selección de Productos -->
-      <!-- Selección de Productos -->
-      <div class="form-section products-section">
+      <!-- Selección de Productos - MEJORADA -->
+      <div class="form-section">
         <div class="section-header">
           <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <h3>Productos</h3>
+          <h3>Selección de Productos</h3>
         </div>
 
-        <div class="form-group">
-          <label for="productoSeleccionado">Seleccionar Producto</label>
-          <select id="productoSeleccionado" class="form-input">
-            <option value="" disabled selected>-- Selecciona un producto --</option>
-            <!-- Iterar sobre productosDisponibles -->
-            <option th:each="producto : ${productosDisponibles}"
-                    th:value="${producto.idProducto}"
-                    th:text="${producto.nombre} + ' - Stock: ' + ${producto.stock} + ' - $' + ${producto.precio}">
-            </option>
-          </select>
-          <button type="button" class="btn btn-secondary" onclick="agregarProducto()">Agregar</button>
+        <!-- Selector de productos con mejor diseño -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="productoSeleccionado">Producto</label>
+            <select id="productoSeleccionado" class="form-input">
+              <option value="" disabled selected>-- Selecciona un producto --</option>
+              <option th:each="producto : ${productosDisponibles}"
+                      th:value="${producto.idProducto}"
+                      th:text="${producto.nombreProducto} + ' - Stock: ' + ${producto.stock} + ' - $' + ${producto.costo}">
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>&nbsp;</label> <!-- Espaciador para alinear el botón -->
+            <button type="button" class="btn btn-secondary" onclick="agregarProducto()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Agregar Producto
+            </button>
+          </div>
         </div>
 
-        <!-- Lista de productos agregados -->
+        <!-- Tabla de productos agregados con mejor estilo -->
         <div class="form-group">
-          <table class="product-table" id="productosAgregados">
-            <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th>Precio Unitario</th>
-              <th>Total</th>
-              <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Se llenará dinámicamente con JavaScript -->
-            </tbody>
-          </table>
+          <div class="table-container">
+            <table class="product-table" id="productosAgregados">
+              <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+                <th>Acciones</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Se llenará dinámicamente con JavaScript -->
+              </tbody>
+            </table>
+            <div class="empty-products" id="emptyProducts" style="display: block;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              <p>No hay productos agregados</p>
+              <span>Selecciona productos del listado superior para agregarlos a la venta</span>
+            </div>
+          </div>
         </div>
 
         <!-- Inputs ocultos para enviar productos al backend -->
@@ -255,33 +275,33 @@
             <label class="payment-option">
               <input type="radio" name="metodoPago" value="efectivo" checked>
               <span class="payment-label">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                </svg>
-                                Efectivo
-                            </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                Efectivo
+              </span>
             </label>
             <label class="payment-option">
               <input type="radio" name="metodoPago" value="transferencia">
               <span class="payment-label">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    <polyline points="7,10 12,15 17,10"></polyline>
-                                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                                </svg>
-                                Transferencia
-                            </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7,10 12,15 17,10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Transferencia
+              </span>
             </label>
             <label class="payment-option">
               <input type="radio" name="metodoPago" value="tarjeta">
               <span class="payment-label">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                    <line x1="1" y1="10" x2="23" y2="10"></line>
-                                </svg>
-                                Tarjeta
-                            </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+                Tarjeta
+              </span>
             </label>
           </div>
         </div>
@@ -367,7 +387,6 @@
       </div>
       <div class="products-list" id="productsList">
         <!-- Los productos se cargarán aquí desde la BD -->
-        <!-- Ejemplo de productos (esto vendría de tu BD) -->
         <div class="product-item" data-id="1" data-name="Producto 1" data-price="25.50">
           <span class="product-name">Producto 1</span>
           <span class="product-price">$25.50</span>
@@ -384,6 +403,151 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Estilos adicionales para mejorar la sección de productos */
+  .table-container {
+    position: relative;
+    min-height: 200px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .product-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+  }
+
+  .product-table th,
+  .product-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .product-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .product-table tbody tr:hover {
+    background-color: #f9fafb;
+  }
+
+  .quantity-input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 4px;
+    margin: 0 8px;
+  }
+
+  .quantity-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .btn-danger {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+
+  .btn-danger:hover {
+    background-color: #dc2626;
+  }
+
+  .empty-products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #6b7280;
+  }
+
+  .empty-products svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  .empty-products p {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    color: #374151;
+  }
+
+  .empty-products span {
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  /* Mejorar el botón de agregar producto */
+  .btn.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn.btn-secondary:hover {
+    background-color: #4b5563;
+    transform: translateY(-1px);
+  }
+
+  .btn.btn-secondary svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Botones de cantidad */
+  .product-table button {
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .product-table button:hover {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+  }
+
+  .product-table button:active {
+    transform: scale(0.95);
+  }
+</style>
 
 <script>
   // Toggle sidebar (código existente)
@@ -452,154 +616,169 @@
   });
 
   // --- Lógica específica para crear ventas ---
-let productosAgregados = []; // Almacena objetos {id, nombre, precio, cantidad}
+  let productosAgregados = []; // Almacena objetos {id, nombre, precio, cantidad}
 
-// Agregar producto desde el select
-function agregarProducto() {
-  const select = document.getElementById("productoSeleccionado");
-  const selectedOption = select.options[select.selectedIndex];
-  const productoId = selectedOption.value;
+  // Agregar producto desde el select
+  function agregarProducto() {
+    const select = document.getElementById("productoSeleccionado");
+    const selectedOption = select.options[select.selectedIndex];
+    const productoId = selectedOption.value;
 
-  if (!productoId) return;
+    if (!productoId) return;
 
-  // Verificar si el producto ya fue agregado
-  if (productosAgregados.some(p => p.id == productoId)) {
-    alert("Este producto ya fue agregado.");
-    return;
+    // Verificar si el producto ya fue agregado
+    if (productosAgregados.some(p => p.id == productoId)) {
+      alert("Este producto ya fue agregado.");
+      return;
+    }
+
+    // Extraer datos del producto
+    const productoTexto = selectedOption.text;
+    const productoNombre = productoTexto.split(" - ")[0];
+    const productoPrecio = parseFloat(productoTexto.split("$")[1]);
+
+    // Agregar al array
+    productosAgregados.push({
+      id: productoId,
+      nombre: productoNombre,
+      precio: productoPrecio,
+      cantidad: 1
+    });
+
+    // Actualizar la UI y los inputs ocultos
+    actualizarListaProductos();
+    actualizarResumen();
+
+    // Resetear el select
+    select.selectedIndex = 0;
   }
 
-  // Extraer datos del producto
-  const productoTexto = selectedOption.text;
-  const productoNombre = productoTexto.split(" - ")[0];
-  const productoPrecio = parseFloat(productoTexto.split("$")[1]);
+  // Actualizar la tabla de productos
+  function actualizarListaProductos() {
+    const tbody = document.querySelector("#productosAgregados tbody");
+    const container = document.getElementById("productosHiddenContainer");
+    const emptyProducts = document.getElementById("emptyProducts");
 
-  // Agregar al array
-  productosAgregados.push({
-    id: productoId,
-    nombre: productoNombre,
-    precio: productoPrecio,
-    cantidad: 1
-  });
+    // Limpiar contenedores
+    tbody.innerHTML = "";
+    container.innerHTML = "";
 
-  // Actualizar la UI y los inputs ocultos
-  actualizarListaProductos();
-  actualizarResumen();
-}
+    // Mostrar/ocultar mensaje de productos vacíos
+    if (productosAgregados.length === 0) {
+      emptyProducts.style.display = "flex";
+    } else {
+      emptyProducts.style.display = "none";
+    }
 
-// Actualizar la tabla de productos
-function actualizarListaProductos() {
-  const tbody = document.querySelector("#productosAgregados tbody");
-  const container = document.getElementById("productosHiddenContainer");
+    // Llenar tabla y crear inputs ocultos
+    productosAgregados.forEach(producto => {
+      // Fila en la tabla
+      const row = document.createElement("tr");
+      row.dataset.productId = producto.id;
+      row.innerHTML = `
+        <td>${producto.nombre}</td>
+        <td>
+          <button type="button" onclick="cambiarCantidad(${producto.id}, -1)">-</button>
+          <input type="number" value="${producto.cantidad}" min="1"
+                 onchange="actualizarCantidad(${producto.id}, this.value)"
+                 class="quantity-input">
+          <button type="button" onclick="cambiarCantidad(${producto.id}, 1)">+</button>
+        </td>
+        <td>$${producto.precio.toFixed(2)}</td>
+        <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
+        <td>
+          <button type="button" onclick="eliminarProducto(${producto.id})" class="btn-danger">
+            <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </td>
+      `;
+      tbody.appendChild(row);
 
-  // Limpiar contenedores
-  tbody.innerHTML = "";
-  container.innerHTML = "";
+      // Input oculto para el formulario
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "productoLista"; // Nombre del campo en VentaDto
+      input.value = producto.id;
+      container.appendChild(input);
+    });
+  }
 
-  // Llenar tabla y crear inputs ocultos
-  productosAgregados.forEach(producto => {
-    // Fila en la tabla
-    const row = document.createElement("tr");
-    row.dataset.productId = producto.id;
-    row.innerHTML = `
-      <td>${producto.nombre}</td>
-      <td>
-        <button onclick="cambiarCantidad(${producto.id}, -1)">-</button>
-        <input type="number" value="${producto.cantidad}" min="1"
-               onchange="actualizarCantidad(${producto.id}, this.value)"
-               class="quantity-input">
-        <button onclick="cambiarCantidad(${producto.id}, 1)">+</button>
-      </td>
-      <td>$${producto.precio.toFixed(2)}</td>
-      <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
-      <td>
-        <button onclick="eliminarProducto(${producto.id})" class="btn-danger">
-          <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </td>
-    `;
-    tbody.appendChild(row);
+  // Funciones auxiliares
+  function cambiarCantidad(productId, delta) {
+    const producto = productosAgregados.find(p => p.id == productId);
+    if (producto) {
+      producto.cantidad = Math.max(1, producto.cantidad + delta);
+      actualizarListaProductos();
+      actualizarResumen();
+    }
+  }
 
-    // Input oculto para el formulario
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = "productoLista"; // Nombre del campo en VentaDto
-    input.value = producto.id;
-    container.appendChild(input);
-  });
-}
+  function actualizarCantidad(productId, cantidad) {
+    const producto = productosAgregados.find(p => p.id == productId);
+    if (producto) {
+      producto.cantidad = Math.max(1, parseInt(cantidad));
+      actualizarResumen();
+    }
+  }
 
-// Funciones auxiliares
-function cambiarCantidad(productId, delta) {
-  const producto = productosAgregados.find(p => p.id == productId);
-  if (producto) {
-    producto.cantidad = Math.max(1, producto.cantidad + delta);
+  function eliminarProducto(productId) {
+    productosAgregados = productosAgregados.filter(p => p.id != productId);
     actualizarListaProductos();
     actualizarResumen();
   }
-}
 
-function actualizarCantidad(productId, cantidad) {
-  const producto = productosAgregados.find(p => p.id == productId);
-  if (producto) {
-    producto.cantidad = Math.max(1, parseInt(cantidad));
-    actualizarResumen();
-  }
-}
+  // Calcular totales
+  function actualizarResumen() {
+    const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+    const porcentaje = parseFloat(document.getElementById("porcentajeAdicional").value) || 0;
+    const adicional = subtotal * (porcentaje / 100);
+    const total = subtotal + adicional;
 
-function eliminarProducto(productId) {
-  productosAgregados = productosAgregados.filter(p => p.id != productId);
-  actualizarListaProductos();
-  actualizarResumen();
-}
+    document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById("percentageAmount").textContent = `$${adicional.toFixed(2)}`;
+    document.getElementById("totalAmount").textContent = `$${total.toFixed(2)}`;
 
-// Calcular totales
-function actualizarResumen() {
-  const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
-  const porcentaje = parseFloat(document.getElementById("porcentajeAdicional").value) || 0;
-  const adicional = subtotal * (porcentaje / 100);
-  const total = subtotal + adicional;
-
-  document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
-  document.getElementById("percentageAmount").textContent = `$${adicional.toFixed(2)}`;
-  document.getElementById("totalAmount").textContent = `$${total.toFixed(2)}`;
-
-  // Actualizar campo total en el formulario (para VentaDto)
-  document.querySelector("input[name='total']").value = total;
-}
-
-// Inicialización
-document.addEventListener("DOMContentLoaded", () => {
-  // Asegurarse de que el campo total exista
-  if (!document.querySelector("input[name='total']")) {
-    const form = document.querySelector("form");
-    const totalInput = document.createElement("input");
-    totalInput.type = "hidden";
-    totalInput.name = "total";
-    form.appendChild(totalInput);
+    // Actualizar campo total en el formulario (para VentaDto)
+    let totalInput = document.querySelector("input[name='total']");
+    if (totalInput) {
+      totalInput.value = total;
+    }
   }
 
-  // Escuchar cambios en el porcentaje adicional
-  document.getElementById("porcentajeAdicional").addEventListener("input", actualizarResumen);
-
-  // Validación del formulario
-  document.getElementById("salesForm").addEventListener("submit", (e) => {
-    if (productosAgregados.length === 0) {
-      e.preventDefault();
-      alert("Debe agregar al menos un producto a la venta.");
-      return;
+  // Inicialización
+  document.addEventListener("DOMContentLoaded", () => {
+    // Asegurarse de que el campo total exista
+    if (!document.querySelector("input[name='total']")) {
+      const form = document.querySelector("form");
+      const totalInput = document.createElement("input");
+      totalInput.type = "hidden";
+      totalInput.name = "total";
+      form.appendChild(totalInput);
     }
 
-    const nombreCliente = document.getElementById("nombreCliente").value.trim();
-    if (!nombreCliente) {
-      e.preventDefault();
-      alert("El nombre del cliente es obligatorio.");
-      return;
-    }
+    // Escuchar cambios en el porcentaje adicional
+    document.getElementById("porcentajeAdicional").addEventListener("input", actualizarResumen);
+
+    // Validación del formulario
+    document.getElementById("salesForm").addEventListener("submit", (e) => {
+      if (productosAgregados.length === 0) {
+        e.preventDefault();
+        alert("Debe agregar al menos un producto a la venta.");
+        return;
+      }
+
+      const nombreCliente = document.getElementById("nombreCliente").value.trim();
+      if (!nombreCliente) {
+        e.preventDefault();
+        alert("El nombre del cliente es obligatorio.");
+        return;
+      }
+    });
   });
-});
 </script>
+
 </body>
 </html>
