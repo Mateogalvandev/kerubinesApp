@@ -154,7 +154,7 @@
     <br>
 
     <!-- Formulario de Venta -->
-    <form class="sales-form" id="salesForm" th:action="@{/venta/crear}" method="post">
+    <form class="sales-form" id="salesForm" th:action="@{/venta/crear/post}" th:object="${ventaEntidad}" method="post">
       <div class="form-grid">
         <!-- Información del Cliente -->
         <div class="form-section">
@@ -167,11 +167,11 @@
           </div>
           <div class="form-group">
             <label for="nombreCliente">Nombre del Cliente *</label>
-            <input type="text" id="nombreCliente" name="nombreCliente" class="form-input" required>
+            <input type="text" id="nombreCliente" name="nombreCliente" th:field="*{nombreCliente}" class="form-input" required>
           </div>
           <div class="form-group">
             <label for="telefonoCliente">Teléfono</label>
-            <input type="tel" id="telefonoCliente" name="telefonoCliente" class="form-input">
+            <input type="tel" id="telefonoCliente" name="telefonoCliente" th:field="*{numeroCliente}" class="form-input">
           </div>
         </div>
 
@@ -186,14 +186,15 @@
           </div>
           <div class="form-group">
             <label for="responsableVenta">Vendedor</label>
-            <input type="text" id="responsableVenta" name="responsableVenta" class="form-input">
-                   //th:value="${usuarioLogueado.nombre}" readonly>
-            <input type="hidden" name="idResponsable" >
-                   //th:value="${usuarioLogueado.idUsuario}">
+            <input type="text" id="responsableVenta" name="responsableVenta" class="form-input"
+                   th:value="${usuarioLogueado.nombre}" readonly>
+            <input type="hidden" name="idResponsable"
+                   th:value="${usuarioLogueado.idUsuario}">
           </div>
         </div>
       </div>
 
+      <!-- Selección de Productos -->
       <!-- Selección de Productos -->
       <div class="form-section products-section">
         <div class="section-header">
@@ -203,18 +204,41 @@
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
           <h3>Productos</h3>
-          <button type="button" class="btn-add-product" id="addProductBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            Agregar Producto
-          </button>
         </div>
 
-        <div class="products-container" id="productsContainer">
-          <!-- Los productos se agregarán dinámicamente aquí -->
+        <div class="form-group">
+          <label for="productoSeleccionado">Seleccionar Producto</label>
+          <select id="productoSeleccionado" class="form-input">
+            <option value="" disabled selected>-- Selecciona un producto --</option>
+            <!-- Iterar sobre productosDisponibles -->
+            <option th:each="producto : ${productosDisponibles}"
+                    th:value="${producto.idProducto}"
+                    th:text="${producto.nombre} + ' - Stock: ' + ${producto.stock} + ' - $' + ${producto.precio}">
+            </option>
+          </select>
+          <button type="button" class="btn btn-secondary" onclick="agregarProducto()">Agregar</button>
         </div>
+
+        <!-- Lista de productos agregados -->
+        <div class="form-group">
+          <table class="product-table" id="productosAgregados">
+            <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Total</th>
+              <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Se llenará dinámicamente con JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Inputs ocultos para enviar productos al backend -->
+        <div id="productosHiddenContainer"></div>
       </div>
 
       <!-- Método de Pago y Configuración -->
@@ -428,180 +452,154 @@
   });
 
   // --- Lógica específica para crear ventas ---
-  let selectedProducts = [];
-  let productCounter = 0;
+let productosAgregados = []; // Almacena objetos {id, nombre, precio, cantidad}
 
-  // Modal de productos
-  const productModal = document.getElementById('productModal');
-  const addProductBtn = document.getElementById('addProductBtn');
-  const closeModal = document.getElementById('closeModal');
-  const productsContainer = document.getElementById('productsContainer');
-  const productSearch = document.getElementById('productSearch');
-  const productsList = document.getElementById('productsList');
+// Agregar producto desde el select
+function agregarProducto() {
+  const select = document.getElementById("productoSeleccionado");
+  const selectedOption = select.options[select.selectedIndex];
+  const productoId = selectedOption.value;
 
-  // Abrir modal
-  addProductBtn.addEventListener('click', () => {
-      productModal.classList.add('active');
-      document.body.classList.add('modal-open');
-  });
+  if (!productoId) return;
 
-  // Cerrar modal
-  closeModal.addEventListener('click', () => {
-      productModal.classList.remove('active');
-      document.body.classList.remove('modal-open');
-  });
-
-  // Cerrar modal al hacer click fuera
-  productModal.addEventListener('click', (e) => {
-      if (e.target === productModal) {
-          productModal.classList.remove('active');
-          document.body.classList.remove('modal-open');
-      }
-  });
-
-  // Búsqueda de productos
-  productSearch.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      const productItems = productsList.querySelectorAll('.product-item');
-
-      productItems.forEach(item => {
-          const productName = item.dataset.name.toLowerCase();
-          if (productName.includes(searchTerm)) {
-              item.style.display = 'flex';
-          } else {
-              item.style.display = 'none';
-          }
-      });
-  });
-
-  // Seleccionar producto
-  productsList.addEventListener('click', (e) => {
-      const productItem = e.target.closest('.product-item');
-      if (productItem) {
-          const productData = {
-              id: productItem.dataset.id,
-              name: productItem.dataset.name,
-              price: parseFloat(productItem.dataset.price)
-          };
-
-          addProductToSale(productData);
-          productModal.classList.remove('active');
-          document.body.classList.remove('modal-open');
-      }
-  });
-
-  // Agregar producto a la venta
-  function addProductToSale(product) {
-      productCounter++;
-      const productElement = document.createElement('div');
-      productElement.className = 'product-row';
-      productElement.dataset.productId = productCounter;
-
-      productElement.innerHTML = `
-          <div class="product-info">
-              <span class="product-name">${product.name}</span>
-              <span class="product-price">$${product.price.toFixed(2)}</span>
-          </div>
-          <div class="product-controls">
-              <div class="quantity-control">
-                  <button type="button" class="quantity-btn" onclick="changeQuantity(${productCounter}, -1)">-</button>
-                  <input type="number" class="quantity-input" value="1" min="1"
-                         onchange="updateQuantity(${productCounter}, this.value)">
-                  <button type="button" class="quantity-btn" onclick="changeQuantity(${productCounter}, 1)">+</button>
-              </div>
-              <span class="product-total">$${product.price.toFixed(2)}</span>
-              <button type="button" class="remove-product" onclick="removeProduct(${productCounter})">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="3,6 5,6 21,6"></polyline>
-                      <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"></path>
-                  </svg>
-              </button>
-          </div>
-          <input type="hidden" name="productos[${productCounter-1}].id" value="${product.id}">
-          <input type="hidden" name="productos[${productCounter-1}].cantidad" value="1">
-          <input type="hidden" name="productos[${productCounter-1}].precio" value="${product.price}">
-      `;
-
-      productsContainer.appendChild(productElement);
-
-      selectedProducts.push({
-          id: productCounter,
-          productId: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: 1
-      });
-
-      updateSummary();
+  // Verificar si el producto ya fue agregado
+  if (productosAgregados.some(p => p.id == productoId)) {
+    alert("Este producto ya fue agregado.");
+    return;
   }
 
-  // Cambiar cantidad
-  function changeQuantity(productId, change) {
-      const productRow = document.querySelector(`[data-product-id="${productId}"]`);
-      const quantityInput = productRow.querySelector('.quantity-input');
-      const newQuantity = Math.max(1, parseInt(quantityInput.value) + change);
-      quantityInput.value = newQuantity;
-      updateQuantity(productId, newQuantity);
+  // Extraer datos del producto
+  const productoTexto = selectedOption.text;
+  const productoNombre = productoTexto.split(" - ")[0];
+  const productoPrecio = parseFloat(productoTexto.split("$")[1]);
+
+  // Agregar al array
+  productosAgregados.push({
+    id: productoId,
+    nombre: productoNombre,
+    precio: productoPrecio,
+    cantidad: 1
+  });
+
+  // Actualizar la UI y los inputs ocultos
+  actualizarListaProductos();
+  actualizarResumen();
+}
+
+// Actualizar la tabla de productos
+function actualizarListaProductos() {
+  const tbody = document.querySelector("#productosAgregados tbody");
+  const container = document.getElementById("productosHiddenContainer");
+
+  // Limpiar contenedores
+  tbody.innerHTML = "";
+  container.innerHTML = "";
+
+  // Llenar tabla y crear inputs ocultos
+  productosAgregados.forEach(producto => {
+    // Fila en la tabla
+    const row = document.createElement("tr");
+    row.dataset.productId = producto.id;
+    row.innerHTML = `
+      <td>${producto.nombre}</td>
+      <td>
+        <button onclick="cambiarCantidad(${producto.id}, -1)">-</button>
+        <input type="number" value="${producto.cantidad}" min="1"
+               onchange="actualizarCantidad(${producto.id}, this.value)"
+               class="quantity-input">
+        <button onclick="cambiarCantidad(${producto.id}, 1)">+</button>
+      </td>
+      <td>$${producto.precio.toFixed(2)}</td>
+      <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
+      <td>
+        <button onclick="eliminarProducto(${producto.id})" class="btn-danger">
+          <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </td>
+    `;
+    tbody.appendChild(row);
+
+    // Input oculto para el formulario
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "productoLista"; // Nombre del campo en VentaDto
+    input.value = producto.id;
+    container.appendChild(input);
+  });
+}
+
+// Funciones auxiliares
+function cambiarCantidad(productId, delta) {
+  const producto = productosAgregados.find(p => p.id == productId);
+  if (producto) {
+    producto.cantidad = Math.max(1, producto.cantidad + delta);
+    actualizarListaProductos();
+    actualizarResumen();
+  }
+}
+
+function actualizarCantidad(productId, cantidad) {
+  const producto = productosAgregados.find(p => p.id == productId);
+  if (producto) {
+    producto.cantidad = Math.max(1, parseInt(cantidad));
+    actualizarResumen();
+  }
+}
+
+function eliminarProducto(productId) {
+  productosAgregados = productosAgregados.filter(p => p.id != productId);
+  actualizarListaProductos();
+  actualizarResumen();
+}
+
+// Calcular totales
+function actualizarResumen() {
+  const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+  const porcentaje = parseFloat(document.getElementById("porcentajeAdicional").value) || 0;
+  const adicional = subtotal * (porcentaje / 100);
+  const total = subtotal + adicional;
+
+  document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
+  document.getElementById("percentageAmount").textContent = `$${adicional.toFixed(2)}`;
+  document.getElementById("totalAmount").textContent = `$${total.toFixed(2)}`;
+
+  // Actualizar campo total en el formulario (para VentaDto)
+  document.querySelector("input[name='total']").value = total;
+}
+
+// Inicialización
+document.addEventListener("DOMContentLoaded", () => {
+  // Asegurarse de que el campo total exista
+  if (!document.querySelector("input[name='total']")) {
+    const form = document.querySelector("form");
+    const totalInput = document.createElement("input");
+    totalInput.type = "hidden";
+    totalInput.name = "total";
+    form.appendChild(totalInput);
   }
 
-  // Actualizar cantidad
-  function updateQuantity(productId, quantity) {
-      const product = selectedProducts.find(p => p.id === productId);
-      if (product) {
-          product.quantity = parseInt(quantity);
-          const productRow = document.querySelector(`[data-product-id="${productId}"]`);
-          const totalElement = productRow.querySelector('.product-total');
-          const hiddenQuantity = productRow.querySelector('input[name*="cantidad"]');
-
-          totalElement.textContent = `$${(product.price * product.quantity).toFixed(2)}`;
-          hiddenQuantity.value = quantity;
-
-          updateSummary();
-      }
-  }
-
-  // Remover producto
-  function removeProduct(productId) {
-      const productRow = document.querySelector(`[data-product-id="${productId}"]`);
-      productRow.remove();
-
-      selectedProducts = selectedProducts.filter(p => p.id !== productId);
-      updateSummary();
-  }
-
-  // Actualizar resumen
-  function updateSummary() {
-      const subtotal = selectedProducts.reduce((sum, product) => {
-          return sum + (product.price * product.quantity);
-      }, 0);
-
-      const percentage = parseFloat(document.getElementById('porcentajeAdicional').value) || 0;
-      const percentageAmount = subtotal * (percentage / 100);
-      const total = subtotal + percentageAmount;
-
-      document.getElementById('subtotalAmount').textContent = `$${subtotal.toFixed(2)}`;
-      document.getElementById('percentageAmount').textContent = `$${percentageAmount.toFixed(2)}`;
-      document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
-  }
-
-  // Actualizar resumen cuando cambie el porcentaje
-  document.getElementById('porcentajeAdicional').addEventListener('input', updateSummary);
+  // Escuchar cambios en el porcentaje adicional
+  document.getElementById("porcentajeAdicional").addEventListener("input", actualizarResumen);
 
   // Validación del formulario
-  document.getElementById('salesForm').addEventListener('submit', (e) => {
-      if (selectedProducts.length === 0) {
-          e.preventDefault();
-          alert('Debe agregar al menos un producto a la venta.');
-          return;
-      }
+  document.getElementById("salesForm").addEventListener("submit", (e) => {
+    if (productosAgregados.length === 0) {
+      e.preventDefault();
+      alert("Debe agregar al menos un producto a la venta.");
+      return;
+    }
 
-      const nombreCliente = document.getElementById('nombreCliente').value.trim();
-      if (!nombreCliente) {
-          e.preventDefault();
-          alert('El nombre del cliente es obligatorio.');
-          return;
-      }
+    const nombreCliente = document.getElementById("nombreCliente").value.trim();
+    if (!nombreCliente) {
+      e.preventDefault();
+      alert("El nombre del cliente es obligatorio.");
+      return;
+    }
   });
+});
 </script>
 </body>
 </html>

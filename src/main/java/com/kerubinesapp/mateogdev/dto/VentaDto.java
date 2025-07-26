@@ -25,4 +25,16 @@ public class VentaDto {
     private Double total;
     private String tipoDeVenta;
     private Usuario usuarioVenta;
-    private Set<Producto> productoLista = new HashSet<>();}
+    private List<Producto> productoLista;
+
+    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, List<Producto> productoLista) {
+        this.idVenta = idVenta;
+        this.nombreCliente = nombreCliente;
+        this.numeroCliente = numeroCliente;
+        this.Date = date;
+        this.total = total;
+        this.tipoDeVenta = tipoDeVenta;
+        this.productoLista = productoLista;
+
+    }
+}

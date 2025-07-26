@@ -32,6 +32,17 @@ public class Venta {
             joinColumns = @JoinColumn(name = "venta_id"),
             inverseJoinColumns = @JoinColumn(name = "producto_id")
     )
-    private Set<Producto> productoLista = new HashSet<>();
+    private List<Producto> productoLista;
+
+    public Venta(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, List<Producto> productoLista) {
+        this.idVenta = idVenta;
+        this.nombreCliente = nombreCliente;
+        this.numeroCliente = numeroCliente;
+        this.Date = date;
+        this.total = total;
+        this.tipoDeVenta = tipoDeVenta;
+        this.productoLista = productoLista;
+
+    }
 
 }

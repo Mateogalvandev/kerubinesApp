@@ -1,9 +1,16 @@
 package com.kerubinesapp.mateogdev.controller;
 
 import com.kerubinesapp.mateogdev.dto.VentaDto;
+import com.kerubinesapp.mateogdev.model.Producto;
+import com.kerubinesapp.mateogdev.model.Usuario;
 import com.kerubinesapp.mateogdev.model.Venta;
+import com.kerubinesapp.mateogdev.repository.ProductoRepository;
+import com.kerubinesapp.mateogdev.repository.UsuarioRepository;
 import com.kerubinesapp.mateogdev.service.VentaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +18,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class VentaController {
 
     @Autowired
     private VentaService ventaService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
 
     @ModelAttribute("venta")
     public VentaDto ventaDto() {
@@ -24,15 +39,21 @@ public class VentaController {
 
     @GetMapping("/venta/crear")
     public String crearVentas(Model model) {
-        VentaDto ventaDto = new VentaDto();
-        model.addAttribute("ventaEntidad", ventaDto);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        Usuario usuario = usuarioRepository.findByUsername(username);
+
+        List<Producto> productos = productoRepository.findByStockGreaterThanEqual(1);
+
+        model.addAttribute("usuarioLogueado", usuario);
+        model.addAttribute("productosDisponibles", productos);
+        model.addAttribute("ventaEntidad", new VentaDto());
         return "ventaCrear";
     }
 
     @PostMapping("/venta/crear/post")
-    public String crearVentaPost(@ModelAttribute("venta") VentaDto ventaDto){
+    public String crearVentaPost(@ModelAttribute("ventaEntidad") VentaDto ventaDto){
         ventaService.guardarVenta(ventaDto);
-
         return "redirect:/venta/administrar";
     }
 
@@ -54,7 +75,6 @@ public class VentaController {
                                     @ModelAttribute("ventaEditar") VentaDto ventaDto,
                                     Model model){
         Venta ventaExistente = ventaService.obtenerVentaId(id);
-        ventaExistente.setUsuarioVenta(ventaDto.getUsuarioVenta());
         ventaExistente.setTipoDeVenta(ventaDto.getTipoDeVenta());
         ventaExistente.setDate(ventaDto.getDate());
         ventaExistente.setTotal(ventaDto.getTotal());

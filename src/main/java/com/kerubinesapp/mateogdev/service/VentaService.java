@@ -1,9 +1,13 @@
 package com.kerubinesapp.mateogdev.service;
 
 import com.kerubinesapp.mateogdev.dto.VentaDto;
+import com.kerubinesapp.mateogdev.model.Usuario;
 import com.kerubinesapp.mateogdev.model.Venta;
+import com.kerubinesapp.mateogdev.repository.UsuarioRepository;
 import com.kerubinesapp.mateogdev.repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +16,10 @@ import java.util.List;
 public class VentaService implements IVentaService {
 
     @Autowired
-    VentaRepository ventaRepository;
+    private VentaRepository ventaRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public Venta guardarVenta(VentaDto ventaDto) {
@@ -23,9 +30,13 @@ public class VentaService implements IVentaService {
                 ventaDto.getDate(),
                 ventaDto.getTotal(),
                 ventaDto.getTipoDeVenta(),
-                ventaDto.getUsuarioVenta(),
-                ventaDto.getProductoLista()
-        );
+                ventaDto.getProductoLista());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Usuario usuario = usuarioRepository.findByUsername(username);
+
+        venta.setUsuarioVenta(usuario);
         return ventaRepository.save(venta);
     }
 

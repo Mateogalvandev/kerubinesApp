@@ -18,7 +18,8 @@ public class ProductoService implements IProductoService {
     public Producto guardarProducto(ProductoDto productoDto) {
         Producto producto = new Producto(
                 productoDto.getNombreProducto(), productoDto.getDescripcion(),
-                productoDto.getTalla(), productoDto.getColor(), productoDto.getCosto()
+                productoDto.getTalla(), productoDto.getColor(), productoDto.getCosto(),
+                productoDto.getStock()
         );
         return productoRepository.save(producto);
 
