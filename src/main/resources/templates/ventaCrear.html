@@ -273,52 +273,36 @@
           </div>
           <div class="payment-methods">
             <label class="payment-option">
-              <input type="radio" name="metodoPago" value="efectivo" checked>
+              <input type="radio" th:field="*{tipoDeVenta}" value="EFECTIVO" class="form-radio">
               <span class="payment-label">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="12" y1="1" x2="12" y2="23"></line>
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
-                Efectivo
-              </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          Efectivo
+        </span>
             </label>
             <label class="payment-option">
-              <input type="radio" name="metodoPago" value="transferencia">
+              <input type="radio" th:field="*{tipoDeVenta}" value="TRANSFERENCIA" class="form-radio">
               <span class="payment-label">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7,10 12,15 17,10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Transferencia
-              </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7,10 12,15 17,10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Transferencia
+        </span>
             </label>
             <label class="payment-option">
-              <input type="radio" name="metodoPago" value="tarjeta">
+              <input type="radio" th:field="*{tipoDeVenta}" value="TARJETA" class="form-radio">
               <span class="payment-label">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                  <line x1="1" y1="10" x2="23" y2="10"></line>
-                </svg>
-                Tarjeta
-              </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          Tarjeta
+        </span>
             </label>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <div class="section-header">
-            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="6" x2="12" y2="10"></line>
-              <line x1="12" y1="14" x2="12.01" y2="14"></line>
-            </svg>
-            <h3>Configuración Adicional</h3>
-          </div>
-          <div class="form-group">
-            <label for="porcentajeAdicional">Porcentaje Adicional (%)</label>
-            <input type="number" id="porcentajeAdicional" name="porcentajeAdicional"
-                   class="form-input" min="0" max="100" step="0.1" value="0">
           </div>
         </div>
       </div>

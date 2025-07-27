@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 public class Venta {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idVenta;
     private String nombreCliente;
     private String numeroCliente;
@@ -43,6 +43,20 @@ public class Venta {
         this.tipoDeVenta = tipoDeVenta;
         this.productoLista = productoLista;
 
+    }
+
+    @Override
+    public String toString() {
+        return "Venta{" +
+                "idVenta=" + idVenta +
+                ", nombreCliente='" + nombreCliente + '\'' +
+                ", numeroCliente='" + numeroCliente + '\'' +
+                ", Date=" + Date +
+                ", total=" + total +
+                ", tipoDeVenta='" + tipoDeVenta + '\'' +
+                ", usuarioId=" + (usuarioVenta != null ? usuarioVenta.getIdUsuario() : null) +
+                ", productosCount=" + (productoLista != null ? productoLista.size() : 0) +
+                '}';
     }
 
 }

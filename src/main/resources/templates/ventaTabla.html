@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrar Ventas - Kerubines App</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}"> <!-- Estilos base del sistema -->
-    <link rel="stylesheet" th:href="@{/css/ventaTabla.css}"> <!-- Estilos específicos de ventas -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/ventaTabla.css}">
 </head>
 <body>
 <!-- Header -->
@@ -216,28 +216,20 @@
                 </select>
             </div>
             <div class="filter-group">
-                <label for="statusFilter">Estado:</label>
-                <select id="statusFilter" class="filter-select">
-                    <option value="all">Todos los estados</option>
-                    <option value="completada">Completada</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="cancelada">Cancelada</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="paymentFilter">Método de pago:</label>
+                <label for="paymentFilter">Tipo de venta:</label>
                 <select id="paymentFilter" class="filter-select">
-                    <option value="all">Todos los métodos</option>
+                    <option value="all">Todos los tipos</option>
                     <option value="efectivo">Efectivo</option>
                     <option value="transferencia">Transferencia</option>
                     <option value="tarjeta">Tarjeta</option>
+                    <option value="credito">Crédito</option>
                 </select>
             </div>
         </div>
 
         <!-- Barra de búsqueda -->
         <div class="search-bar-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Buscar por cliente, ID de venta o vendedor...">
+            <input type="text" id="searchInput" class="search-input" placeholder="Buscar por ID, cliente, teléfono, usuario...">
             <button class="search-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -256,17 +248,8 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th data-column="id">
+                            <th data-column="idVenta">
                                 ID Venta
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
-                                    </svg>
-                                </button>
-                            </th>
-                            <th data-column="cliente">
-                                Cliente
                                 <button class="sort-button" data-sort-direction="none">
                                     <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -283,6 +266,15 @@
                                     </svg>
                                 </button>
                             </th>
+                            <th data-column="tipoVenta">
+                                Tipo de Venta
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
                             <th data-column="total">
                                 Total
                                 <button class="sort-button" data-sort-direction="none">
@@ -292,8 +284,8 @@
                                     </svg>
                                 </button>
                             </th>
-                            <th data-column="metodoPago">
-                                Método de Pago
+                            <th data-column="idUsuario">
+                                ID Usuario
                                 <button class="sort-button" data-sort-direction="none">
                                     <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -301,8 +293,8 @@
                                     </svg>
                                 </button>
                             </th>
-                            <th data-column="estado">
-                                Estado
+                            <th data-column="productos">
+                                Productos
                                 <button class="sort-button" data-sort-direction="none">
                                     <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -310,8 +302,17 @@
                                     </svg>
                                 </button>
                             </th>
-                            <th data-column="vendedor">
-                                Vendedor
+                            <th data-column="telefono">
+                                Teléfono
+                                <button class="sort-button" data-sort-direction="none">
+                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                    </svg>
+                                </button>
+                            </th>
+                            <th data-column="cliente">
+                                Cliente
                                 <button class="sort-button" data-sort-direction="none">
                                     <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="7 10 12 15 17 10"></polyline>
@@ -323,20 +324,17 @@
                         </tr>
                         </thead>
                         <tbody id="tableBody">
-                        <!-- Ejemplo de datos (esto vendría de tu BD) -->
+                        <!-- Datos de ventas desde la base de datos -->
                         <tr th:each="venta : ${ventaTabla}">
                             <td th:text="${venta.idVenta}">ID</td>
-                            <td th:text="${venta.nombreCliente}">Nombre del Cliente</td>
-                            <td th:text="${venta.numeroCliente}">Numero del Cliente</td>
                             <td th:text="${venta.Date}">Fecha</td>
+                            <td th:text="${venta.tipoDeVenta}">Tipo de Venta></td>
                             <td th:text="${venta.total}">Total</td>
-                            <td th:text="${venta.tipoDeVenta}">Tipo de Venta</td>
-                            <td> </td>Vendedor</td>
-                            <td>
-                                <a th:href="@{/venta/editar/{id}(id=${venta.idVenta})}" class="btn btn-edit">Editar</a>
-                                <a href="#" class="btn btn-delete"
-                                   onclick="confirmDelete(event, '@{/venta/eliminar/{id}(id=${venta.idVenta})}')">Eliminar</a>
-                            </td>
+                            <td th:text="${venta.usuarioVenta}">ID Usuario</td>
+                            <td th:text="${venta.productoLista}">Lista de producto></td>
+                            <td th:text="${venta.numeroCliente}">Teléfono</td>
+                            <td th:text="${venta.nombreCliente}">Cliente</td>
+                            <td> </td>
                         </tr>
                         </tbody>
                     </table>
@@ -387,7 +385,7 @@
 </div>
 
 <script>
-    // Toggle sidebar (código existente)
+    // Toggle sidebar
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
@@ -405,7 +403,7 @@
         document.body.classList.remove('sidebar-open');
     });
 
-    // Toggle user dropdown (código existente)
+    // Toggle user dropdown
     const userButton = document.getElementById('userButton');
     const dropdownMenu = document.getElementById('dropdownMenu');
 
@@ -422,7 +420,7 @@
         e.stopPropagation();
     });
 
-    // Toggle navigation submenus (código existente)
+    // Toggle navigation submenus
     const navToggles = document.querySelectorAll('.nav-toggle');
     navToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
@@ -463,17 +461,17 @@
             const cells = row.querySelectorAll('td');
             if (cells.length > 0) {
                 data.push({
-                    id: cells[0].textContent.trim(),
-                    cliente: cells[1].textContent.trim(),
-                    fecha: cells[2].textContent.trim(),
+                    idVenta: cells[0].textContent.trim(),
+                    fecha: cells[1].textContent.trim(),
+                    tipoVenta: cells[2].textContent.trim(),
                     total: cells[3].textContent.trim(),
-                    metodoPago: cells[4].textContent.trim(),
-                    estado: cells[5].textContent.trim(),
-                    vendedor: cells[6].textContent.trim()
+                    idUsuario: cells[4].textContent.trim(),
+                    productos: cells[5].textContent.trim(),
+                    telefono: cells[6].textContent.trim(),
+                    cliente: cells[7].textContent.trim()
                 });
             }
         });
-
         return data;
     }
 
@@ -491,7 +489,6 @@
 
     // Filtros
     const dateFilter = document.getElementById('dateFilter');
-    const statusFilter = document.getElementById('statusFilter');
     const paymentFilter = document.getElementById('paymentFilter');
 
     // Función para renderizar la tabla
@@ -502,7 +499,7 @@
         const paginatedData = dataToRender.slice(start, end);
 
         if (paginatedData.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="8" class="no-results">No se encontraron resultados.</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="9" class="no-results">No se encontraron resultados.</td></tr>';
             return;
         }
 
@@ -512,7 +509,7 @@
         paginatedData.forEach(item => {
             // Buscar la fila original que coincide con este item
             const originalRow = originalRows.find(row =>
-                row.querySelector('td').textContent.trim() === item.id
+                row.querySelector('td').textContent.trim() === item.idVenta
             );
 
             if (originalRow) {
@@ -532,7 +529,10 @@
         }, 0);
 
         const today = new Date().toISOString().split('T')[0];
-        const todaySales = filteredData.filter(sale => sale.fecha === today).length;
+        const todaySales = filteredData.filter(sale => {
+            const saleDate = new Date(sale.fecha.split('/').reverse().join('-')).toISOString().split('T')[0];
+            return saleDate === today;
+        }).length;
 
         document.getElementById('totalSales').textContent = totalSales;
         document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
@@ -548,7 +548,7 @@
         if (dateFilterValue !== 'all') {
             const today = new Date();
             filteredData = filteredData.filter(item => {
-                const itemDate = new Date(item.fecha);
+                const itemDate = new Date(item.fecha.split('/').reverse().join('-'));
                 switch (dateFilterValue) {
                     case 'today':
                         return itemDate.toDateString() === today.toDateString();
@@ -564,17 +564,10 @@
             });
         }
 
-        // Filtro por estado
-        if (statusFilter.value !== 'all') {
-            filteredData = filteredData.filter(item =>
-                item.estado.toLowerCase().includes(statusFilter.value.toLowerCase())
-            );
-        }
-
-        // Filtro por método de pago
+        // Filtro por tipo de venta
         if (paymentFilter.value !== 'all') {
             filteredData = filteredData.filter(item =>
-                item.metodoPago.toLowerCase().includes(paymentFilter.value.toLowerCase())
+                item.tipoVenta.toLowerCase().includes(paymentFilter.value.toLowerCase())
             );
         }
 
@@ -596,7 +589,6 @@
 
     // Event listeners para filtros
     dateFilter.addEventListener('change', applyFilters);
-    statusFilter.addEventListener('change', applyFilters);
     paymentFilter.addEventListener('change', applyFilters);
 
     // Búsqueda
@@ -667,8 +659,11 @@
                         valA = parseFloat(valA.replace('$', '').replace(',', '')) || 0;
                         valB = parseFloat(valB.replace('$', '').replace(',', '')) || 0;
                     } else if (column === 'fecha') {
-                        valA = new Date(valA);
-                        valB = new Date(valB);
+                        valA = new Date(valA.split('/').reverse().join('-'));
+                        valB = new Date(valB.split('/').reverse().join('-'));
+                    } else if (column === 'idVenta' || column === 'idUsuario') {
+                        valA = parseInt(valA) || 0;
+                        valB = parseInt(valB) || 0;
                     }
 
                     if (valA < valB) return direction === 'asc' ? -1 : 1;
@@ -705,15 +700,24 @@
     });
 
     // Funciones específicas de ventas
+    function viewSaleDetails(saleId) {
+        // Implementar lógica para mostrar detalles de la venta
+        console.log('Ver detalles de venta:', saleId);
+        // Aquí puedes hacer una petición AJAX para obtener los detalles y mostrarlos en el modal
+        document.getElementById('saleDetailModal').style.display = 'block';
+    }
+
     function printSale(saleId) {
         // Implementar lógica de impresión
         console.log('Imprimir venta:', saleId);
         // Aquí puedes abrir una nueva ventana con el recibo o generar un PDF
+        window.open(`/venta/imprimir/${saleId}`, '_blank');
     }
 
     function confirmDelete(event, deleteUrl) {
         event.preventDefault();
         const isConfirmed = confirm('¿Estás seguro de que deseas eliminar esta venta? Esta acción no se puede deshacer.');
+
         if (isConfirmed) {
             const processedUrl = deleteUrl
                 .replace(/&amp;/g, '&')
@@ -723,15 +727,29 @@
         return false;
     }
 
+    // Modal functionality
+    const saleDetailModal = document.getElementById('saleDetailModal');
+    const closeSaleModal = document.getElementById('closeSaleModal');
+
+    closeSaleModal.addEventListener('click', () => {
+        saleDetailModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === saleDetailModal) {
+            saleDetailModal.style.display = 'none';
+        }
+    });
+
     // Inicializar al cargar la página
     document.addEventListener('DOMContentLoaded', () => {
         tableData = getTableDataFromDOM();
         filteredData = [...tableData];
-
         renderTable(filteredData);
         updatePaginationControls();
         updateStats();
     });
 </script>
+
 </body>
 </html>

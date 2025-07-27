@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
     private String nombre;
     private String username;
@@ -107,5 +107,17 @@ public class Usuario {
 
     public void setRolUsuario(Rol rolUsuario) {
         this.rolUsuario = rolUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "idUsuario=" + idUsuario +
+                ", nombre='" + nombre + '\'' +
+                ", username='" + username + '\'' +
+                ", rolUsuario=" + rolUsuario +
+                ", fechaIngreso=" + fechaIngreso +
+                ", ventasCount=" + (ventas != null ? ventas.size() : 0) +
+                '}';
     }
 }

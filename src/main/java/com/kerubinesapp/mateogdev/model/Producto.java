@@ -13,7 +13,7 @@
     @Entity
     public class Producto {
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long idProducto;
         private String nombreProducto;
         private String talla;
@@ -40,6 +40,19 @@
             this.descripcion = descripcion;
             this.costo = costo;
             this.stock = stock;
+        }
+
+        @Override
+        public String toString() {
+            return "Producto{" +
+                    "idProducto=" + idProducto +
+                    ", nombreProducto='" + nombreProducto + '\'' +
+                    ", talla='" + talla + '\'' +
+                    ", color='" + color + '\'' +
+                    ", costo=" + costo +
+                    ", stock=" + stock +
+                    ", ventasCount=" + (ventaLista != null ? ventaLista.size() : 0) +
+                    '}';
         }
 
     }

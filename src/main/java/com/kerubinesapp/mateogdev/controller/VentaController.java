@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -53,6 +54,12 @@ public class VentaController {
 
     @PostMapping("/venta/crear/post")
     public String crearVentaPost(@ModelAttribute("ventaEntidad") VentaDto ventaDto){
+        ventaDto.setDate(LocalDateTime.now());
+
+        if (ventaDto.getTipoDeVenta() == null || ventaDto.getTipoDeVenta().isEmpty()) {
+            ventaDto.setTipoDeVenta("NO_ESPECIFICO"); // Valor por defecto
+        }
+
         ventaService.guardarVenta(ventaDto);
         return "redirect:/venta/administrar";
     }
