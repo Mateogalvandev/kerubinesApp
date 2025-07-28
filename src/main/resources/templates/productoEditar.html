@@ -179,6 +179,11 @@
             </div>
 
             <div class="form-group">
+              <label for="stock" class="form-label required">Stock</label>
+              <input type="number" id="stock" th:field="*{stock}" class="form-input" required>
+            </div>
+
+            <div class="form-group">
               <label for="color" class="form-label required">Color</label>
               <div class="color-input-wrapper">
                 <!-- Input de color picker - SIN th:value para evitar el error -->

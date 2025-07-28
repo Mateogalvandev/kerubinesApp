@@ -67,6 +67,7 @@ public class productoController {
         productoExistente.setTalla(productoDto.getTalla());
         productoExistente.setColor(productoDto.getColor());
         productoExistente.setCosto(productoDto.getCosto());
+        productoExistente.setStock(productoDto.getStock());
         productoService.actualizarProducto(productoExistente);
         return "redirect:/productos/administrar";
 

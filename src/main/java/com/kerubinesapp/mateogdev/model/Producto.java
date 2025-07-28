@@ -20,11 +20,11 @@
         private String color;
         private String descripcion;
         private Double costo;
-        private Double stock;
+        private Long stock;
         @ManyToMany
         private List<Venta> ventaLista;
 
-        public Producto(String nombreProducto, String talla, String color, String descripcion, Double costo, Double stock, List<Venta> ventaLista) {
+        public Producto(String nombreProducto, String talla, String color, String descripcion, Double costo, Long stock, List<Venta> ventaLista) {
             this.nombreProducto = nombreProducto;
             this.talla = talla;
             this.color = color;
@@ -33,7 +33,7 @@
             this.stock = stock;
         }
 
-        public Producto(String nombreProducto, String talla, String color, String descripcion, Double costo, Double stock) {
+        public Producto(String nombreProducto, String talla, String color, String descripcion, Double costo, Long stock) {
             this.nombreProducto = nombreProducto;
             this.talla = talla;
             this.color = color;

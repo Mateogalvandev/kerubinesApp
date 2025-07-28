@@ -14,6 +14,6 @@ public class ProductoDto {
     private String color;
     private String descripcion;
     private Double costo;
-    private Double stock;
+    private Long stock;
 
 }
