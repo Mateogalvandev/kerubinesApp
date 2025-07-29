@@ -58,7 +58,8 @@
           </svg>
           <span>Venta</span>
         </div>
-        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(90deg);">
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             style="transform: rotate(90deg);">
           <polyline points="9,18 15,12 9,6"></polyline>
         </svg>
       </button>
@@ -72,12 +73,14 @@
         </a>
         <a href="#" class="nav-subitem" th:href="@{/venta/administrar}">
           <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+            </path>
           </svg>
           Administrar
         </a>
       </div>
     </div>
+
     <!-- Usuarios Section -->
     <div class="nav-section">
       <button class="nav-item nav-toggle" data-target="usuariosSubmenu">
@@ -102,12 +105,14 @@
         </a>
         <a href="#" class="nav-subitem" th:href="@{/usuarios/administrar}">
           <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+            </path>
           </svg>
           Administrar
         </a>
       </div>
     </div>
+
     <!-- Productos Section -->
     <div class="nav-section">
       <button class="nav-item nav-toggle" data-target="productosSubmenu">
@@ -133,7 +138,8 @@
         </a>
         <a href="#" class="nav-subitem" th:href="@{/productos/administrar}">
           <svg class="nav-subicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+            </path>
           </svg>
           Administrar
         </a>
@@ -187,13 +193,12 @@
             <label for="responsableVenta">Vendedor</label>
             <input type="text" id="responsableVenta" name="responsableVenta" class="form-input"
                    th:value="${usuarioLogueado.nombre}" readonly>
-            <input type="hidden" name="idResponsable"
-                   th:value="${usuarioLogueado.idUsuario}">
+            <input type="hidden" name="idResponsable" th:value="${usuarioLogueado.idUsuario}">
           </div>
         </div>
       </div>
 
-      <!-- Selección de Productos - MEJORADA -->
+      <!-- Selección de Productos -->
       <div class="form-section">
         <div class="section-header">
           <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -204,20 +209,19 @@
           <h3>Selección de Productos</h3>
         </div>
 
-        <!-- Selector de productos con mejor diseño -->
+        <!-- Selector de productos -->
         <div class="form-grid">
           <div class="form-group">
             <label for="productoSeleccionado">Producto</label>
             <select id="productoSeleccionado" class="form-input">
               <option value="" disabled selected>-- Selecciona un producto --</option>
-              <option th:each="producto : ${productosDisponibles}"
-                      th:value="${producto.idProducto}"
+              <option th:each="producto : ${productosDisponibles}" th:value="${producto.idProducto}"
                       th:text="${producto.nombreProducto} + ' - Stock: ' + ${producto.stock} + ' - $' + ${producto.costo}">
               </option>
             </select>
           </div>
           <div class="form-group">
-            <label>&nbsp;</label> <!-- Espaciador para alinear el botón -->
+            <label>&nbsp;</label>
             <button type="button" class="btn btn-secondary" onclick="agregarProducto()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -228,7 +232,7 @@
           </div>
         </div>
 
-        <!-- Tabla de productos agregados con mejor estilo -->
+        <!-- Tabla de productos agregados -->
         <div class="form-group">
           <div class="table-container">
             <table class="product-table" id="productosAgregados">
@@ -275,34 +279,50 @@
             <label class="payment-option">
               <input type="radio" th:field="*{tipoDeVenta}" value="EFECTIVO" class="form-radio">
               <span class="payment-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="1" x2="12" y2="23"></line>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-          </svg>
-          Efectivo
-        </span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                  Efectivo
+                </span>
             </label>
             <label class="payment-option">
               <input type="radio" th:field="*{tipoDeVenta}" value="TRANSFERENCIA" class="form-radio">
               <span class="payment-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7,10 12,15 17,10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          Transferencia
-        </span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7,10 12,15 17,10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  Transferencia
+                </span>
             </label>
             <label class="payment-option">
               <input type="radio" th:field="*{tipoDeVenta}" value="TARJETA" class="form-radio">
               <span class="payment-label">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-            <line x1="1" y1="10" x2="23" y2="10"></line>
-          </svg>
-          Tarjeta
-        </span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                  </svg>
+                  Tarjeta
+                </span>
             </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-header">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 12l2 2 4-4"></path>
+            </svg>
+            <h3>Porcentaje</h3>
+          </div>
+          <div class="form-group">
+            <div class="percentage-input-container">
+              <input type="number" id="porcentajeInput" placeholder="0" class="form-input" min="-100" max="1000" step="0.1">
+              <span class="percentage-symbol">%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -311,10 +331,12 @@
       <div class="form-section summary-section">
         <div class="section-header">
           <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4m6-6h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4m-6 0a2 2 0 0 0-2-2v-3a2 2 0 0 0 2-2m6 0a2 2 0 0 1 2-2v-3a2 2 0 0 1-2-2"></path>
+            <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4m6-6h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-4m-6 0a2 2 0 0 0-2-2v-3a2 2 0 0 0 2-2m6 0a2 2 0 0 1 2-2v-3a2 2 0 0 1-2-2">
+            </path>
           </svg>
           <h3>Resumen de la Venta</h3>
         </div>
+        <input type="hidden" th:field="*{total}" id="totalHidden">
         <div class="summary-content">
           <div class="summary-row">
             <span>Subtotal:</span>
@@ -322,7 +344,7 @@
           </div>
           <div class="summary-row">
             <span>Porcentaje Adicional:</span>
-            <span class="summary-value" id="percentageAmount">$0.00</span>
+            <span class="summary-value" id="percentageAmount">0% ($0.00)</span>
           </div>
           <div class="summary-row total-row">
             <span>Total:</span>
@@ -339,7 +361,6 @@
           </svg>
           Cancelar
         </button>
-
         <button type="submit" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12"></polyline>
@@ -377,219 +398,74 @@
   </div>
 </div>
 
-<style>
-  /* Estilos adicionales para mejorar la sección de productos */
-  .table-container {
-    position: relative;
-    min-height: 200px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .product-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-  }
-
-  .product-table th,
-  .product-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .product-table th {
-    background-color: #f9fafb;
-    font-weight: 600;
-    color: #374151;
-  }
-
-  .product-table tbody tr:hover {
-    background-color: #f9fafb;
-  }
-
-  .quantity-input {
-    width: 60px;
-    text-align: center;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    padding: 4px;
-    margin: 0 8px;
-  }
-
-  .quantity-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  .btn-danger {
-    background-color: #ef4444;
-    color: white;
-    border: none;
-    padding: 6px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-  }
-
-  .btn-danger:hover {
-    background-color: #dc2626;
-  }
-
-  .empty-products {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    text-align: center;
-    color: #6b7280;
-  }
-
-  .empty-products svg {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 16px;
-    opacity: 0.5;
-  }
-
-  .empty-products p {
-    font-size: 18px;
-    font-weight: 500;
-    margin: 0 0 8px 0;
-    color: #374151;
-  }
-
-  .empty-products span {
-    font-size: 14px;
-    color: #6b7280;
-  }
-
-  /* Mejorar el botón de agregar producto */
-  .btn.btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background-color: #6b7280;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn.btn-secondary:hover {
-    background-color: #4b5563;
-    transform: translateY(-1px);
-  }
-
-  .btn.btn-secondary svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* Botones de cantidad */
-  .product-table button {
-    background-color: #f3f4f6;
-    border: 1px solid #d1d5db;
-    color: #374151;
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    transition: all 0.2s;
-  }
-
-  .product-table button:hover {
-    background-color: #e5e7eb;
-    border-color: #9ca3af;
-  }
-
-  .product-table button:active {
-    transform: scale(0.95);
-  }
-</style>
-
 <script>
-  // Toggle sidebar (código existente)
+  // Toggle sidebar
   const menuToggle = document.getElementById('menuToggle');
   const sidebar = document.getElementById('sidebar');
   const mainContent = document.getElementById('mainContent');
   const overlay = document.getElementById('overlay');
 
   menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      overlay.classList.toggle('active');
-      document.body.classList.toggle('sidebar-open');
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+    document.body.classList.toggle('sidebar-open');
   });
 
   overlay.addEventListener('click', () => {
-      sidebar.classList.remove('active');
-      overlay.classList.remove('active');
-      document.body.classList.remove('sidebar-open');
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.classList.remove('sidebar-open');
   });
 
-  // Toggle user dropdown (código existente)
+  // Toggle user dropdown
   const userButton = document.getElementById('userButton');
   const dropdownMenu = document.getElementById('dropdownMenu');
 
   userButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownMenu.classList.toggle('active');
+    e.stopPropagation();
+    dropdownMenu.classList.toggle('active');
   });
 
   document.addEventListener('click', () => {
-      dropdownMenu.classList.remove('active');
+    dropdownMenu.classList.remove('active');
   });
 
   dropdownMenu.addEventListener('click', (e) => {
-      e.stopPropagation();
+    e.stopPropagation();
   });
 
-  // Toggle navigation submenus (código existente)
+  // Toggle navigation submenus
   const navToggles = document.querySelectorAll('.nav-toggle');
   navToggles.forEach(toggle => {
-      toggle.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = toggle.getAttribute('data-target');
-          const submenu = document.getElementById(targetId);
-          const chevron = toggle.querySelector('.nav-chevron');
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = toggle.getAttribute('data-target');
+      const submenu = document.getElementById(targetId);
+      const chevron = toggle.querySelector('.nav-chevron');
 
-          navToggles.forEach(otherToggle => {
-              if (otherToggle !== toggle) {
-                  const otherTargetId = otherToggle.getAttribute('data-target');
-                  const otherSubmenu = document.getElementById(otherTargetId);
-                  const otherChevron = otherToggle.querySelector('.nav-chevron');
-                  otherSubmenu.classList.remove('active');
-                  otherToggle.classList.remove('active');
-                  otherChevron.style.transform = 'rotate(0deg)';
-              }
-          });
-
-          submenu.classList.toggle('active');
-          toggle.classList.toggle('active');
-          if (submenu.classList.contains('active')) {
-              chevron.style.transform = 'rotate(90deg)';
-          } else {
-              chevron.style.transform = 'rotate(0deg)';
-          }
+      navToggles.forEach(otherToggle => {
+        if (otherToggle !== toggle) {
+          const otherTargetId = otherToggle.getAttribute('data-target');
+          const otherSubmenu = document.getElementById(otherTargetId);
+          const otherChevron = otherToggle.querySelector('.nav-chevron');
+          otherSubmenu.classList.remove('active');
+          otherToggle.classList.remove('active');
+          otherChevron.style.transform = 'rotate(0deg)';
+        }
       });
+
+      submenu.classList.toggle('active');
+      toggle.classList.toggle('active');
+      if (submenu.classList.contains('active')) {
+        chevron.style.transform = 'rotate(90deg)';
+      } else {
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    });
   });
 
   // --- Lógica específica para crear ventas ---
-  let productosAgregados = []; // Almacena objetos {id, nombre, precio, cantidad}
+  let productosAgregados = [];
 
   // Agregar producto desde el select
   function agregarProducto() {
@@ -651,17 +527,19 @@
       row.innerHTML = `
         <td>${producto.nombre}</td>
         <td>
-          <button type="button" onclick="cambiarCantidad(${producto.id}, -1)">-</button>
-          <input type="number" value="${producto.cantidad}" min="1"
-                 onchange="actualizarCantidad(${producto.id}, this.value)"
-                 class="quantity-input">
-          <button type="button" onclick="cambiarCantidad(${producto.id}, 1)">+</button>
+          <div class="quantity-control">
+            <button type="button" onclick="cambiarCantidad(${producto.id}, -1)" class="quantity-btn">-</button>
+            <input type="number" value="${producto.cantidad}" min="1"
+                   onchange="actualizarCantidad(${producto.id}, this.value)"
+                   class="quantity-input">
+            <button type="button" onclick="cambiarCantidad(${producto.id}, 1)" class="quantity-btn">+</button>
+          </div>
         </td>
         <td>$${producto.precio.toFixed(2)}</td>
         <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
         <td>
-          <button type="button" onclick="eliminarProducto(${producto.id})" class="btn-danger">
-            <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor">
+          <button type="button" onclick="eliminarProducto(${producto.id})" class="remove-product">
+            <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -673,7 +551,7 @@
       // Input oculto para el formulario
       const input = document.createElement("input");
       input.type = "hidden";
-      input.name = "productoLista"; // Nombre del campo en VentaDto
+      input.name = "productoLista";
       input.value = producto.id;
       container.appendChild(input);
     });
@@ -704,17 +582,44 @@
   }
 
   // Calcular totales
- function actualizarResumen() {
-  const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+  function actualizarResumen() {
+    // Calcular subtotal
+    const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
 
-  document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
-  document.getElementById("totalAmount").textContent = `$${subtotal.toFixed(2)}`;
+    // Obtener porcentaje
+    const porcentaje = parseFloat(document.getElementById("porcentajeInput").value) || 0;
 
-  let totalInput = document.querySelector("input[name='total']");
-  if (totalInput) {
-    totalInput.value = subtotal;
+    // Calcular monto del porcentaje
+    const montoPorcentaje = subtotal * porcentaje / 100;
+
+    // Calcular total
+    const total = subtotal + montoPorcentaje;
+
+    // Línea para el campo hidden con Thymeleaf
+    document.getElementById("totalHidden").value = total.toFixed(2);
+
+    // Actualizar la UI
+    document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
+
+    // Mostrar porcentaje y su valor monetario
+    const percentageElement = document.getElementById("percentageAmount");
+    if (porcentaje === 0) {
+      percentageElement.textContent = "0% ($0.00)";
+      percentageElement.className = "summary-value";
+    } else {
+      const sign = porcentaje >= 0 ? "+" : "-";
+      percentageElement.textContent = `${porcentaje}% (${sign}$${Math.abs(montoPorcentaje).toFixed(2)})`;
+      percentageElement.className = `summary-value ${porcentaje >= 0 ? 'positive' : 'negative'}`;
+    }
+
+    document.getElementById("totalAmount").textContent = `$${total.toFixed(2)}`;
+
+    // Actualizar campo oculto para el backend
+    const totalInput = document.querySelector("input[name='total']");
+    if (totalInput) {
+      totalInput.value = total.toFixed(2);
+    }
   }
-}
 
   // Inicialización
   document.addEventListener("DOMContentLoaded", () => {
@@ -728,7 +633,7 @@
     }
 
     // Escuchar cambios en el porcentaje adicional
-    document.getElementById("porcentajeAdicional").addEventListener("input", actualizarResumen);
+    document.getElementById("porcentajeInput").addEventListener("input", actualizarResumen);
 
     // Validación del formulario
     document.getElementById("salesForm").addEventListener("submit", (e) => {
@@ -747,6 +652,5 @@
     });
   });
 </script>
-
 </body>
 </html>
