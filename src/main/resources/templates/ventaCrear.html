@@ -339,6 +339,7 @@
           </svg>
           Cancelar
         </button>
+
         <button type="submit" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12"></polyline>
@@ -371,18 +372,6 @@
       </div>
       <div class="products-list" id="productsList">
         <!-- Los productos se cargarán aquí desde la BD -->
-        <div class="product-item" data-id="1" data-name="Producto 1" data-price="25.50">
-          <span class="product-name">Producto 1</span>
-          <span class="product-price">$25.50</span>
-        </div>
-        <div class="product-item" data-id="2" data-name="Producto 2" data-price="15.75">
-          <span class="product-name">Producto 2</span>
-          <span class="product-price">$15.75</span>
-        </div>
-        <div class="product-item" data-id="3" data-name="Producto 3" data-price="30.00">
-          <span class="product-name">Producto 3</span>
-          <span class="product-price">$30.00</span>
-        </div>
       </div>
     </div>
   </div>
@@ -715,22 +704,17 @@
   }
 
   // Calcular totales
-  function actualizarResumen() {
-    const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
-    const porcentaje = parseFloat(document.getElementById("porcentajeAdicional").value) || 0;
-    const adicional = subtotal * (porcentaje / 100);
-    const total = subtotal + adicional;
+ function actualizarResumen() {
+  const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
 
-    document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById("percentageAmount").textContent = `$${adicional.toFixed(2)}`;
-    document.getElementById("totalAmount").textContent = `$${total.toFixed(2)}`;
+  document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
+  document.getElementById("totalAmount").textContent = `$${subtotal.toFixed(2)}`;
 
-    // Actualizar campo total en el formulario (para VentaDto)
-    let totalInput = document.querySelector("input[name='total']");
-    if (totalInput) {
-      totalInput.value = total;
-    }
+  let totalInput = document.querySelector("input[name='total']");
+  if (totalInput) {
+    totalInput.value = subtotal;
   }
+}
 
   // Inicialización
   document.addEventListener("DOMContentLoaded", () => {
