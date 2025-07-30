@@ -73,6 +73,7 @@ public class VentaController {
 
     @GetMapping("/venta/administrar")
     public String ventaTabla(Model model){
+
         model.addAttribute("ventaTabla",ventaService.listaVenta());
         return "ventaTabla";
     }

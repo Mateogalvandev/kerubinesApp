@@ -6,6 +6,7 @@
     <title>Administrar Ventas - Kerubines App</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/ventaTabla.css}">
+    <link rel="stylesheet" th:href="@{/css/ventaTabla-modern.css}">
 </head>
 <body>
 <!-- Header -->
@@ -184,7 +185,7 @@
                 </div>
                 <div class="stat-content">
                     <h3 class="stat-number" id="totalRevenue">$0.00</h3>
-                    <p class="stat-label">Ingresos Totales</p>
+                    <p class="stat-label">Ingresos Diarios</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -212,7 +213,6 @@
                     <option value="today">Hoy</option>
                     <option value="week">Esta semana</option>
                     <option value="month">Este mes</option>
-                    <option value="custom">Rango personalizado</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -222,7 +222,6 @@
                     <option value="efectivo">Efectivo</option>
                     <option value="transferencia">Transferencia</option>
                     <option value="tarjeta">Tarjeta</option>
-                    <option value="credito">Crédito</option>
                 </select>
             </div>
         </div>
@@ -238,107 +237,130 @@
             </button>
         </div>
 
-        <!-- Contenedor de la tabla -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Registro de Ventas</h6>
+        <!-- Contenedor de la tabla mejorado -->
+        <div class="table-container">
+            <div class="table-header">
+                <h6>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                        <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+                    </svg>
+                    Registro de Ventas
+                </h6>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th data-column="idVenta">
-                                ID Venta
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
+            <div class="table-responsive">
+                <table class="modern-table" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th data-column="idVenta">
+                            ID Venta
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th data-column="fecha">
+                            Fecha
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th data-column="tipoVenta">
+                            Tipo de Venta
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th data-column="total">
+                            Total
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th data-column="idUsuario">
+                            Vendedor
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th data-column="productos">
+                            Productos
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th data-column="telefono">
+                            Teléfono
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th data-column="cliente">
+                            Cliente
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    <!-- Datos de ventas desde la base de datos -->
+                    <tr th:each="venta : ${ventaTabla}" class="data-row">
+                        <td class="sale-id" th:text="${venta.idVenta}">ID</td>
+                        <td class="sale-date" th:text="${#temporals.format(venta.Date, 'dd/MM/yy HH:mm')}">Fecha</td>
+                        <td>
+                            <span class="payment-badge" th:classappend="'payment-' + ${#strings.toLowerCase(venta.tipoDeVenta)}" th:text="${venta.tipoDeVenta}">Tipo de Venta</span>
+                        </td>
+                        <td class="sale-total" th:text="'$' + ${venta.total}">Total</td>
+                        <td class="sale-user" th:text="${venta.usuarioVenta.nombre}">Vendedor</td>
+                        <td class="products-list" th:attr="data-products=${venta.productoLista}">
+                            <span th:text="${venta.productoLista}">Lista de producto</span>
+                        </td>
+                        <td class="sale-phone" th:text="${venta.numeroCliente}">Teléfono</td>
+                        <td class="sale-client" th:text="${venta.nombreCliente}">Cliente</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn btn-view" th:onclick="'viewSaleDetails(' + ${venta.idVenta} + ')'" data-tooltip="Ver detalles">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                 </button>
-                            </th>
-                            <th data-column="fecha">
-                                Fecha
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
+                                <button class="action-btn btn-print" th:onclick="'printSale(' + ${venta.idVenta} + ')'" data-tooltip="Imprimir">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6,9 6,2 18,2 18,9"></polyline>
+                                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                        <rect x="6" y="14" width="12" height="8"></rect>
                                     </svg>
                                 </button>
-                            </th>
-                            <th data-column="tipoVenta">
-                                Tipo de Venta
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
-                                    </svg>
-                                </button>
-                            </th>
-                            <th data-column="total">
-                                Total
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
-                                    </svg>
-                                </button>
-                            </th>
-                            <th data-column="idUsuario">
-                                ID Usuario
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
-                                    </svg>
-                                </button>
-                            </th>
-                            <th data-column="productos">
-                                Productos
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
-                                    </svg>
-                                </button>
-                            </th>
-                            <th data-column="telefono">
-                                Teléfono
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
-                                    </svg>
-                                </button>
-                            </th>
-                            <th data-column="cliente">
-                                Cliente
-                                <button class="sort-button" data-sort-direction="none">
-                                    <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <polyline points="7 14 12 9 17 14"></polyline>
-                                    </svg>
-                                </button>
-                            </th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                        <!-- Datos de ventas desde la base de datos -->
-                        <tr th:each="venta : ${ventaTabla}">
-                            <td th:text="${venta.idVenta}">ID</td>
-                            <td th:text="${venta.Date}">Fecha</td>
-                            <td th:text="${venta.tipoDeVenta}">Tipo de Venta></td>
-                            <td th:text="${venta.total}">Total</td>
-                            <td th:text="${venta.usuarioVenta}">ID Usuario</td>
-                            <td th:text="${venta.productoLista}">Lista de producto></td>
-                            <td th:text="${venta.numeroCliente}">Teléfono</td>
-                            <td th:text="${venta.nombreCliente}">Cliente</td>
-                            <td> </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -385,6 +407,10 @@
 </div>
 
 <script>
+    // ===================================
+    // SCRIPT PARA ADMINISTRAR VENTAS
+    // ===================================
+
     // Toggle sidebar
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.getElementById('sidebar');
@@ -450,31 +476,11 @@
         });
     });
 
-    // --- Lógica específica para administrar ventas ---
+    // ===================================
+    // LÓGICA ESPECÍFICA PARA ADMINISTRAR VENTAS
+    // ===================================
 
-    // Función para obtener datos de la tabla desde el DOM
-    function getTableDataFromDOM() {
-        const rows = document.querySelectorAll('#tableBody tr');
-        const data = [];
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            if (cells.length > 0) {
-                data.push({
-                    idVenta: cells[0].textContent.trim(),
-                    fecha: cells[1].textContent.trim(),
-                    tipoVenta: cells[2].textContent.trim(),
-                    total: cells[3].textContent.trim(),
-                    idUsuario: cells[4].textContent.trim(),
-                    productos: cells[5].textContent.trim(),
-                    telefono: cells[6].textContent.trim(),
-                    cliente: cells[7].textContent.trim()
-                });
-            }
-        });
-        return data;
-    }
-
+    // Variables globales
     const tableBody = document.getElementById('tableBody');
     const searchInput = document.getElementById('searchInput');
     const sortButtons = document.querySelectorAll('.sort-button');
@@ -482,6 +488,7 @@
     const nextPageBtn = document.getElementById('nextPage');
     const pageNumbersContainer = document.getElementById('pageNumbers');
 
+    let originalRows = []; // Almacenar las filas originales de Thymeleaf
     let tableData = [];
     let filteredData = [];
     let currentPage = 1;
@@ -491,7 +498,72 @@
     const dateFilter = document.getElementById('dateFilter');
     const paymentFilter = document.getElementById('paymentFilter');
 
-    // Función para renderizar la tabla
+    // ===================================
+    // FUNCIÓN PARA FORMATEAR LA LISTA DE PRODUCTOS
+    // ===================================
+    function formatProductList(productString) {
+        try {
+            // Remover corchetes externos
+            const cleanString = productString.replace(/^\[|\]$/g, '');
+
+            // Dividir por productos individuales
+            const products = cleanString.split(/(?=Producto\{)/);
+
+            const formattedProducts = products.map(product => {
+                if (!product.trim()) return '';
+
+                // Extraer nombre del producto
+                const nameMatch = product.match(/nombreProducto='([^']+)'/);
+                const name = nameMatch ? nameMatch[1] : 'Producto';
+
+                return `<span class="product-item">${name}</span>`;
+            }).filter(p => p);
+
+            return formattedProducts.join('');
+        } catch (e) {
+            // Si hay error en el parsing, mostrar versión simplificada
+            return `<span class="product-item">Productos de la venta</span>`;
+        }
+    }
+
+    // ===================================
+    // FUNCIÓN PARA CAPTURAR DATOS DEL DOM
+    // ===================================
+    function captureOriginalData() {
+        const rows = document.querySelectorAll('#tableBody tr.data-row');
+        originalRows = Array.from(rows); // Guardar las filas originales
+        tableData = [];
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 8) {
+                // Formatear la lista de productos
+                const productsCell = cells[5];
+                const originalProductText = productsCell.getAttribute('data-products') || productsCell.textContent.trim();
+                const formattedProducts = formatProductList(originalProductText);
+                productsCell.innerHTML = formattedProducts;
+
+                tableData.push({
+                    idVenta: cells[0].textContent.trim(),
+                    fecha: cells[1].textContent.trim(),
+                    tipoVenta: cells[2].textContent.trim(),
+                    total: cells[3].textContent.trim(),
+                    idUsuario: cells[4].textContent.trim(),
+                    productos: originalProductText, // Mantener el texto original para búsqueda
+                    telefono: cells[6].textContent.trim(),
+                    cliente: cells[7].textContent.trim(),
+                    originalRow: row // Referencia a la fila original
+                });
+            }
+        });
+
+        filteredData = [...tableData];
+        console.log('Datos capturados:', tableData.length, 'filas');
+    }
+
+    // ===================================
+    // FUNCIÓN PARA RENDERIZAR LA TABLA
+    // ===================================
     function renderTable(dataToRender) {
         tableBody.innerHTML = '';
         const start = (currentPage - 1) * rowsPerPage;
@@ -503,43 +575,65 @@
             return;
         }
 
-        // Obtener las filas originales de Thymeleaf
-        const originalRows = Array.from(document.querySelectorAll('#tableBody tr'));
-
         paginatedData.forEach(item => {
-            // Buscar la fila original que coincide con este item
-            const originalRow = originalRows.find(row =>
-                row.querySelector('td').textContent.trim() === item.idVenta
-            );
-
-            if (originalRow) {
+            if (item.originalRow) {
                 // Clonar la fila original para mantener todo el HTML de Thymeleaf
-                const row = originalRow.cloneNode(true);
+                const row = item.originalRow.cloneNode(true);
+
+                // Volver a formatear los productos en la fila clonada
+                const productsCell = row.querySelector('td:nth-child(6)');
+                if (productsCell) {
+                    const originalProductText = productsCell.getAttribute('data-products') || item.productos;
+                    productsCell.innerHTML = formatProductList(originalProductText);
+                }
+
                 tableBody.appendChild(row);
             }
         });
     }
 
-    // Función para actualizar estadísticas
+    // ===================================
+    // FUNCIÓN PARA ACTUALIZAR ESTADÍSTICAS
+    // ===================================
     function updateStats() {
         const totalSales = filteredData.length;
-        const totalRevenue = filteredData.reduce((sum, sale) => {
-            const amount = parseFloat(sale.total.replace('$', '').replace(',', ''));
+
+        // Calcular ingresos diarios (solo ventas de hoy)
+        const today = new Date().toISOString().split('T')[0];
+        const todaysSales = filteredData.filter(sale => {
+            try {
+                let saleDate;
+                if (sale.fecha.includes('/')) {
+                    const parts = sale.fecha.split('/');
+                    if (parts.length >= 3) {
+                        // Asumir formato DD/MM/YY HH:mm
+                        const year = parts[2].length === 2 ? '20' + parts[2] : parts[2];
+                        saleDate = new Date(year, parts[1] - 1, parts[0]).toISOString().split('T')[0];
+                    }
+                } else if (sale.fecha.includes('-')) {
+                    saleDate = new Date(sale.fecha).toISOString().split('T')[0];
+                }
+                return saleDate === today;
+            } catch (e) {
+                return false;
+            }
+        });
+
+        const dailyRevenue = todaysSales.reduce((sum, sale) => {
+            const amount = parseFloat(sale.total.replace(/[^0-9.-]+/g, ''));
             return sum + (isNaN(amount) ? 0 : amount);
         }, 0);
 
-        const today = new Date().toISOString().split('T')[0];
-        const todaySales = filteredData.filter(sale => {
-            const saleDate = new Date(sale.fecha.split('/').reverse().join('-')).toISOString().split('T')[0];
-            return saleDate === today;
-        }).length;
+        const todaySalesCount = todaysSales.length;
 
         document.getElementById('totalSales').textContent = totalSales;
-        document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
-        document.getElementById('todaySales').textContent = todaySales;
+        document.getElementById('totalRevenue').textContent = `$${dailyRevenue.toFixed(2)}`;
+        document.getElementById('todaySales').textContent = todaySalesCount;
     }
 
-    // Función para aplicar filtros
+    // ===================================
+    // FUNCIÓN PARA APLICAR FILTROS
+    // ===================================
     function applyFilters() {
         filteredData = [...tableData];
 
@@ -548,18 +642,34 @@
         if (dateFilterValue !== 'all') {
             const today = new Date();
             filteredData = filteredData.filter(item => {
-                const itemDate = new Date(item.fecha.split('/').reverse().join('-'));
-                switch (dateFilterValue) {
-                    case 'today':
-                        return itemDate.toDateString() === today.toDateString();
-                    case 'week':
-                        const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-                        return itemDate >= weekAgo;
-                    case 'month':
-                        return itemDate.getMonth() === today.getMonth() &&
-                               itemDate.getFullYear() === today.getFullYear();
-                    default:
-                        return true;
+                try {
+                    let itemDate;
+                    if (item.fecha.includes('/')) {
+                        const parts = item.fecha.split('/');
+                        if (parts.length >= 3) {
+                            const year = parts[2].length === 2 ? '20' + parts[2] : parts[2];
+                            itemDate = new Date(year, parts[1] - 1, parts[0]);
+                        }
+                    } else if (item.fecha.includes('-')) {
+                        itemDate = new Date(item.fecha);
+                    }
+
+                    if (!itemDate) return false;
+
+                    switch (dateFilterValue) {
+                        case 'today':
+                            return itemDate.toDateString() === today.toDateString();
+                        case 'week':
+                            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            return itemDate >= weekAgo;
+                        case 'month':
+                            return itemDate.getMonth() === today.getMonth() &&
+                                   itemDate.getFullYear() === today.getFullYear();
+                        default:
+                            return true;
+                    }
+                } catch (e) {
+                    return false;
                 }
             });
         }
@@ -594,7 +704,9 @@
     // Búsqueda
     searchInput.addEventListener('input', applyFilters);
 
-    // Función para actualizar controles de paginación
+    // ===================================
+    // FUNCIÓN PARA ACTUALIZAR CONTROLES DE PAGINACIÓN
+    // ===================================
     function updatePaginationControls() {
         const totalPages = Math.ceil(filteredData.length / rowsPerPage);
         pageNumbersContainer.innerHTML = '';
@@ -618,7 +730,9 @@
         }
     }
 
-    // Ordenamiento
+    // ===================================
+    // ORDENAMIENTO DE COLUMNAS
+    // ===================================
     sortButtons.forEach(button => {
         button.addEventListener('click', () => {
             const column = button.parentElement.getAttribute('data-column');
@@ -656,11 +770,28 @@
 
                     // Manejo especial para números y fechas
                     if (column === 'total') {
-                        valA = parseFloat(valA.replace('$', '').replace(',', '')) || 0;
-                        valB = parseFloat(valB.replace('$', '').replace(',', '')) || 0;
+                        valA = parseFloat(valA.replace(/[^0-9.-]+/g, '')) || 0;
+                        valB = parseFloat(valB.replace(/[^0-9.-]+/g, '')) || 0;
                     } else if (column === 'fecha') {
-                        valA = new Date(valA.split('/').reverse().join('-'));
-                        valB = new Date(valB.split('/').reverse().join('-'));
+                        try {
+                            if (valA.includes('/')) {
+                                const partsA = valA.split('/');
+                                const yearA = partsA[2].length === 2 ? '20' + partsA[2] : partsA[2];
+                                valA = new Date(yearA, partsA[1] - 1, partsA[0]);
+                            } else {
+                                valA = new Date(valA);
+                            }
+                            if (valB.includes('/')) {
+                                const partsB = valB.split('/');
+                                const yearB = partsB[2].length === 2 ? '20' + partsB[2] : partsB[2];
+                                valB = new Date(yearB, partsB[1] - 1, partsB[0]);
+                            } else {
+                                valB = new Date(valB);
+                            }
+                        } catch (e) {
+                            valA = 0;
+                            valB = 0;
+                        }
                     } else if (column === 'idVenta' || column === 'idUsuario') {
                         valA = parseInt(valA) || 0;
                         valB = parseInt(valB) || 0;
@@ -681,7 +812,9 @@
         });
     });
 
-    // Paginación
+    // ===================================
+    // CONTROLES DE PAGINACIÓN
+    // ===================================
     prevPageBtn.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
@@ -699,25 +832,22 @@
         }
     });
 
-    // Funciones específicas de ventas
+    // ===================================
+    // FUNCIONES ESPECÍFICAS DE VENTAS
+    // ===================================
     function viewSaleDetails(saleId) {
-        // Implementar lógica para mostrar detalles de la venta
         console.log('Ver detalles de venta:', saleId);
-        // Aquí puedes hacer una petición AJAX para obtener los detalles y mostrarlos en el modal
         document.getElementById('saleDetailModal').style.display = 'block';
     }
 
     function printSale(saleId) {
-        // Implementar lógica de impresión
         console.log('Imprimir venta:', saleId);
-        // Aquí puedes abrir una nueva ventana con el recibo o generar un PDF
         window.open(`/venta/imprimir/${saleId}`, '_blank');
     }
 
     function confirmDelete(event, deleteUrl) {
         event.preventDefault();
         const isConfirmed = confirm('¿Estás seguro de que deseas eliminar esta venta? Esta acción no se puede deshacer.');
-
         if (isConfirmed) {
             const processedUrl = deleteUrl
                 .replace(/&amp;/g, '&')
@@ -727,7 +857,9 @@
         return false;
     }
 
-    // Modal functionality
+    // ===================================
+    // FUNCIONALIDAD DEL MODAL
+    // ===================================
     const saleDetailModal = document.getElementById('saleDetailModal');
     const closeSaleModal = document.getElementById('closeSaleModal');
 
@@ -741,15 +873,23 @@
         }
     });
 
-    // Inicializar al cargar la página
+    // Hacer las funciones globales para que Thymeleaf pueda acceder a ellas
+    window.viewSaleDetails = viewSaleDetails;
+    window.printSale = printSale;
+    window.confirmDelete = confirmDelete;
+
+    // ===================================
+    // INICIALIZACIÓN AL CARGAR LA PÁGINA
+    // ===================================
     document.addEventListener('DOMContentLoaded', () => {
-        tableData = getTableDataFromDOM();
-        filteredData = [...tableData];
-        renderTable(filteredData);
-        updatePaginationControls();
-        updateStats();
+        // Esperar un poco para asegurar que Thymeleaf haya renderizado
+        setTimeout(() => {
+            captureOriginalData();
+            renderTable(filteredData);
+            updatePaginationControls();
+            updateStats();
+        }, 100);
     });
 </script>
-
 </body>
 </html>

@@ -621,3 +621,14 @@
 body.modal-open {
     overflow: hidden;
 }
+
+.producto-badge {
+    display: inline-block;
+    background-color: #f0f9ff;
+    border: 1px solid #d1e7ff;
+    border-radius: 12px;
+    padding: 4px 8px;
+    margin: 2px;
+    font-size: 0.85em;
+    color: #0369a1;
+}
