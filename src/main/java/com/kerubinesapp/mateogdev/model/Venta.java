@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,25 +24,30 @@ public class Venta {
     private LocalDateTime Date;
     private Double total;
     private String tipoDeVenta;
+    private String modalidadVenta;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuarioVenta;
-    @ManyToMany
-    @JoinTable(
-            name = "venta_producto",
-            joinColumns = @JoinColumn(name = "venta_id"),
-            inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
-    private List<Producto> productoLista;
 
-    public Venta(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, List<Producto> productoLista) {
+
+    @OneToMany(mappedBy = "venta", orphanRemoval = true)
+    private List<ItemVenta> items = new ArrayList<>();
+
+    public void agregarItem(Producto producto, Integer cantidad){
+        ItemVenta itemVenta = new ItemVenta(this, producto, cantidad);
+        items.add(itemVenta);
+    }
+
+
+
+    public Venta(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total,String modalidadVenta, String tipoDeVenta) {
         this.idVenta = idVenta;
         this.nombreCliente = nombreCliente;
         this.numeroCliente = numeroCliente;
         this.Date = date;
         this.total = total;
+        this.modalidadVenta = modalidadVenta;
         this.tipoDeVenta = tipoDeVenta;
-        this.productoLista = productoLista;
 
     }
 
@@ -54,9 +60,7 @@ public class Venta {
                 ", Date=" + Date +
                 ", total=" + total +
                 ", tipoDeVenta='" + tipoDeVenta + '\'' +
-                ", usuarioId=" + (usuarioVenta != null ? usuarioVenta.getIdUsuario() : null) +
-                ", productosCount=" + (productoLista != null ? productoLista.size() : 0) +
-                '}';
+                ", usuarioId=" + (usuarioVenta != null ? usuarioVenta.getIdUsuario() : null);
     }
 
 }

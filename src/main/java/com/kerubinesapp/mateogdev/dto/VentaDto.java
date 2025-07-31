@@ -1,5 +1,6 @@
 package com.kerubinesapp.mateogdev.dto;
 
+import com.kerubinesapp.mateogdev.model.ItemVenta;
 import com.kerubinesapp.mateogdev.model.Producto;
 import com.kerubinesapp.mateogdev.model.Usuario;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,6 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class VentaDto {
 
 
@@ -25,16 +25,38 @@ public class VentaDto {
     private Double total;
     private String tipoDeVenta;
     private Usuario usuarioVenta;
-    private List<Producto> productoLista;
+    private String modalidadVenta;
+    private List<ItemVentaDto> items;
 
-    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, List<Producto> productoLista) {
+    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String modalidadVenta,String tipoDeVenta) {
         this.idVenta = idVenta;
         this.nombreCliente = nombreCliente;
         this.numeroCliente = numeroCliente;
         this.Date = date;
         this.total = total;
+        this.modalidadVenta = modalidadVenta;
         this.tipoDeVenta = tipoDeVenta;
-        this.productoLista = productoLista;
 
+    }
+
+    public VentaDto(String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, Usuario usuarioVenta, List<ItemVentaDto> items) {
+        this.nombreCliente = nombreCliente;
+        this.numeroCliente = numeroCliente;
+        Date = date;
+        this.total = total;
+        this.tipoDeVenta = tipoDeVenta;
+        this.usuarioVenta = usuarioVenta;
+        this.items = items;
+    }
+
+    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, Usuario usuarioVenta, List<ItemVentaDto> items) {
+        this.idVenta = idVenta;
+        this.nombreCliente = nombreCliente;
+        this.numeroCliente = numeroCliente;
+        Date = date;
+        this.total = total;
+        this.tipoDeVenta = tipoDeVenta;
+        this.usuarioVenta = usuarioVenta;
+        this.items = items;
     }
 }

@@ -5,6 +5,7 @@
     import lombok.Data;
     import lombok.NoArgsConstructor;
 
+    import java.util.ArrayList;
     import java.util.List;
 
     @Data
@@ -21,17 +22,10 @@
         private String descripcion;
         private Double costo;
         private Long stock;
-        @ManyToMany
-        private List<Venta> ventaLista;
 
-        public Producto(String nombreProducto, String talla, String color, String descripcion, Double costo, Long stock, List<Venta> ventaLista) {
-            this.nombreProducto = nombreProducto;
-            this.talla = talla;
-            this.color = color;
-            this.descripcion = descripcion;
-            this.costo = costo;
-            this.stock = stock;
-        }
+        @OneToMany(mappedBy = "producto", orphanRemoval = true)
+        private List<ItemVenta> itemsVenta = new ArrayList<>();
+
 
         public Producto(String nombreProducto, String talla, String color, String descripcion, Double costo, Long stock) {
             this.nombreProducto = nombreProducto;
@@ -50,9 +44,7 @@
                     ", talla='" + talla + '\'' +
                     ", color='" + color + '\'' +
                     ", costo=" + costo +
-                    ", stock=" + stock +
-                    ", ventasCount=" + (ventaLista != null ? ventaLista.size() : 0) +
-                    '}';
+                    ", stock=" + stock;
         }
 
     }

@@ -1,5 +1,6 @@
 package com.kerubinesapp.mateogdev.controller;
 
+import com.kerubinesapp.mateogdev.dto.ItemVentaDto;
 import com.kerubinesapp.mateogdev.dto.VentaDto;
 import com.kerubinesapp.mateogdev.model.Producto;
 import com.kerubinesapp.mateogdev.model.Usuario;
@@ -13,10 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,11 +52,17 @@ public class VentaController {
     }
 
     @PostMapping("/venta/crear/post")
-    public String crearVentaPost(@ModelAttribute("ventaEntidad") VentaDto ventaDto){
+    public String crearVentaPost(@ModelAttribute("ventaEntidad") VentaDto ventaDto, BindingResult result){
         ventaDto.setDate(LocalDateTime.now());
 
+        // Validacion de tipo de venta
         if (ventaDto.getTipoDeVenta() == null || ventaDto.getTipoDeVenta().isEmpty()) {
             ventaDto.setTipoDeVenta("NO_ESPECIFICO"); // Valor por defecto
+        }
+
+        // Validacion para no hacer ventas vacias
+        if (ventaDto.getItems() == null || ventaDto.getItems().isEmpty()) {
+            throw new RuntimeException("Debe agregar al menos un producto a la venta");
         }
 
         ventaService.guardarVenta(ventaDto);
@@ -86,7 +91,6 @@ public class VentaController {
         ventaExistente.setTipoDeVenta(ventaDto.getTipoDeVenta());
         ventaExistente.setDate(ventaDto.getDate());
         ventaExistente.setTotal(ventaDto.getTotal());
-        ventaExistente.setProductoLista(ventaDto.getProductoLista());
         ventaService.actualizarVenta(ventaExistente);
         return "redirect:/venta/administrar";
     }

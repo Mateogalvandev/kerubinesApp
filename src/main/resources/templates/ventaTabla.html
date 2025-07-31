@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,7 +46,6 @@
         </div>
     </div>
 </header>
-
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <nav class="sidebar-nav">
@@ -142,7 +141,6 @@
         </div>
     </nav>
 </aside>
-
 <!-- Main Content -->
 <main class="main-content" id="mainContent">
     <div class="container-fluid">
@@ -162,7 +160,6 @@
                 </a>
             </div>
         </div>
-
         <!-- Filtros y estadísticas -->
         <div class="stats-container">
             <div class="stat-card">
@@ -203,14 +200,12 @@
                 </div>
             </div>
         </div>
-
         <!-- Filtros -->
         <div class="filters-container">
             <div class="filter-group">
                 <label for="dateFilter">Filtrar por fecha:</label>
                 <select id="dateFilter" class="filter-select">
-                    <option value="all">Todas las fechas</option>
-                    <option value="today">Hoy</option>
+                    <option value="all">Hoy</option>
                     <option value="week">Esta semana</option>
                     <option value="month">Este mes</option>
                 </select>
@@ -225,7 +220,6 @@
                 </select>
             </div>
         </div>
-
         <!-- Barra de búsqueda -->
         <div class="search-bar-container">
             <input type="text" id="searchInput" class="search-input" placeholder="Buscar por ID, cliente, teléfono, usuario...">
@@ -236,7 +230,6 @@
                 </svg>
             </button>
         </div>
-
         <!-- Contenedor de la tabla mejorado -->
         <div class="table-container">
             <div class="table-header">
@@ -323,6 +316,15 @@
                                 </svg>
                             </button>
                         </th>
+                        <th data-column="modalidadVenta">
+                            Modalidad
+                            <button class="sort-button" data-sort-direction="none">
+                                <svg class="sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <polyline points="7 14 12 9 17 14"></polyline>
+                                </svg>
+                            </button>
+                        </th>
                         <th>Acciones</th>
                     </tr>
                     </thead>
@@ -336,11 +338,24 @@
                         </td>
                         <td class="sale-total" th:text="'$' + ${venta.total}">Total</td>
                         <td class="sale-user" th:text="${venta.usuarioVenta.nombre}">Vendedor</td>
-                        <td class="products-list" th:attr="data-products=${venta.productoLista}">
-                            <span th:text="${venta.productoLista}">Lista de producto</span>
+                        <td class="products-list">
+                            <!-- Adaptación para la nueva entidad ItemVenta -->
+                            <ul class="product-items-list">
+                                <li th:each="itemVenta : ${venta.items}" class="product-item">
+                                    <span th:text="${itemVenta.producto.nombreProducto}">Nombre Producto</span>
+                                    <span th:text="' (' + ${itemVenta.cantidad} + ' unidades)'"> (X unidades)</span>
+                                </li>
+                            </ul>
                         </td>
                         <td class="sale-phone" th:text="${venta.numeroCliente}">Teléfono</td>
                         <td class="sale-client" th:text="${venta.nombreCliente}">Cliente</td>
+                        <td>
+                            <span class="modalidad-badge"
+                                  th:classappend="'modalidad-' + ${#strings.toLowerCase(venta.modalidadVenta)}"
+                                  th:text="${venta.modalidadVenta}">
+                                Modalidad
+                            </span>
+                        </td>
                         <td>
                             <div class="action-buttons">
                                 <button class="action-btn btn-view" th:onclick="'viewSaleDetails(' + ${venta.idVenta} + ')'" data-tooltip="Ver detalles">
@@ -363,7 +378,6 @@
                 </table>
             </div>
         </div>
-
         <!-- Paginación -->
         <div class="pagination-container">
             <button class="pagination-button" id="prevPage">
@@ -384,10 +398,8 @@
         </div>
     </div>
 </main>
-
 <!-- Overlay for mobile -->
 <div class="overlay" id="overlay"></div>
-
 <!-- Modal para ver detalles de venta -->
 <div class="modal" id="saleDetailModal">
     <div class="modal-content">
@@ -405,7 +417,6 @@
         </div>
     </div>
 </div>
-
 <script>
     // ===================================
     // SCRIPT PARA ADMINISTRAR VENTAS
@@ -418,15 +429,15 @@
     const overlay = document.getElementById('overlay');
 
     menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-        document.body.classList.toggle('sidebar-open');
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.classList.toggle('sidebar-open');
     });
 
     overlay.addEventListener('click', () => {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.classList.remove('sidebar-open');
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.classList.remove('sidebar-open');
     });
 
     // Toggle user dropdown
@@ -434,46 +445,46 @@
     const dropdownMenu = document.getElementById('dropdownMenu');
 
     userButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle('active');
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('active');
     });
 
     document.addEventListener('click', () => {
-        dropdownMenu.classList.remove('active');
+      dropdownMenu.classList.remove('active');
     });
 
     dropdownMenu.addEventListener('click', (e) => {
-        e.stopPropagation();
+      e.stopPropagation();
     });
 
     // Toggle navigation submenus
     const navToggles = document.querySelectorAll('.nav-toggle');
     navToggles.forEach(toggle => {
-        toggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = toggle.getAttribute('data-target');
-            const submenu = document.getElementById(targetId);
-            const chevron = toggle.querySelector('.nav-chevron');
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = toggle.getAttribute('data-target');
+        const submenu = document.getElementById(targetId);
+        const chevron = toggle.querySelector('.nav-chevron');
 
-            navToggles.forEach(otherToggle => {
-                if (otherToggle !== toggle) {
-                    const otherTargetId = otherToggle.getAttribute('data-target');
-                    const otherSubmenu = document.getElementById(otherTargetId);
-                    const otherChevron = otherToggle.querySelector('.nav-chevron');
-                    otherSubmenu.classList.remove('active');
-                    otherToggle.classList.remove('active');
-                    otherChevron.style.transform = 'rotate(0deg)';
-                }
-            });
-
-            submenu.classList.toggle('active');
-            toggle.classList.toggle('active');
-            if (submenu.classList.contains('active')) {
-                chevron.style.transform = 'rotate(90deg)';
-            } else {
-                chevron.style.transform = 'rotate(0deg)';
-            }
+        navToggles.forEach(otherToggle => {
+          if (otherToggle !== toggle) {
+            const otherTargetId = otherToggle.getAttribute('data-target');
+            const otherSubmenu = document.getElementById(otherTargetId);
+            const otherChevron = otherToggle.querySelector('.nav-chevron');
+            otherSubmenu.classList.remove('active');
+            otherToggle.classList.remove('active');
+            otherChevron.style.transform = 'rotate(0deg)';
+          }
         });
+
+        submenu.classList.toggle('active');
+        toggle.classList.toggle('active');
+        if (submenu.classList.contains('active')) {
+          chevron.style.transform = 'rotate(90deg)';
+        } else {
+          chevron.style.transform = 'rotate(0deg)';
+        }
+      });
     });
 
     // ===================================
@@ -487,7 +498,6 @@
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
     const pageNumbersContainer = document.getElementById('pageNumbers');
-
     let originalRows = []; // Almacenar las filas originales de Thymeleaf
     let tableData = [];
     let filteredData = [];
@@ -499,203 +509,194 @@
     const paymentFilter = document.getElementById('paymentFilter');
 
     // ===================================
-    // FUNCIÓN PARA FORMATEAR LA LISTA DE PRODUCTOS
-    // ===================================
-    function formatProductList(productString) {
-        try {
-            // Remover corchetes externos
-            const cleanString = productString.replace(/^\[|\]$/g, '');
-
-            // Dividir por productos individuales
-            const products = cleanString.split(/(?=Producto\{)/);
-
-            const formattedProducts = products.map(product => {
-                if (!product.trim()) return '';
-
-                // Extraer nombre del producto
-                const nameMatch = product.match(/nombreProducto='([^']+)'/);
-                const name = nameMatch ? nameMatch[1] : 'Producto';
-
-                return `<span class="product-item">${name}</span>`;
-            }).filter(p => p);
-
-            return formattedProducts.join('');
-        } catch (e) {
-            // Si hay error en el parsing, mostrar versión simplificada
-            return `<span class="product-item">Productos de la venta</span>`;
-        }
-    }
-
-    // ===================================
     // FUNCIÓN PARA CAPTURAR DATOS DEL DOM
     // ===================================
     function captureOriginalData() {
-        const rows = document.querySelectorAll('#tableBody tr.data-row');
-        originalRows = Array.from(rows); // Guardar las filas originales
-        tableData = [];
+      const rows = document.querySelectorAll('#tableBody tr.data-row');
+      originalRows = Array.from(rows); // Guardar las filas originales
+      tableData = [];
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 8) {
+          const productsCell = cells[5];
+          const productsHtml = productsCell.innerHTML; // Capturamos el HTML ya renderizado por Thymeleaf
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            if (cells.length >= 8) {
-                // Formatear la lista de productos
-                const productsCell = cells[5];
-                const originalProductText = productsCell.getAttribute('data-products') || productsCell.textContent.trim();
-                const formattedProducts = formatProductList(originalProductText);
-                productsCell.innerHTML = formattedProducts;
-
-                tableData.push({
-                    idVenta: cells[0].textContent.trim(),
-                    fecha: cells[1].textContent.trim(),
-                    tipoVenta: cells[2].textContent.trim(),
-                    total: cells[3].textContent.trim(),
-                    idUsuario: cells[4].textContent.trim(),
-                    productos: originalProductText, // Mantener el texto original para búsqueda
-                    telefono: cells[6].textContent.trim(),
-                    cliente: cells[7].textContent.trim(),
-                    originalRow: row // Referencia a la fila original
-                });
-            }
-        });
-
-        filteredData = [...tableData];
-        console.log('Datos capturados:', tableData.length, 'filas');
+          tableData.push({
+            idVenta: cells[0].textContent.trim(),
+            fecha: cells[1].textContent.trim(),
+            tipoVenta: cells[2].textContent.trim(),
+            total: cells[3].textContent.trim(),
+            idUsuario: cells[4].textContent.trim(),
+            productos: productsHtml, // Guardamos el HTML directamente
+            telefono: cells[6].textContent.trim(),
+            cliente: cells[7].textContent.trim(),
+            modalidadVenta: cells[8].textContent.trim(),
+            originalRow: row // Referencia a la fila original
+          });
+        }
+      });
+      filteredData = [...tableData];
+      console.log('Datos capturados:', tableData.length, 'filas');
     }
 
     // ===================================
     // FUNCIÓN PARA RENDERIZAR LA TABLA
     // ===================================
     function renderTable(dataToRender) {
-        tableBody.innerHTML = '';
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const paginatedData = dataToRender.slice(start, end);
+      tableBody.innerHTML = '';
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const paginatedData = dataToRender.slice(start, end);
 
-        if (paginatedData.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="9" class="no-results">No se encontraron resultados.</td></tr>';
-            return;
+      if (paginatedData.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="10" class="no-results">No se encontraron resultados.</td></tr>';
+        return;
+      }
+
+      paginatedData.forEach(item => {
+        if (item.originalRow) {
+          // Clonar la fila original para mantener todo el HTML de Thymeleaf
+          const row = item.originalRow.cloneNode(true);
+          // Volver a insertar el HTML de productos que ya capturamos
+          const productsCell = row.querySelector('td:nth-child(6)');
+          if (productsCell) {
+            productsCell.innerHTML = item.productos; // Usamos el HTML guardado
+          }
+          tableBody.appendChild(row);
         }
-
-        paginatedData.forEach(item => {
-            if (item.originalRow) {
-                // Clonar la fila original para mantener todo el HTML de Thymeleaf
-                const row = item.originalRow.cloneNode(true);
-
-                // Volver a formatear los productos en la fila clonada
-                const productsCell = row.querySelector('td:nth-child(6)');
-                if (productsCell) {
-                    const originalProductText = productsCell.getAttribute('data-products') || item.productos;
-                    productsCell.innerHTML = formatProductList(originalProductText);
-                }
-
-                tableBody.appendChild(row);
-            }
-        });
+      });
     }
 
     // ===================================
     // FUNCIÓN PARA ACTUALIZAR ESTADÍSTICAS
     // ===================================
-    function updateStats() {
-        const totalSales = filteredData.length;
+    // ===================================
+// FUNCIÓN PARA ACTUALIZAR ESTADÍSTICAS
+// ===================================
+function updateStats() {
+  const totalSales = filteredData.length;
 
-        // Calcular ingresos diarios (solo ventas de hoy)
-        const today = new Date().toISOString().split('T')[0];
-        const todaysSales = filteredData.filter(sale => {
-            try {
-                let saleDate;
-                if (sale.fecha.includes('/')) {
-                    const parts = sale.fecha.split('/');
-                    if (parts.length >= 3) {
-                        // Asumir formato DD/MM/YY HH:mm
-                        const year = parts[2].length === 2 ? '20' + parts[2] : parts[2];
-                        saleDate = new Date(year, parts[1] - 1, parts[0]).toISOString().split('T')[0];
-                    }
-                } else if (sale.fecha.includes('-')) {
-                    saleDate = new Date(sale.fecha).toISOString().split('T')[0];
-                }
-                return saleDate === today;
-            } catch (e) {
-                return false;
-            }
-        });
+  // Obtener fecha actual del sistema en formato YYYY-MM-DD
+  const today = new Date();
+  const todayFormatted = today.toISOString().split('T')[0];
 
-        const dailyRevenue = todaysSales.reduce((sum, sale) => {
-            const amount = parseFloat(sale.total.replace(/[^0-9.-]+/g, ''));
-            return sum + (isNaN(amount) ? 0 : amount);
-        }, 0);
+  // Filtrar ventas de hoy
+  const todaysSales = filteredData.filter(sale => {
+    try {
+      // Convertir fecha de la venta a formato comparable
+      let saleDateFormatted;
+      if (sale.fecha.includes('/')) {
+        // Si la fecha está en formato DD/MM/YY HH:mm
+        const [datePart, timePart] = sale.fecha.split(' ');
+        const [day, month, year] = datePart.split('/');
+        // Asegurar año de 4 dígitos
+        const fullYear = year.length === 2 ? `20${year}` : year;
+        saleDateFormatted = `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      } else if (sale.fecha.includes('-')) {
+        // Si ya está en formato ISO o similar
+        saleDateFormatted = sale.fecha.split('T')[0];
+      }
 
-        const todaySalesCount = todaysSales.length;
-
-        document.getElementById('totalSales').textContent = totalSales;
-        document.getElementById('totalRevenue').textContent = `$${dailyRevenue.toFixed(2)}`;
-        document.getElementById('todaySales').textContent = todaySalesCount;
+      return saleDateFormatted === todayFormatted;
+    } catch (e) {
+      console.error('Error al procesar fecha:', e);
+      return false;
     }
+  });
+
+  // Calcular ingresos diarios (suma de totales de ventas de hoy)
+  const dailyRevenue = todaysSales.reduce((sum, sale) => {
+    // Extraer el valor numérico del total (eliminando $ y otros caracteres)
+    const amount = parseFloat(sale.total.replace(/[^0-9.-]+/g, ''));
+    return sum + (isNaN(amount) ? 0 : amount);
+  }, 0);
+
+  const todaySalesCount = todaysSales.length;
+
+  // Actualizar la UI
+  document.getElementById('totalSales').textContent = totalSales;
+  document.getElementById('totalRevenue').textContent = `$${dailyRevenue.toFixed(2)}`;
+  document.getElementById('todaySales').textContent = todaySalesCount;
+}
 
     // ===================================
     // FUNCIÓN PARA APLICAR FILTROS
     // ===================================
     function applyFilters() {
-        filteredData = [...tableData];
+    filteredData = [...tableData];
 
-        // Filtro por fecha
-        const dateFilterValue = dateFilter.value;
-        if (dateFilterValue !== 'all') {
-            const today = new Date();
-            filteredData = filteredData.filter(item => {
-                try {
-                    let itemDate;
-                    if (item.fecha.includes('/')) {
-                        const parts = item.fecha.split('/');
-                        if (parts.length >= 3) {
-                            const year = parts[2].length === 2 ? '20' + parts[2] : parts[2];
-                            itemDate = new Date(year, parts[1] - 1, parts[0]);
-                        }
-                    } else if (item.fecha.includes('-')) {
-                        itemDate = new Date(item.fecha);
-                    }
+    // Filtro por fecha
+    const dateFilterValue = dateFilter.value;
+    if (dateFilterValue !== 'all') {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalizar a inicio del día
 
-                    if (!itemDate) return false;
-
-                    switch (dateFilterValue) {
-                        case 'today':
-                            return itemDate.toDateString() === today.toDateString();
-                        case 'week':
-                            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-                            return itemDate >= weekAgo;
-                        case 'month':
-                            return itemDate.getMonth() === today.getMonth() &&
-                                   itemDate.getFullYear() === today.getFullYear();
-                        default:
-                            return true;
-                    }
-                } catch (e) {
-                    return false;
+        filteredData = filteredData.filter(item => {
+            try {
+                // Parsear fecha de la venta
+                let saleDate;
+                if (item.fecha.includes('/')) {
+                    const [datePart, timePart] = item.fecha.split(' ');
+                    const [day, month, year] = datePart.split('/');
+                    const fullYear = year.length === 2 ? `20${year}` : year;
+                    saleDate = new Date(`${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+                } else if (item.fecha.includes('-')) {
+                    saleDate = new Date(item.fecha.split('T')[0]);
                 }
-            });
-        }
+                
+                if (!saleDate) return false;
+                saleDate.setHours(0, 0, 0, 0); // Normalizar a inicio del día
 
-        // Filtro por tipo de venta
-        if (paymentFilter.value !== 'all') {
-            filteredData = filteredData.filter(item =>
-                item.tipoVenta.toLowerCase().includes(paymentFilter.value.toLowerCase())
-            );
-        }
-
-        // Aplicar búsqueda si hay texto
-        if (searchInput.value.trim() !== '') {
-            const searchTerm = searchInput.value.toLowerCase();
-            filteredData = filteredData.filter(item =>
-                Object.values(item).some(value =>
-                    String(value).toLowerCase().includes(searchTerm)
-                )
-            );
-        }
-
-        currentPage = 1;
-        renderTable(filteredData);
-        updatePaginationControls();
-        updateStats();
+                switch (dateFilterValue) {
+                    case 'today':
+                        return saleDate.getTime() === today.getTime();
+                        
+                    case 'week':
+                        // Obtener inicio de semana (lunes)
+                        const dayOfWeek = today.getDay();
+                        const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Ajuste para que la semana empiece en lunes
+                        const weekStart = new Date(today);
+                        weekStart.setDate(diff);
+                        weekStart.setHours(0, 0, 0, 0);
+                        return saleDate >= weekStart && saleDate <= today;
+                        
+                    case 'month':
+                        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+                        return saleDate >= monthStart && saleDate <= today;
+                        
+                    default:
+                        return true;
+                }
+            } catch (e) {
+                console.error('Error procesando fecha:', e);
+                return false;
+            }
+        });
     }
+
+    // Resto del código de applyFilters() permanece igual...
+    // Filtro por tipo de venta
+    if (paymentFilter.value !== 'all') {
+        filteredData = filteredData.filter(item =>
+            item.tipoVenta.toLowerCase().includes(paymentFilter.value.toLowerCase())
+        );
+    }
+
+    // Aplicar búsqueda si hay texto
+    if (searchInput.value.trim() !== '') {
+        const searchTerm = searchInput.value.toLowerCase();
+        filteredData = filteredData.filter(item =>
+            Object.values(item).some(value =>
+                String(value).toLowerCase().includes(searchTerm)
+            )
+        );
+    }
+
+    currentPage = 1;
+    renderTable(filteredData);
+    updatePaginationControls();
+    updateStats();
+}
 
     // Event listeners para filtros
     dateFilter.addEventListener('change', applyFilters);
@@ -708,153 +709,156 @@
     // FUNCIÓN PARA ACTUALIZAR CONTROLES DE PAGINACIÓN
     // ===================================
     function updatePaginationControls() {
-        const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-        pageNumbersContainer.innerHTML = '';
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      pageNumbersContainer.innerHTML = '';
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
 
-        prevPageBtn.disabled = currentPage === 1;
-        nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.classList.add('page-number-button');
-            pageBtn.textContent = i;
-            if (i === currentPage) {
-                pageBtn.classList.add('active');
-            }
-            pageBtn.addEventListener('click', () => {
-                currentPage = i;
-                renderTable(filteredData);
-                updatePaginationControls();
-            });
-            pageNumbersContainer.appendChild(pageBtn);
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.classList.add('page-number-button');
+        pageBtn.textContent = i;
+        if (i === currentPage) {
+          pageBtn.classList.add('active');
         }
+        pageBtn.addEventListener('click', () => {
+          currentPage = i;
+          renderTable(filteredData);
+          updatePaginationControls();
+        });
+        pageNumbersContainer.appendChild(pageBtn);
+      }
     }
 
     // ===================================
     // ORDENAMIENTO DE COLUMNAS
     // ===================================
     sortButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const column = button.parentElement.getAttribute('data-column');
-            let direction = button.getAttribute('data-sort-direction');
+      button.addEventListener('click', () => {
+        const column = button.parentElement.getAttribute('data-column');
+        let direction = button.getAttribute('data-sort-direction');
 
-            // Resetear otros botones
-            sortButtons.forEach(otherButton => {
-                if (otherButton !== button) {
-                    otherButton.setAttribute('data-sort-direction', 'none');
-                    otherButton.querySelector('.sort-icon').innerHTML =
-                        '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>';
-                }
-            });
-
-            // Cambiar dirección
-            if (direction === 'asc') {
-                direction = 'desc';
-                button.querySelector('.sort-icon').innerHTML = '<polyline points="7 14 12 9 17 14"></polyline>';
-            } else if (direction === 'desc') {
-                direction = 'none';
-                button.querySelector('.sort-icon').innerHTML =
-                    '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>';
-            } else {
-                direction = 'asc';
-                button.querySelector('.sort-icon').innerHTML = '<polyline points="7 10 12 15 17 10"></polyline>';
-            }
-
-            button.setAttribute('data-sort-direction', direction);
-
-            // Ordenar datos
-            if (direction !== 'none') {
-                filteredData.sort((a, b) => {
-                    let valA = String(a[column]).toLowerCase();
-                    let valB = String(b[column]).toLowerCase();
-
-                    // Manejo especial para números y fechas
-                    if (column === 'total') {
-                        valA = parseFloat(valA.replace(/[^0-9.-]+/g, '')) || 0;
-                        valB = parseFloat(valB.replace(/[^0-9.-]+/g, '')) || 0;
-                    } else if (column === 'fecha') {
-                        try {
-                            if (valA.includes('/')) {
-                                const partsA = valA.split('/');
-                                const yearA = partsA[2].length === 2 ? '20' + partsA[2] : partsA[2];
-                                valA = new Date(yearA, partsA[1] - 1, partsA[0]);
-                            } else {
-                                valA = new Date(valA);
-                            }
-                            if (valB.includes('/')) {
-                                const partsB = valB.split('/');
-                                const yearB = partsB[2].length === 2 ? '20' + partsB[2] : partsB[2];
-                                valB = new Date(yearB, partsB[1] - 1, partsB[0]);
-                            } else {
-                                valB = new Date(valB);
-                            }
-                        } catch (e) {
-                            valA = 0;
-                            valB = 0;
-                        }
-                    } else if (column === 'idVenta' || column === 'idUsuario') {
-                        valA = parseInt(valA) || 0;
-                        valB = parseInt(valB) || 0;
-                    }
-
-                    if (valA < valB) return direction === 'asc' ? -1 : 1;
-                    if (valA > valB) return direction === 'asc' ? 1 : -1;
-                    return 0;
-                });
-            } else {
-                applyFilters(); // Volver al orden original con filtros
-                return;
-            }
-
-            currentPage = 1;
-            renderTable(filteredData);
-            updatePaginationControls();
+        // Resetear otros botones
+        sortButtons.forEach(otherButton => {
+          if (otherButton !== button) {
+            otherButton.setAttribute('data-sort-direction', 'none');
+            otherButton.querySelector('.sort-icon').innerHTML =
+              '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>';
+          }
         });
+
+        // Cambiar dirección
+        if (direction === 'asc') {
+          direction = 'desc';
+          button.querySelector('.sort-icon').innerHTML = '<polyline points="7 14 12 9 17 14"></polyline>';
+        } else if (direction === 'desc') {
+          direction = 'none';
+          button.querySelector('.sort-icon').innerHTML =
+            '<polyline points="7 10 12 15 17 10"></polyline><polyline points="7 14 12 9 17 14"></polyline>';
+        } else {
+          direction = 'asc';
+          button.querySelector('.sort-icon').innerHTML = '<polyline points="7 10 12 15 17 10"></polyline>';
+        }
+        button.setAttribute('data-sort-direction', direction);
+
+        // Ordenar datos
+        if (direction !== 'none') {
+          filteredData.sort((a, b) => {
+            let valA = String(a[column]).toLowerCase();
+            let valB = String(b[column]).toLowerCase();
+
+            // Manejo especial para números y fechas
+            if (column === 'total') {
+              valA = parseFloat(valA.replace(/[^0-9.-]+/g, '')) || 0;
+              valB = parseFloat(valB.replace(/[^0-9.-]+/g, '')) || 0;
+            } else if (column === 'fecha') {
+              try {
+                if (valA.includes('/')) {
+                  const partsA = valA.split('/');
+                  const yearA = partsA[2].length === 2 ? '20' + partsA[2] : partsA[2];
+                  valA = new Date(yearA, partsA[1] - 1, partsA[0]);
+                } else {
+                  valA = new Date(valA);
+                }
+                if (valB.includes('/')) {
+                  const partsB = valB.split('/');
+                  const yearB = partsB[2].length === 2 ? '20' + partsB[2] : partsB[2];
+                  valB = new Date(yearB, partsB[1] - 1, partsB[0]);
+                } else {
+                  valB = new Date(valB);
+                }
+              } catch (e) {
+                valA = 0;
+                valB = 0;
+              }
+            } else if (column === 'idVenta' || column === 'idUsuario') {
+              valA = parseInt(valA) || 0;
+              valB = parseInt(valB) || 0;
+            }
+
+            if (valA < valB) return direction === 'asc' ? -1 : 1;
+            if (valA > valB) return direction === 'asc' ? 1 : -1;
+            return 0;
+          });
+        } else {
+          applyFilters(); // Volver al orden original con filtros
+          return;
+        }
+
+        currentPage = 1;
+        renderTable(filteredData);
+        updatePaginationControls();
+      });
     });
 
     // ===================================
     // CONTROLES DE PAGINACIÓN
     // ===================================
     prevPageBtn.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable(filteredData);
-            updatePaginationControls();
-        }
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable(filteredData);
+        updatePaginationControls();
+      }
     });
 
     nextPageBtn.addEventListener('click', () => {
-        const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTable(filteredData);
-            updatePaginationControls();
-        }
+      const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable(filteredData);
+        updatePaginationControls();
+      }
     });
 
     // ===================================
     // FUNCIONES ESPECÍFICAS DE VENTAS
     // ===================================
     function viewSaleDetails(saleId) {
-        console.log('Ver detalles de venta:', saleId);
-        document.getElementById('saleDetailModal').style.display = 'block';
+      console.log('Ver detalles de venta:', saleId);
+      // Aquí deberías hacer una llamada AJAX para obtener los detalles de la venta
+      // y luego poblar el modal con esa información.
+      // Por ahora, solo mostramos el modal.
+      document.getElementById('saleDetailModal').style.display = 'block';
+      overlay.classList.add('active'); // Activar overlay al abrir modal
+      document.body.classList.add('modal-open'); // Bloquear scroll del body
     }
 
     function printSale(saleId) {
-        console.log('Imprimir venta:', saleId);
-        window.open(`/venta/imprimir/${saleId}`, '_blank');
+      console.log('Imprimir venta:', saleId);
+      window.open(`/venta/imprimir/${saleId}`, '_blank');
     }
 
     function confirmDelete(event, deleteUrl) {
-        event.preventDefault();
-        const isConfirmed = confirm('¿Estás seguro de que deseas eliminar esta venta? Esta acción no se puede deshacer.');
-        if (isConfirmed) {
-            const processedUrl = deleteUrl
-                .replace(/&amp;/g, '&')
-                .replace(/&#x2F;/g, '/');
-            window.location.href = processedUrl;
-        }
-        return false;
+      event.preventDefault();
+      const isConfirmed = confirm('¿Estás seguro de que deseas eliminar esta venta? Esta acción no se puede deshacer.');
+      if (isConfirmed) {
+        const processedUrl = deleteUrl
+          .replace(/&amp;/g, '&')
+          .replace(/&#x2F;/g, '/');
+        window.location.href = processedUrl;
+      }
+      return false;
     }
 
     // ===================================
@@ -864,13 +868,17 @@
     const closeSaleModal = document.getElementById('closeSaleModal');
 
     closeSaleModal.addEventListener('click', () => {
-        saleDetailModal.style.display = 'none';
+      saleDetailModal.style.display = 'none';
+      overlay.classList.remove('active'); // Desactivar overlay al cerrar modal
+      document.body.classList.remove('modal-open'); // Habilitar scroll del body
     });
 
-    window.addEventListener('click', (event) => {
-        if (event.target === saleDetailModal) {
-            saleDetailModal.style.display = 'none';
-        }
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay && saleDetailModal.style.display === 'block') {
+        saleDetailModal.style.display = 'none';
+        overlay.classList.remove('active');
+        document.body.classList.remove('modal-open');
+      }
     });
 
     // Hacer las funciones globales para que Thymeleaf pueda acceder a ellas
@@ -882,13 +890,13 @@
     // INICIALIZACIÓN AL CARGAR LA PÁGINA
     // ===================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Esperar un poco para asegurar que Thymeleaf haya renderizado
-        setTimeout(() => {
-            captureOriginalData();
-            renderTable(filteredData);
-            updatePaginationControls();
-            updateStats();
-        }, 100);
+      // Esperar un poco para asegurar que Thymeleaf haya renderizado
+      setTimeout(() => {
+        captureOriginalData();
+        renderTable(filteredData);
+        updatePaginationControls();
+        updateStats();
+      }, 100);
     });
 </script>
 </body>

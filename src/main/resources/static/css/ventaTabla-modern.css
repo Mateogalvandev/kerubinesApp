@@ -1,7 +1,4 @@
-/* ===================================
-   ESTILOS MINIMALISTAS PARA TABLA DE VENTAS
-   =================================== */
-
+/* ===================================   ESTILOS MINIMALISTAS PARA TABLA DE VENTAS   =================================== */
 /* Contenedor principal de la tabla */
 .table-container {
   background: #ffffff;
@@ -90,10 +87,7 @@
   background: #f3f4f6;
 }
 
-/* ===================================
-   ESTILOS PARA CELDAS ESPECÍFICAS
-   =================================== */
-
+/* ===================================   ESTILOS PARA CELDAS ESPECÍFICAS   =================================== */
 /* ID de venta */
 .sale-id {
   font-weight: 600;
@@ -142,10 +136,7 @@
   text-align: left;
 }
 
-/* ===================================
-   BADGES MINIMALISTAS PARA TIPOS DE VENTA
-   =================================== */
-
+/* ===================================   BADGES MINIMALISTAS PARA TIPOS DE VENTA   =================================== */
 .payment-badge {
   display: inline-flex;
   align-items: center;
@@ -179,16 +170,19 @@
   border-color: #fde68a;
 }
 
-/* ===================================
-   LISTA DE PRODUCTOS MINIMALISTA
-   =================================== */
-
+/* ===================================   LISTA DE PRODUCTOS MINIMALISTA   =================================== */
 .products-list {
   max-width: 220px;
   max-height: 60px;
   overflow-y: auto;
   font-size: 0.8125rem;
   line-height: 1.4;
+}
+
+.product-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .product-item {
@@ -221,10 +215,7 @@
   background: #9ca3af;
 }
 
-/* ===================================
-   BOTONES DE ACCIÓN MINIMALISTAS
-   =================================== */
-
+/* ===================================   BOTONES DE ACCIÓN MINIMALISTAS   =================================== */
 .action-buttons {
   display: flex;
   gap: 0.5rem;
@@ -301,10 +292,7 @@
   visibility: visible;
 }
 
-/* ===================================
-   ALINEACIÓN Y SIMETRÍA DE COLUMNAS
-   =================================== */
-
+/* ===================================   ALINEACIÓN Y SIMETRÍA DE COLUMNAS   =================================== */
 /* Columna ID Venta */
 .modern-table th[data-column="idVenta"],
 .modern-table td:nth-child(1) {
@@ -368,10 +356,7 @@
   text-align: center;
 }
 
-/* ===================================
-   ESTADOS DE CARGA Y SIN RESULTADOS
-   =================================== */
-
+/* ===================================   ESTADOS DE CARGA Y SIN RESULTADOS   =================================== */
 .loading-row {
   text-align: center;
   padding: 3rem;
@@ -402,10 +387,7 @@
   font-size: 0.875rem;
 }
 
-/* ===================================
-   RESPONSIVE DESIGN MEJORADO
-   =================================== */
-
+/* ===================================   RESPONSIVE DESIGN MEJORADO   =================================== */
 /* Tablets y pantallas medianas */
 @media (max-width: 1200px) {
   .modern-table {
@@ -538,10 +520,7 @@
   }
 }
 
-/* ===================================
-   MEJORAS ADICIONALES MINIMALISTAS
-   =================================== */
-
+/* ===================================   MEJORAS ADICIONALES MINIMALISTAS   =================================== */
 /* Animaciones suaves y sutiles */
 .modern-table tbody tr,
 .action-btn,
@@ -604,7 +583,8 @@
 
 /* Mejoras en la tipografía */
 .modern-table {
-  font-feature-settings: "tnum" 1; /* Números tabulares para mejor alineación */
+  font-feature-settings: "tnum" 1;
+  /* Números tabulares para mejor alineación */
 }
 
 /* Estados de ordenamiento más sutiles */

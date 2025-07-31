@@ -150,6 +150,7 @@
         </div>
         <div class="form-container" >
             <form id="productForm" th:action="@{/productos/crear/post}" th:object="${productoEntidad}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="form-grid">
                     <!-- Nombre del producto -->
                     <div class="form-group">
