@@ -51,7 +51,7 @@ public class UsuarioService implements IUsuarioService{
 
     @Override
     public Usuario guardarUsuario(UsuarioDto usuarioDto) {
-        Usuario usuario = new Usuario(usuarioDto.getNombre(),passwordEncoder.encode(usuarioDto.getPassword()), usuarioDto.getUsername());
+        Usuario usuario = new Usuario(usuarioDto.getNombre(), passwordEncoder.encode(usuarioDto.getPassword()), usuarioDto.getUsername());
         usuario.setRolUsuario(Usuario.Rol.ROLE_USER);
         usuario.setFechaIngreso(LocalDate.now());
         return usuarioRepository.save(usuario);

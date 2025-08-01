@@ -6,8 +6,16 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ItemVentaDto {
     private Long productoId;
     private int cantidad;
+    private Double precioUnitario;
+
+    public ItemVentaDto(Long productoId, int cantidad, Double precioUnitario) {
+        this.productoId = productoId;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+    }
+    // Puedes añadir otros campos si los necesitas en el frontend,
+    // pero no el objeto Producto completo para simplificar.
 }

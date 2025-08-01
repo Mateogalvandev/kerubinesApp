@@ -14,8 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class VentaService implements IVentaService {
@@ -41,7 +47,9 @@ public class VentaService implements IVentaService {
                 ventaDto.getDate(),
                 ventaDto.getTotal(),
                 ventaDto.getModalidadVenta(),
-                ventaDto.getTipoDeVenta());
+                ventaDto.getTipoDeVenta(),
+                ventaDto.getPorcentaje());
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Usuario usuario = usuarioRepository.findByUsername(username);
@@ -51,10 +59,11 @@ public class VentaService implements IVentaService {
         Venta ventaGuardada = ventaRepository.save(venta);
 
         // Procesar los items de la venta
-        double total = 0;
+        double subtotal = 0;
         for (ItemVentaDto itemDto : ventaDto.getItems()){
             Producto producto = productoRepository.findById(itemDto.getProductoId())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
             // Validar stock
             if (producto.getStock() < itemDto.getCantidad()) {
                 throw new RuntimeException("Stock insuficiente para " + producto.getNombreProducto());
@@ -74,12 +83,15 @@ public class VentaService implements IVentaService {
             // Guardar Item
             itemVentaRepository.save(itemVenta);
 
-            // Sumar el total
-            total += itemVenta.calcularSubTotal();
+            // Sumar al subtotal
+            subtotal += itemVenta.calcularSubTotal();
         }
 
+        // Calcular el total aplicando el porcentaje
+        double porcentaje = ventaDto.getPorcentaje() != null ? ventaDto.getPorcentaje() : 0.0;
+        double total = subtotal * (1 + porcentaje / 100);
 
-
+        // Actualizar la venta con el total calculado
         ventaGuardada.setTotal(total);
         return ventaRepository.save(ventaGuardada);
     }
@@ -95,9 +107,63 @@ public class VentaService implements IVentaService {
         return venta;
     }
 
-    @Override
+    /*@Override
     public Venta actualizarVenta(Venta venta) {
         return ventaRepository.save(venta);
+    }*/
+
+    @Transactional
+    public Venta actualizarVenta(Long id, VentaDto ventaDto) {
+        Venta ventaExistente = ventaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Venta no encontrada con ID: " + id));
+
+        // 1. Actualizar campos directos (incluyendo porcentaje)
+        ventaExistente.setNombreCliente(ventaDto.getNombreCliente());
+        ventaExistente.setNumeroCliente(ventaDto.getNumeroCliente());
+        ventaExistente.setTipoDeVenta(ventaDto.getTipoDeVenta());
+        ventaExistente.setModalidadVenta(ventaDto.getModalidadVenta());
+        ventaExistente.setPorcentaje(ventaDto.getPorcentaje()); // <- Asegurar que se guarde
+
+        // 2. Sincronizar ítems (tu lógica existente)
+        Map<Long, ItemVentaDto> incomingItemsMap = ventaDto.getItems().stream()
+                .collect(Collectors.toMap(ItemVentaDto::getProductoId, item -> item));
+
+        Set<ItemVenta> itemsToRemove = ventaExistente.getItems().stream()
+                .filter(existingItem -> !incomingItemsMap.containsKey(existingItem.getProducto().getIdProducto()))
+                .collect(Collectors.toSet());
+
+        ventaExistente.getItems().removeAll(itemsToRemove);
+
+        for (ItemVentaDto itemDto : ventaDto.getItems()) {
+            Producto producto = productoRepository.findById(itemDto.getProductoId())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + itemDto.getProductoId()));
+
+            ItemVenta existingItem = ventaExistente.getItems().stream()
+                    .filter(item -> item.getProducto().getIdProducto().equals(itemDto.getProductoId()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existingItem != null) {
+                existingItem.setCantidad(itemDto.getCantidad());
+                existingItem.setPrecioUnitario(itemDto.getPrecioUnitario());
+            } else {
+                ItemVenta newItem = new ItemVenta(ventaExistente, producto, itemDto.getCantidad());
+                newItem.setPrecioUnitario(itemDto.getPrecioUnitario());
+                ventaExistente.getItems().add(newItem);
+            }
+        }
+
+        // 3. Recalcular el total CON porcentaje (¡Cambio clave aquí!)
+        double subtotal = ventaExistente.getItems().stream()
+                .mapToDouble(ItemVenta::calcularSubTotal)
+                .sum();
+
+        double porcentaje = ventaDto.getPorcentaje() != null ? ventaDto.getPorcentaje() : 0.0;
+        double total = subtotal * (1 + porcentaje / 100); // Aplicar porcentaje
+
+        ventaExistente.setTotal(total);
+
+        return ventaRepository.save(ventaExistente);
     }
 
     @Override

@@ -12,12 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 @Data
 @NoArgsConstructor
+@AllArgsConstructor // Asegúrate de que Lombok genere un constructor con todos los campos
 public class VentaDto {
-
-
     private Long idVenta;
     private String nombreCliente;
     private String numeroCliente;
@@ -26,9 +24,17 @@ public class VentaDto {
     private String tipoDeVenta;
     private Usuario usuarioVenta;
     private String modalidadVenta;
+    private Double porcentaje; // ¡Campo agregado!
     private List<ItemVentaDto> items;
 
-    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String modalidadVenta,String tipoDeVenta) {
+    // Puedes mantener tus constructores específicos si los necesitas,
+    // pero con @Data y @AllArgsConstructor, Lombok ya genera los getters/setters
+    // y un constructor con todos los campos.
+
+    // Si aún necesitas constructores específicos, asegúrate de incluir 'porcentaje'
+    // en ellos si es relevante para su uso. Por ejemplo:
+
+    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String modalidadVenta, String tipoDeVenta, Double porcentaje) {
         this.idVenta = idVenta;
         this.nombreCliente = nombreCliente;
         this.numeroCliente = numeroCliente;
@@ -36,10 +42,10 @@ public class VentaDto {
         this.total = total;
         this.modalidadVenta = modalidadVenta;
         this.tipoDeVenta = tipoDeVenta;
-
+        this.porcentaje = porcentaje; // Incluir en el constructor
     }
 
-    public VentaDto(String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, Usuario usuarioVenta, List<ItemVentaDto> items) {
+    public VentaDto(String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, Usuario usuarioVenta, List<ItemVentaDto> items, Double porcentaje) {
         this.nombreCliente = nombreCliente;
         this.numeroCliente = numeroCliente;
         Date = date;
@@ -47,9 +53,10 @@ public class VentaDto {
         this.tipoDeVenta = tipoDeVenta;
         this.usuarioVenta = usuarioVenta;
         this.items = items;
+        this.porcentaje = porcentaje; // Incluir en el constructor
     }
 
-    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, Usuario usuarioVenta, List<ItemVentaDto> items) {
+    public VentaDto(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String tipoDeVenta, Usuario usuarioVenta, List<ItemVentaDto> items, Double porcentaje) {
         this.idVenta = idVenta;
         this.nombreCliente = nombreCliente;
         this.numeroCliente = numeroCliente;
@@ -58,5 +65,6 @@ public class VentaDto {
         this.tipoDeVenta = tipoDeVenta;
         this.usuarioVenta = usuarioVenta;
         this.items = items;
+        this.porcentaje = porcentaje; // Incluir en el constructor
     }
 }

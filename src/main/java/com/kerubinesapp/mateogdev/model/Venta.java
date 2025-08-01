@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,12 +23,13 @@ public class Venta {
     private Double total;
     private String tipoDeVenta;
     private String modalidadVenta;
+    private Double porcentaje; // <--- ¡Asegúrate de que este campo esté aquí!
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuarioVenta;
 
-
-    @OneToMany(mappedBy = "venta", orphanRemoval = true)
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // Añadido CascadeType.ALL para guardar ítems
     private List<ItemVenta> items = new ArrayList<>();
 
     public void agregarItem(Producto producto, Integer cantidad){
@@ -38,9 +37,8 @@ public class Venta {
         items.add(itemVenta);
     }
 
-
-
-    public Venta(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total,String modalidadVenta, String tipoDeVenta) {
+    // Constructor con el nuevo campo porcentaje
+    public Venta(Long idVenta, String nombreCliente, String numeroCliente, LocalDateTime date, Double total, String modalidadVenta, String tipoDeVenta, Double porcentaje) {
         this.idVenta = idVenta;
         this.nombreCliente = nombreCliente;
         this.numeroCliente = numeroCliente;
@@ -48,7 +46,7 @@ public class Venta {
         this.total = total;
         this.modalidadVenta = modalidadVenta;
         this.tipoDeVenta = tipoDeVenta;
-
+        this.porcentaje = porcentaje;
     }
 
     @Override
@@ -60,7 +58,9 @@ public class Venta {
                 ", Date=" + Date +
                 ", total=" + total +
                 ", tipoDeVenta='" + tipoDeVenta + '\'' +
-                ", usuarioId=" + (usuarioVenta != null ? usuarioVenta.getIdUsuario() : null);
+                ", modalidadVenta='" + modalidadVenta + '\'' +
+                ", porcentaje=" + porcentaje + // Incluir en toString
+                ", usuarioId=" + (usuarioVenta != null ? usuarioVenta.getIdUsuario() : null) +
+                '}';
     }
-
 }

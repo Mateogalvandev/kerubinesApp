@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class VentaController {
@@ -70,9 +71,31 @@ public class VentaController {
     }
 
 
+
     @GetMapping("/venta/editar/{id}")
-    public String editarVenta(@PathVariable Long id, Model model){
-        model.addAttribute("ventaEditar", ventaService.obtenerVentaId(id));
+    public String editarVenta(@PathVariable Long id, Model model) {
+        Venta venta = ventaService.obtenerVentaId(id);
+        venta.getItems().size(); // Fuerza la carga de los items si son LAZY
+
+        VentaDto ventaDto = new VentaDto();
+        ventaDto.setIdVenta(venta.getIdVenta());
+        ventaDto.setNombreCliente(venta.getNombreCliente());
+        ventaDto.setNumeroCliente(venta.getNumeroCliente());
+        ventaDto.setDate(venta.getDate());
+        ventaDto.setTotal(venta.getTotal());
+        ventaDto.setTipoDeVenta(venta.getTipoDeVenta());
+        ventaDto.setUsuarioVenta(venta.getUsuarioVenta());
+        ventaDto.setModalidadVenta(venta.getModalidadVenta());
+        ventaDto.setPorcentaje(venta.getPorcentaje() != null ? venta.getPorcentaje() : 0.0);
+
+        List<ItemVentaDto> itemDtos = venta.getItems().stream()
+                .map(item -> new ItemVentaDto(item.getProducto().getIdProducto(), item.getCantidad(), item.getPrecioUnitario()))
+                .collect(Collectors.toList());
+        ventaDto.setItems(itemDtos);
+
+        List<Producto> productos = productoRepository.findAll(); // Usar findAll() para obtener todos los productos disponibles
+        model.addAttribute("productosDisponibles", productos);
+        model.addAttribute("ventaEditar", ventaDto);
         return "ventaEditar";
     }
 
@@ -86,12 +109,22 @@ public class VentaController {
     @PostMapping("/venta/editar/post/{id}")
     public String ventaEditarAccion(@PathVariable Long id,
                                     @ModelAttribute("ventaEditar") VentaDto ventaDto,
+                                    BindingResult result,
                                     Model model){
-        Venta ventaExistente = ventaService.obtenerVentaId(id);
-        ventaExistente.setTipoDeVenta(ventaDto.getTipoDeVenta());
-        ventaExistente.setDate(ventaDto.getDate());
-        ventaExistente.setTotal(ventaDto.getTotal());
-        ventaService.actualizarVenta(ventaExistente);
+        if (ventaDto.getItems() == null || ventaDto.getItems().isEmpty()) {
+            model.addAttribute("error", "Debe agregar al menos un producto a la venta");
+            List<Producto> productos = productoRepository.findAll();
+            model.addAttribute("productosDisponibles", productos);
+            return "ventaEditar";
+        }
+        try {
+            ventaService.actualizarVenta(id, ventaDto);
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            List<Producto> productos = productoRepository.findAll();
+            model.addAttribute("productosDisponibles", productos);
+            return "ventaEditar";
+        }
         return "redirect:/venta/administrar";
     }
 

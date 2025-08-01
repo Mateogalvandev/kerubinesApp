@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +45,6 @@
     </div>
   </div>
 </header>
-
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
   <nav class="sidebar-nav">
@@ -145,7 +144,6 @@
     </div>
   </nav>
 </aside>
-
 <!-- Main Content -->
 <main class="main-content" id="mainContent">
   <div class="container-fluid">
@@ -333,7 +331,7 @@
           </div>
           <div class="form-group">
             <div class="percentage-input-container">
-              <input type="number" id="porcentajeInput" placeholder="0" class="form-input" min="-100" max="1000" step="0.1">
+              <input type="number" id="porcentajeInput" placeholder="0" class="form-input" min="-100" max="1000" step="0.1" th:field="*{porcentaje}">
               <span class="percentage-symbol">%</span>
             </div>
           </div>
@@ -382,10 +380,10 @@
     </form>
   </div>
 </main>
+</div>
 
 <!-- Overlay for mobile -->
 <div class="overlay" id="overlay"></div>
-
 <!-- Modal para seleccionar productos -->
 <div class="modal" id="productModal">
   <div class="modal-content">
@@ -425,7 +423,6 @@
     </div>
   </div>
 </div>
-
 <!-- Script para cargar los productos desde Thymeleaf a JavaScript -->
 <script th:inline="javascript">
   /*<![CDATA[*/
@@ -434,19 +431,18 @@
   var allProducts = [];
   /*[# th:each="producto : ${productosDisponibles}"]*/
   allProducts.push({
-    idProducto: /*[[${producto.idProducto}]]*/ null,
-    nombreProducto: /*[[${producto.nombreProducto}]]*/ '',
-    talla: /*[[${producto.talla}]]*/ '',
-    color: /*[[${producto.color}]]*/ '',
-    descripcion: /*[[${producto.descripcion}]]*/ '',
-    costo: /*[[${producto.costo}]]*/ 0.0,
-    stock: /*[[${producto.stock}]]*/ 0
+      idProducto: /*[[${producto.idProducto}]]*/ null,
+      nombreProducto: /*[[${producto.nombreProducto}]]*/ '',
+      talla: /*[[${producto.talla}]]*/ '',
+      color: /*[[${producto.color}]]*/ '',
+      descripcion: /*[[${producto.descripcion}]]*/ '',
+      costo: /*[[${producto.costo}]]*/ 0.0,
+      stock: /*[[${producto.stock}]]*/ 0
   });
   /*[/]*/
   console.log("Productos cargados desde Thymeleaf:", allProducts);
   /*]]>*/
 </script>
-
 <script>
   // --- Funcionalidades generales de la UI ---
   // Toggle sidebar
@@ -454,71 +450,65 @@
   const sidebar = document.getElementById('sidebar');
   const mainContent = document.getElementById('mainContent');
   const overlay = document.getElementById('overlay');
-
   menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-    document.body.classList.toggle('sidebar-open');
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.classList.toggle('sidebar-open');
   });
-
   overlay.addEventListener('click', () => {
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.classList.remove('sidebar-open');
+      if (productModal.classList.contains('active')) { // Solo cierra el modal si está abierto
+          productModal.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.classList.remove('modal-open');
+      } else { // Si no hay modal abierto, cierra la sidebar
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.classList.remove('sidebar-open');
+      }
   });
-
   // Toggle user dropdown
   const userButton = document.getElementById('userButton');
   const dropdownMenu = document.getElementById('dropdownMenu');
-
   userButton.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdownMenu.classList.toggle('active');
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('active');
   });
-
   document.addEventListener('click', () => {
-    dropdownMenu.classList.remove('active');
+      dropdownMenu.classList.remove('active');
   });
-
   dropdownMenu.addEventListener('click', (e) => {
-    e.stopPropagation();
+      e.stopPropagation();
   });
-
   // Toggle navigation submenus
   const navToggles = document.querySelectorAll('.nav-toggle');
   navToggles.forEach(toggle => {
-    toggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = toggle.getAttribute('data-target');
-      const submenu = document.getElementById(targetId);
-      const chevron = toggle.querySelector('.nav-chevron');
-
-      navToggles.forEach(otherToggle => {
-        if (otherToggle !== toggle) {
-          const otherTargetId = otherToggle.getAttribute('data-target');
-          const otherSubmenu = document.getElementById(otherTargetId);
-          const otherChevron = otherToggle.querySelector('.nav-chevron');
-          otherSubmenu.classList.remove('active');
-          otherToggle.classList.remove('active');
-          otherChevron.style.transform = 'rotate(0deg)';
-        }
+      toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = toggle.getAttribute('data-target');
+          const submenu = document.getElementById(targetId);
+          const chevron = toggle.querySelector('.nav-chevron');
+          navToggles.forEach(otherToggle => {
+              if (otherToggle !== toggle) {
+                  const otherTargetId = otherToggle.getAttribute('data-target');
+                  const otherSubmenu = document.getElementById(otherTargetId);
+                  const otherChevron = otherToggle.querySelector('.nav-chevron');
+                  otherSubmenu.classList.remove('active');
+                  otherToggle.classList.remove('active');
+                  otherChevron.style.transform = 'rotate(0deg)';
+              }
+          });
+          submenu.classList.toggle('active');
+          toggle.classList.toggle('active');
+          if (submenu.classList.contains('active')) {
+              chevron.style.transform = 'rotate(90deg)';
+          } else {
+              chevron.style.transform = 'rotate(0deg)';
+          }
       });
-
-      submenu.classList.toggle('active');
-      toggle.classList.toggle('active');
-      if (submenu.classList.contains('active')) {
-        chevron.style.transform = 'rotate(90deg)';
-      } else {
-        chevron.style.transform = 'rotate(0deg)';
-      }
-    });
   });
-
   // --- Lógica específica para crear ventas ---
   let productosAgregados = [];
-
   // `allProducts` is now populated by the Thymeleaf script block above this script.
-
   // Modal elements
   const productModal = document.getElementById('productModal');
   const closeModalBtn = document.getElementById('closeModal');
@@ -526,285 +516,281 @@
   const productSearchInput = document.getElementById('productSearch');
   const productSearchResultsBody = document.getElementById('productSearchResultsBody');
   const emptySearchResultsDiv = document.getElementById('emptySearchResults');
-
   // Open modal
   openProductSearchBtn.addEventListener('click', () => {
-    productModal.classList.add('active');
-    overlay.classList.add('active');
-    document.body.classList.add('modal-open');
-    productSearchInput.value = ''; // Clear search on open
-    renderProductSearchResults(allProducts); // Show all products initially
-    productSearchInput.focus();
+      productModal.classList.add('active');
+      overlay.classList.add('active');
+      document.body.classList.add('modal-open');
+      productSearchInput.value = ''; // Clear search on open
+      renderProductSearchResults(allProducts); // Show all products initially
+      productSearchInput.focus();
   });
-
   // Close modal
   closeModalBtn.addEventListener('click', () => {
-    productModal.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.classList.remove('modal-open');
-  });
-
-  overlay.addEventListener('click', () => {
-    if (productModal.classList.contains('active')) {
       productModal.classList.remove('active');
       overlay.classList.remove('active');
       document.body.classList.remove('modal-open');
-    }
   });
-
+  overlay.addEventListener('click', () => {
+      if (productModal.classList.contains('active')) {
+          productModal.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.classList.remove('modal-open');
+      }
+  });
   // Filter products based on search input
   productSearchInput.addEventListener('input', () => {
-    const searchTerm = productSearchInput.value.toLowerCase();
-    const filtered = allProducts.filter(product =>
-      product.nombreProducto.toLowerCase().includes(searchTerm) ||
-      (product.talla && product.talla.toLowerCase().includes(searchTerm)) ||
-      (product.color && product.color.toLowerCase().includes(searchTerm)) ||
-      (product.descripcion && product.descripcion.toLowerCase().includes(searchTerm))
-    );
-    renderProductSearchResults(filtered);
+      const searchTerm = productSearchInput.value.toLowerCase();
+      const filtered = allProducts.filter(product =>
+          product.nombreProducto.toLowerCase().includes(searchTerm) ||
+          (product.talla && product.talla.toLowerCase().includes(searchTerm)) ||
+          (product.color && product.color.toLowerCase().includes(searchTerm)) ||
+          (product.descripcion && product.descripcion.toLowerCase().includes(searchTerm))
+      );
+      renderProductSearchResults(filtered);
   });
-
   // Render products in the modal table
   function renderProductSearchResults(products) {
-    productSearchResultsBody.innerHTML = '';
-    if (products.length === 0) {
-      emptySearchResultsDiv.style.display = 'block';
-    } else {
-      emptySearchResultsDiv.style.display = 'none';
-      products.forEach(product => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${product.nombreProducto}</td>
-          <td>${product.talla || '-'}</td>
-          <td>${product.color || '-'}</td>
-          <td>$${product.costo.toFixed(2)}</td>
-          <td>${product.stock}</td>
-          <td>
-            <button type="button" class="btn btn-add-small" onclick="selectProductFromModal(${product.idProducto})">
-              <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </button>
-          </td>
-        `;
-        productSearchResultsBody.appendChild(row);
-      });
-    }
+      productSearchResultsBody.innerHTML = '';
+      if (products.length === 0) {
+          emptySearchResultsDiv.style.display = 'block';
+      } else {
+          emptySearchResultsDiv.style.display = 'none';
+          products.forEach(product => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+        <td>${product.nombreProducto}</td>
+        <td>${product.talla || '-'}</td>
+        <td>${product.color || '-'}</td>
+        <td>$${product.costo.toFixed(2)}</td>
+        <td>${product.stock}</td>
+        <td>
+          <button type="button" class="btn btn-add-small" onclick="selectProductFromModal(${product.idProducto})">
+            <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </td>
+      `;
+              productSearchResultsBody.appendChild(row);
+          });
+      }
   }
-
   // Select product from modal and add to sales list
   function selectProductFromModal(productId) {
-    const productToAdd = allProducts.find(p => p.idProducto == productId);
-    if (!productToAdd) {
-      alert("Error: Producto no encontrado.");
-      return;
-    }
-    agregarProducto(productToAdd);
-    closeModalBtn.click(); // Close the modal after adding
+      const productToAdd = allProducts.find(p => p.idProducto == productId);
+      if (!productToAdd) {
+          alert("Error: Producto no encontrado.");
+          return;
+      }
+      agregarProducto(productToAdd);
+      closeModalBtn.click(); // Close the modal after adding
   }
-
   // Add product to sales list (now accepts a product object)
   function agregarProducto(product) {
-    const productoId = product.idProducto;
-    const productoNombre = product.nombreProducto;
-    const stock = product.stock;
-    const productoPrecio = product.costo;
-
-    const productoExistente = productosAgregados.find(p => p.productoId == productoId);
-    const cantidadActual = productoExistente ? productoExistente.cantidad : 0;
-
-    if (cantidadActual >= stock) {
-      alert("No hay suficiente stock disponible para este producto");
-      return;
-    }
-
-    if (productoExistente) {
-      productoExistente.cantidad++;
-    } else {
-      productosAgregados.push({
-        productoId: productoId,
-        nombre: productoNombre,
-        precio: productoPrecio,
-        cantidad: 1,
-        stock: stock // Guardamos el stock para validaciones posteriores
-      });
-    }
-
-    actualizarListaProductos();
-    actualizarResumen();
-  }
-
-  // Update the products table
-  function actualizarListaProductos() {
-    const tbody = document.querySelector("#productosAgregados tbody");
-    const container = document.getElementById("productosHiddenContainer");
-
-    // Clear table and hidden container
-    tbody.innerHTML = "";
-    container.innerHTML = "";
-
-    if (productosAgregados.length === 0) {
-      document.getElementById("emptyProducts").style.display = "block";
-      return;
-    }
-
-    document.getElementById("emptyProducts").style.display = "none";
-
-    // Iterate through added products and generate rows + hidden inputs
-    productosAgregados.forEach((producto, index) => {
-      // --- Create row in the table ---
-      const row = document.createElement("tr");
-      row.innerHTML = `
-            <td>${producto.nombre}</td>
-            <td>
-                <div class="quantity-control">
-                    <button type="button" onclick="cambiarCantidad(${producto.productoId}, -1)">−</button>
-                    <span>${producto.cantidad}</span>
-                    <button type="button" onclick="cambiarCantidad(${producto.productoId}, 1)">+</button>
-                </div>
-            </td>
-            <td>$${producto.precio.toFixed(2)}</td>
-            <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
-            <td>
-                <button type="button" onclick="eliminarProducto('${producto.productoId}')" class="remove-product">
-                    <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </td>
-        `;
-      tbody.appendChild(row);
-
-      // --- Create hidden inputs for Thymeleaf/Spring ---
-      const prefix = `items[${index}]`; // Prefix for Spring binding
-
-      // Hidden input: productoId
-      const idInput = document.createElement("input");
-      idInput.type = "hidden";
-      idInput.name = `${prefix}.productoId`;
-      idInput.value = producto.productoId;
-      container.appendChild(idInput);
-
-      // Hidden input: cantidad
-      const cantidadInput = document.createElement("input");
-      cantidadInput.type = "hidden";
-      cantidadInput.name = `${prefix}.cantidad`;
-      cantidadInput.value = producto.cantidad;
-      container.appendChild(cantidadInput);
-    });
-  }
-
-  // Helper functions for product management
-  function cambiarCantidad(productId, delta) {
-    const producto = productosAgregados.find(p => p.productoId == productId);
-    if (producto) {
-      const nuevaCantidad = producto.cantidad + delta;
-      if (nuevaCantidad < 1) {
-        return; // Do not allow quantities less than 1
+      const productoId = product.idProducto;
+      const productoNombre = product.nombreProducto;
+      const stock = product.stock;
+      const productoPrecio = product.costo;
+      const productoExistente = productosAgregados.find(p => p.productoId == productoId);
+      const cantidadActual = productoExistente ? productoExistente.cantidad : 0;
+      if (cantidadActual >= stock) {
+          alert("No hay suficiente stock disponible para este producto");
+          return;
       }
-      if (nuevaCantidad > producto.stock) {
-        alert("No hay suficiente stock disponible");
-        return;
+      if (productoExistente) {
+          productoExistente.cantidad++;
+      } else {
+          productosAgregados.push({
+              productoId: productoId,
+              nombre: productoNombre,
+              precio: productoPrecio,
+              cantidad: 1,
+              stock: stock // Guardamos el stock para validaciones posteriores
+          });
       }
-      producto.cantidad = nuevaCantidad;
       actualizarListaProductos();
       actualizarResumen();
-    }
   }
-
+  // Update the products table
+  function actualizarListaProductos() {
+      const tbody = document.querySelector("#productosAgregados tbody");
+      const container = document.getElementById("productosHiddenContainer");
+      // Clear table and hidden container
+      tbody.innerHTML = "";
+      container.innerHTML = "";
+      if (productosAgregados.length === 0) {
+          document.getElementById("emptyProducts").style.display = "block";
+          return;
+      }
+      document.getElementById("emptyProducts").style.display = "none";
+      // Iterate through added products and generate rows + hidden inputs
+      productosAgregados.forEach((producto, index) => {
+          // --- Create row in the table ---
+          const row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${producto.nombre}</td>
+          <td>
+              <div class="quantity-control">
+                  <button type="button" onclick="cambiarCantidad(${producto.productoId}, -1)">−</button>
+                  <span>${producto.cantidad}</span>
+                  <button type="button" onclick="cambiarCantidad(${producto.productoId}, 1)">+</button>
+              </div>
+          </td>
+          <td>$${producto.precio.toFixed(2)}</td>
+          <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
+          <td>
+              <button type="button" onclick="eliminarProducto('${producto.productoId}')" class="remove-product">
+                  <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+              </button>
+          </td>
+      `;
+          tbody.appendChild(row);
+          // --- Create hidden inputs for Thymeleaf/Spring ---
+          const prefix = `items[${index}]`; // Prefix for Spring binding
+          // Hidden input: productoId
+          const idInput = document.createElement("input");
+          idInput.type = "hidden";
+          idInput.name = `${prefix}.productoId`;
+          idInput.value = producto.productoId;
+          container.appendChild(idInput);
+          // Hidden input: cantidad
+          const cantidadInput = document.createElement("input");
+          cantidadInput.type = "hidden";
+          cantidadInput.name = `${prefix}.cantidad`;
+          cantidadInput.value = producto.cantidad;
+          container.appendChild(cantidadInput);
+          // Hidden input: precioUnitario (Asegúrate de que este también se envíe)
+          const precioUnitarioInput = document.createElement("input");
+          precioUnitarioInput.type = "hidden";
+          precioUnitarioInput.name = `${prefix}.precioUnitario`;
+          precioUnitarioInput.value = producto.precio;
+          container.appendChild(precioUnitarioInput);
+      });
+  }
+  // Helper functions for product management
+  function cambiarCantidad(productId, delta) {
+      const producto = productosAgregados.find(p => p.productoId == productId);
+      if (producto) {
+          const nuevaCantidad = producto.cantidad + delta;
+          if (nuevaCantidad < 1) {
+              return; // Do not allow quantities less than 1
+          }
+          const productInAllProducts = allProducts.find(p => p.idProducto == productId);
+          if (nuevaCantidad > productInAllProducts.stock) {
+              alert("No hay suficiente stock disponible");
+              return;
+          }
+          producto.cantidad = nuevaCantidad;
+          actualizarListaProductos();
+          actualizarResumen();
+      }
+  }
   function eliminarProducto(productId) {
-    productosAgregados = productosAgregados.filter(p => p.productoId != productId);
-    actualizarListaProductos();
-    actualizarResumen();
+      productosAgregados = productosAgregados.filter(p => p.productoId != productId);
+      actualizarListaProductos();
+      actualizarResumen();
   }
-
   // Calculate totals
   function actualizarResumen() {
-    // Calculate subtotal
-    const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+      console.log("--- Ejecutando actualizarResumen ---");
+      // Calculate subtotal
+      const subtotal = productosAgregados.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+      console.log("Subtotal calculado:", subtotal.toFixed(2));
 
-    // Get percentage
-    const porcentajeInput = document.getElementById("porcentajeInput");
-    const porcentaje = parseFloat(porcentajeInput.value) || 0;
+      // Get percentage
+      const porcentajeInput = document.getElementById("porcentajeInput");
+      const porcentajeValue = porcentajeInput ? porcentajeInput.value : "0"; // Fallback if element not found
+      console.log("Valor del input de porcentaje (porcentajeInput.value):", porcentajeValue);
 
-    // Calculate percentage amount
-    const montoPorcentaje = subtotal * porcentaje / 100;
+      const porcentaje = parseFloat(porcentajeValue) || 0;
+      console.log("Porcentaje parseado (parseFloat):", porcentaje);
 
-    // Calculate total
-    const total = subtotal + montoPorcentaje;
+      // Calculate percentage amount
+      const montoPorcentaje = subtotal * porcentaje / 100;
+      console.log("Monto del porcentaje calculado:", montoPorcentaje.toFixed(2));
 
-    // Update hidden field for total (th:field="*{total}" already handles it)
-    document.getElementById("totalHidden").value = total.toFixed(2);
+      // Calculate total
+      const total = subtotal + montoPorcentaje;
+      console.log("Total calculado (Subtotal + Monto Porcentaje):", total.toFixed(2));
 
-    // Update UI
-    document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
-
-    // Show percentage and its monetary value
-    const percentageElement = document.getElementById("percentageAmount");
-    if (porcentaje === 0) {
-      percentageElement.textContent = "0% ($0.00)";
-      percentageElement.className = "summary-value";
-    } else {
-      const sign = porcentaje >= 0 ? "+" : ""; // Don't show '-' if negative, Math.abs handles it
-      percentageElement.textContent = `${porcentaje}% (${sign}$${montoPorcentaje.toFixed(2)})`;
-      percentageElement.className = `summary-value ${porcentaje >= 0 ? 'positive' : 'negative'}`;
-    }
-
-    document.getElementById("totalAmount").textContent = `$${total.toFixed(2)}`;
+      // Update hidden field for total (th:field="*{total}" already handles it)
+      document.getElementById("totalHidden").value = total.toFixed(2);
+      // Update UI
+      document.getElementById("subtotalAmount").textContent = `$${subtotal.toFixed(2)}`;
+      // Show percentage and its monetary value
+      const percentageElement = document.getElementById("percentageAmount");
+      if (porcentaje === 0) {
+          percentageElement.textContent = "0% ($0.00)";
+          percentageElement.className = "summary-value";
+      } else {
+          const sign = porcentaje >= 0 ? "+" : ""; // Don't show '-' if negative, Math.abs handles it
+          percentageElement.textContent = `${porcentaje}% (${sign}${(montoPorcentaje).toFixed(2)})`;
+          percentageElement.className = `summary-value ${porcentaje >= 0 ? 'positive' : 'negative'}`;
+      }
+      document.getElementById("totalAmount").textContent = `$${total.toFixed(2)}`;
+      console.log("--- Fin de actualizarResumen ---");
   }
-
   // Initialization
   document.addEventListener("DOMContentLoaded", () => {
-    // Listen for changes in the additional percentage
-    document.getElementById("porcentajeInput").addEventListener("input", actualizarResumen);
-
-    // Listen for changes in the sales type radio buttons to update the summary if necessary
-    document.querySelectorAll("input[name='tipoDeVenta']").forEach(radio => {
-      radio.addEventListener("change", actualizarResumen);
-    });
-
-    // Listen for changes in the sales modality radio buttons
-    document.querySelectorAll("input[name='modalidadVenta']").forEach(radio => {
-      radio.addEventListener("change", actualizarResumen);
-    });
-
-    // Form validation
-    document.getElementById("salesForm").addEventListener("submit", (e) => {
-      // Validate that products have been added
-      if (productosAgregados.length === 0) {
-        e.preventDefault();
-        alert("Debe agregar al menos un producto a la venta.");
-        openProductSearchBtn.focus(); // Focus the button to open the product search
-        return;
+      const porcentajeInput = document.getElementById("porcentajeInput");
+      if (porcentajeInput) {
+          porcentajeInput.addEventListener("input", () => {
+              console.log("Evento 'input' disparado en porcentajeInput. Valor actual:", porcentajeInput.value);
+              actualizarResumen();
+          });
+      } else {
+          console.error("Elemento con ID 'porcentajeInput' no encontrado en DOMContentLoaded.");
       }
 
-      // Validate client name
-      const nombreCliente = document.getElementById("nombreCliente").value.trim();
-      if (!nombreCliente) {
-        e.preventDefault();
-        alert("El nombre del cliente es obligatorio.");
-        document.getElementById("nombreCliente").focus();
-        return;
-      }
+      // Listen for changes in the sales type radio buttons to update the summary if necessary
+      document.querySelectorAll("input[name='tipoDeVenta']").forEach(radio => {
+          radio.addEventListener("change", actualizarResumen);
+      });
+      // Listen for changes in the sales modality radio buttons
+      document.querySelectorAll("input[name='modalidadVenta']").forEach(radio => {
+          radio.addEventListener("change", actualizarResumen);
+      });
 
-      // Validate sales type
-      const tipoVenta = document.querySelector("input[name='tipoDeVenta']:checked");
-      if (!tipoVenta) {
-        e.preventDefault();
-        alert("Por favor seleccione un método de pago.");
-        return;
-      }
-
-      // Validate sales modality
-      const modalidadVenta = document.querySelector("input[name='modalidadVenta']:checked");
-      if (!modalidadVenta) {
-        e.preventDefault();
-        alert("Por favor seleccione una modalidad de venta.");
-        return;
-      }
-    });
+      // Initial update of product list and summary when the page loads
+      actualizarListaProductos();
+      actualizarResumen(); // Call once on load to set initial summary
+      // Form validation
+      document.getElementById("salesForm").addEventListener("submit", (e) => {
+          // Validate that products have been added
+          if (productosAgregados.length === 0) {
+              e.preventDefault();
+              alert("Debe agregar al menos un producto a la venta.");
+              openProductSearchBtn.focus(); // Focus the button to open the product search
+              return;
+          }
+          // Validate client name
+          const nombreCliente = document.getElementById("nombreCliente").value.trim();
+          if (!nombreCliente) {
+              e.preventDefault();
+              alert("El nombre del cliente es obligatorio.");
+              document.getElementById("nombreCliente").focus();
+              return;
+          }
+          // Validate sales type
+          const tipoVenta = document.querySelector("input[name='tipoDeVenta']:checked");
+          if (!tipoVenta) {
+              e.preventDefault();
+              alert("Por favor seleccione un método de pago.");
+              return;
+          }
+          // Validate sales modality
+          const modalidadVenta = document.querySelector("input[name='modalidadVenta']:checked");
+          if (!modalidadVenta) {
+              e.preventDefault();
+              alert("Por favor seleccione una modalidad de venta.");
+              return;
+          }
+      });
   });
 </script>
 </body>
